@@ -1,0 +1,19 @@
+{
+  "title": "আমার র‍্যাপিড পাস",
+  "cardNumberCopied": "কার্ড নাম্বার কপি করা হয়েছে",
+  "noInternet": "ইন্টারনেট সংযোগ নেই",
+  "removeCard": "কার্ড মুছে ফেলুন",
+  "copyCardNumber": "কার্ড নাম্বার কপি করুন",
+  "cardInactive": "কার্ড নিষ্ক্রিয়",
+  "lowBalance": "ব্যালেন্স কম",
+  "inactive": "নিষ্ক্রিয়",
+  "errorWhileLoading": "কার্ডটি লোড করার সময় একটি ত্রুটি হয়েছে",
+
+  "addFirstCard": "নিচের + বাটন ব্যাবহার করে আপনার প্রথম কার্ডটি যোগ করুন",
+
+  "addRapidPass": "র‍্যাপিড পাস যোগ করুন",
+  "cardNumberHint": "১৪-অঙ্কের কার্ড নাম্বার",
+  "cardNumberValidator": "\"RP\" উপসর্গ বাদে ১৪-অঙ্কের নাম্বার লিখুন",
+  "cardNameHint": "নাম",
+  "cardNameValidator": "কার্ড সংরক্ষণের জন্য একটি নাম দিন"
+}

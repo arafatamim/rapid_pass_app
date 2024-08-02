@@ -1,0 +1,19 @@
+{
+  "title": "Amar Rapid Pass",
+  "cardNumberCopied": "Card number copied to clipboard",
+  "noInternet": "No internet connection",
+  "removeCard": "Remove card",
+  "copyCardNumber": "Copy card number",
+  "cardInactive": "card inactive",
+  "lowBalance": "low balance",
+  "inactive": "inactive",
+  "errorWhileLoading": "An error occurred while loading the card",
+
+  "addFirstCard": "Add your first card using the + button below",
+
+  "addRapidPass": "Add Rapid Pass",
+  "cardNumberHint": "14-digit card number",
+  "cardNumberValidator": "Enter a 14-digit card number, without the \"RP\" prefix",
+  "cardNameHint": "Name",
+  "cardNameValidator": "Enter a name to save this card as"
+}
