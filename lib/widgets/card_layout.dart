@@ -12,6 +12,7 @@ class CardLayoutBase extends StatefulWidget {
   final double? elevation;
   final ShapeBorder? shape;
   final Color? color;
+  final Color? foregroundColor;
 
   const CardLayoutBase({
     super.key,
@@ -20,6 +21,7 @@ class CardLayoutBase extends StatefulWidget {
     this.elevation,
     this.shape,
     this.color,
+    this.foregroundColor,
     this.disableDropdownMenu = false,
     required this.children,
   });
@@ -72,6 +74,7 @@ class _CardLayoutBaseState extends State<CardLayoutBase> {
                 children: [
                   IconButton(
                     onPressed: widget.onDelete,
+                    color: widget.foregroundColor,
                     icon: const Icon(Icons.delete_forever_outlined),
                     iconSize: 36,
                     tooltip: AppLocalizations.of(context)!.removeCard,
@@ -81,6 +84,7 @@ class _CardLayoutBaseState extends State<CardLayoutBase> {
                       _controller.flipCard();
                       widget.onCopy?.call();
                     },
+                    color: widget.foregroundColor,
                     icon: const Icon(Icons.copy_outlined),
                     iconSize: 28,
                     padding: const EdgeInsets.all(12),
@@ -192,6 +196,7 @@ class CardLayoutSuccess extends StatelessWidget {
 
     return CardLayoutBase(
       color: activeBackgroundColor,
+      foregroundColor: activeForegroundColor,
       elevation: passData.isActive ? 1 : 0,
       shape: passData.isActive
           ? null
@@ -225,7 +230,7 @@ class CardLayoutSuccess extends StatelessWidget {
         ),
         const Spacer(),
         Text(
-          "${RelativeTime.locale(const Locale("en")).format(passData.lastUpdated)}"
+          "${RelativeTime(context).format(passData.lastUpdated)}"
           "${!passData.isActive ? " • ${AppLocalizations.of(context)!.inactive}" : ""}",
           style: Theme.of(context)
               .textTheme

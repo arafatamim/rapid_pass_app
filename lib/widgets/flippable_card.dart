@@ -10,11 +10,11 @@ class FlippableCardController extends ChangeNotifier {
     notifyListeners();
   }
 
-  final ChangeNotifier notifyFlip = ChangeNotifier();
+  final ChangeNotifier _notifyFlip = ChangeNotifier();
 
   /// Flip the card
   void flipCard() {
-    notifyFlip.notifyListeners();
+    _notifyFlip.notifyListeners();
   }
 }
 
@@ -100,7 +100,7 @@ class _FlippableCardState extends State<FlippableCard>
       _secondaryDuration = widget.primaryDuration;
     }
 
-    _effectiveController.notifyFlip.addListener(() {
+    _effectiveController._notifyFlip.addListener(() {
       _flipCard();
     });
   }
