@@ -18,7 +18,7 @@ class RapidPassData {
     final document = dom.Document.html(html);
     final str = document.querySelector("table");
     if (str == null) {
-      throw Exception("Invalid card number");
+      throw Exception("Invalid card number or server error");
     }
     final el1 = str
         .querySelectorAll("td.text-right")

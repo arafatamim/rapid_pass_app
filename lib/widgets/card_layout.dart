@@ -43,13 +43,41 @@ class _CardLayoutBaseState extends State<CardLayoutBase> {
   Widget build(BuildContext context) {
     return AspectRatio(
       aspectRatio: 1.8,
-      child: FlippableCard(
-        controller: _controller,
-        axis: Axis.vertical,
-        primaryDuration: const Duration(milliseconds: 800),
-        primaryCurve: Curves.elasticOut,
-        secondaryCurve: Curves.easeOut,
-        frontWidget: Card(
+      child: GestureDetector(
+        onLongPressStart: (details) async {
+          if (widget.disableDropdownMenu) {
+            return;
+          }
+          final offset = details.globalPosition;
+          final value = await showMenu(
+            context: context,
+            position: RelativeRect.fromLTRB(
+              offset.dx,
+              offset.dy,
+              MediaQuery.of(context).size.width - offset.dx,
+              MediaQuery.of(context).size.height - offset.dy,
+            ),
+            items: [
+              PopupMenuItem(
+                value: "copy",
+                child: Text(AppLocalizations.of(context)!.copyCardNumber),
+              ),
+              PopupMenuItem(
+                value: "delete",
+                child: Text(AppLocalizations.of(context)!.removeCard),
+              ),
+            ],
+          );
+          switch (value) {
+            case "copy":
+              widget.onCopy?.call();
+              break;
+            case "delete":
+              widget.onDelete?.call();
+              break;
+          }
+        },
+        child: Card(
           color: widget.color,
           elevation: widget.elevation,
           shape: widget.shape,
@@ -62,39 +90,6 @@ class _CardLayoutBaseState extends State<CardLayoutBase> {
             ),
           ),
         ),
-        backWidget: Card(
-          color: widget.color,
-          elevation: widget.elevation,
-          shape: widget.shape,
-          child: Padding(
-            padding: const EdgeInsets.all(18),
-            child: Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                    onPressed: widget.onDelete,
-                    color: widget.foregroundColor,
-                    icon: const Icon(Icons.delete_forever_outlined),
-                    iconSize: 36,
-                    tooltip: AppLocalizations.of(context)!.removeCard,
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      _controller.flipCard();
-                      widget.onCopy?.call();
-                    },
-                    color: widget.foregroundColor,
-                    icon: const Icon(Icons.copy_outlined),
-                    iconSize: 28,
-                    padding: const EdgeInsets.all(12),
-                    tooltip: AppLocalizations.of(context)!.copyCardNumber,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
       ),
     );
   }
@@ -103,11 +98,13 @@ class _CardLayoutBaseState extends State<CardLayoutBase> {
 class CardLayoutLoading extends StatelessWidget {
   final int passNumber;
   final String passName;
+  final int index;
 
   const CardLayoutLoading({
     super.key,
     required this.passNumber,
     required this.passName,
+    required this.index,
   });
 
   @override
@@ -125,9 +122,23 @@ class CardLayoutLoading extends StatelessWidget {
         ),
       ),
       children: [
-        Text(
-          [passName, "RP$passNumber"].join(" • "),
-          style: TextStyle(color: hintColor),
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                [passName, "RP$passNumber"].join(" • "),
+                style: TextStyle(color: hintColor),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            ReorderableDragStartListener(
+              index: index,
+              child: Icon(
+                Icons.drag_handle,
+                color: hintColor,
+              ),
+            ),
+          ],
         ),
         const Spacer(),
         Container(
@@ -147,6 +158,7 @@ class CardLayoutLoading extends StatelessWidget {
 }
 
 class CardLayoutSuccess extends StatelessWidget {
+  final int index;
   final String passName;
   final int passNumber;
   final RapidPassData passData;
@@ -155,6 +167,7 @@ class CardLayoutSuccess extends StatelessWidget {
 
   const CardLayoutSuccess({
     super.key,
+    required this.index,
     required this.passName,
     required this.passNumber,
     required this.passData,
@@ -210,9 +223,23 @@ class CardLayoutSuccess extends StatelessWidget {
       onCopy: onCopy,
       onDelete: onDelete,
       children: [
-        Text(
-          [passName, "RP$passNumber"].join(" • "),
-          style: TextStyle(color: activeForegroundColor),
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                [passName, "RP$passNumber"].join(" • "),
+                style: TextStyle(color: activeForegroundColor),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            ReorderableDragStartListener(
+              index: index,
+              child: Icon(
+                Icons.drag_handle,
+                color: activeForegroundColor,
+              ),
+            ),
+          ],
         ),
         const Spacer(),
         Row(
@@ -243,6 +270,7 @@ class CardLayoutSuccess extends StatelessWidget {
 }
 
 class CardLayoutError extends StatelessWidget {
+  final int index;
   final Object? message;
   final int passNumber;
   final String passName;
@@ -251,6 +279,7 @@ class CardLayoutError extends StatelessWidget {
 
   const CardLayoutError({
     super.key,
+    required this.index,
     this.message,
     this.onDelete,
     this.onCopy,
@@ -272,9 +301,23 @@ class CardLayoutError extends StatelessWidget {
       onCopy: onCopy,
       onDelete: onDelete,
       children: [
-        Text(
-          [passName, "RP$passNumber"].join(" • "),
-          style: const TextStyle(color: Colors.red),
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                [passName, "RP$passNumber"].join(" • "),
+                style: const TextStyle(color: Colors.red),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            ReorderableDragStartListener(
+              index: index,
+              child: Icon(
+                Icons.drag_handle,
+                color: Theme.of(context).hintColor,
+              ),
+            ),
+          ],
         ),
         const Spacer(),
         Text(

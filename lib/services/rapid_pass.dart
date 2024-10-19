@@ -1,12 +1,15 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:flutter/material.dart';
 import 'package:rapid_pass_info/models/rapid_pass.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/io_client.dart';
 
 http.Client makeClient() {
-  var ioClient = HttpClient()..badCertificateCallback = (_, __, ___) => true;
+  var ioClient = HttpClient();
+  ioClient.badCertificateCallback = (_, __, ___) => true;
+  ioClient.connectionTimeout = const Duration(seconds: 20);
   return IOClient(ioClient);
 }
 
@@ -25,7 +28,7 @@ class RapidPassService {
       final body = response.body;
       return RapidPassData.fromHTML(body);
     } catch (e) {
-      print(e);
+      debugPrint("Error: $e");
       rethrow;
     } finally {
       client.close();

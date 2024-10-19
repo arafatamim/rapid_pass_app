@@ -10,6 +10,8 @@ import 'package:relative_time/relative_time.dart';
 // TODO: single view when only one card
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
   runApp(const RapidPassApp());
 }
 

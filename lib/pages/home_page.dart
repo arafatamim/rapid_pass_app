@@ -9,16 +9,65 @@ import 'package:rapid_pass_info/state/state.dart';
 import 'package:rapid_pass_info/widgets/card_layout.dart';
 import 'package:rapid_pass_info/widgets/empty_message.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart' hide AppState;
+import '../helpers/ad_helper.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
-
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  BannerAd? _bannerAd;
+
+  Future<InitializationStatus> _initGoogleMobileAds() {
+    return MobileAds.instance.initialize();
+  }
+
+  void _loadAd() {
+    final bannerAd = BannerAd(
+      size: AdSize.banner,
+      adUnitId: AdHelper.bannerAdUnitId,
+      request: const AdRequest(),
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          if (!mounted) {
+            ad.dispose();
+            return;
+          }
+          setState(() {
+            _bannerAd = ad as BannerAd;
+          });
+        },
+        onAdFailedToLoad: (ad, error) {
+          debugPrint('BannerAd failed to load: $error');
+          ad.dispose();
+        },
+        onAdClosed: (ad) {
+          setState(() {
+            _bannerAd = null;
+          });
+          ad.dispose();
+        },
+      ),
+    );
+
+    // Start loading.
+    bannerAd.load();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (Platform.isAndroid) {
+      _initGoogleMobileAds().then((status) {
+        _loadAd();
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<AppState>(
@@ -35,36 +84,81 @@ class _HomePageState extends State<HomePage> {
       builder: (context, state, child) {
         return Scaffold(
           floatingActionButton: child,
-          body: CustomScrollView(
-            slivers: [
-              SliverAppBar.large(
-                title: Center(
-                  child: Text(
+          bottomNavigationBar: (_bannerAd != null)
+              ? SizedBox(
+                  width: _bannerAd!.size.width.toDouble(),
+                  height: _bannerAd!.size.height.toDouble(),
+                  child: AdWidget(ad: _bannerAd!),
+                )
+              : null,
+          body: RefreshIndicator(
+            onRefresh: () async {
+              setState(() {});
+            },
+            child: CustomScrollView(
+              slivers: [
+                SliverAppBar.large(
+                  title: Text(
                     AppLocalizations.of(context)!.title,
                     textAlign: TextAlign.center,
                   ),
-                ),
-                centerTitle: true,
-              ),
-              SliverPadding(
-                padding: const EdgeInsets.only(
-                  left: 8,
-                  right: 8,
-                  bottom: 8,
-                ),
-                sliver: state.passes.isEmpty
-                    ? const SliverToBoxAdapter(
-                        child: Center(
-                          child: EmptyMessage(),
+                  actions: [
+                    PopupMenuButton<String>(
+                      onSelected: (value) {
+                        if (value == 'about') {
+                          showAboutDialog(
+                            context: context,
+                            applicationName:
+                                AppLocalizations.of(context)!.title,
+                            applicationVersion: '1.0.0',
+                            applicationIcon: Image.asset(
+                              'assets/icon/icon.png',
+                              width: 48,
+                              height: 48,
+                            ),
+                            children: [
+                              Text(
+                                AppLocalizations.of(context)!.aboutDescription,
+                              ),
+                            ],
+                          );
+                        }
+                      },
+                      itemBuilder: (context) => [
+                        PopupMenuItem<String>(
+                          value: 'about',
+                          child: Text(AppLocalizations.of(context)!.about),
                         ),
-                      )
-                    : CardList(passes: state.passes),
-              ),
-            ],
+                      ],
+                    )
+                  ],
+                ),
+                SliverPadding(
+                  padding: const EdgeInsets.only(
+                    left: 8,
+                    right: 8,
+                    bottom: 8,
+                  ),
+                  sliver: state.passes.isEmpty
+                      ? const SliverToBoxAdapter(
+                          child: Center(
+                            child: EmptyMessage(),
+                          ),
+                        )
+                      : CardList(passes: state.passes),
+                ),
+              ],
+            ),
           ),
         );
       },
     );
+  }
+
+  @override
+  void dispose() {
+    _bannerAd?.dispose();
+    super.dispose();
   }
 }
 
@@ -90,24 +184,19 @@ class _CardListState extends State<CardList> {
       },
       itemBuilder: (context, index) {
         final pass = widget.passes[index];
-        return ReorderableDelayedDragStartListener(
+        return AnimatedSwitcher(
           key: ValueKey(pass.id),
-          index: index,
-          child: AnimatedSwitcher(
-            transitionBuilder: (child, animation) {
-              return SizeTransition(
-                sizeFactor: animation,
-                child: FadeTransition(
-                  opacity: animation,
-                  child: child,
-                ),
-              );
-            },
-            duration: const Duration(milliseconds: 300),
-            child: Material(
-              child: CardItem(pass: pass),
-            ),
-          ),
+          transitionBuilder: (child, animation) {
+            return SizeTransition(
+              sizeFactor: animation,
+              child: FadeTransition(
+                opacity: animation,
+                child: child,
+              ),
+            );
+          },
+          duration: const Duration(milliseconds: 300),
+          child: CardItem(pass: pass, index: index),
         );
       },
     );
@@ -116,10 +205,12 @@ class _CardListState extends State<CardList> {
 
 class CardItem extends StatefulWidget {
   final RapidPass pass;
+  final int index;
 
   const CardItem({
     super.key,
     required this.pass,
+    required this.index,
   });
 
   @override
@@ -137,6 +228,7 @@ class _CardItemState extends State<CardItem> {
                 snapshot.connectionState == ConnectionState.active) &&
             snapshot.hasError) {
           return CardLayoutError(
+            index: widget.index,
             message: switch (snapshot.error) {
               SocketException _ => AppLocalizations.of(context)!.noInternet,
               _ => snapshot.error,
@@ -151,6 +243,7 @@ class _CardItemState extends State<CardItem> {
             snapshot.hasData) {
           final passData = snapshot.data!;
           return CardLayoutSuccess(
+            index: widget.index,
             passName: widget.pass.name,
             passNumber: widget.pass.number,
             passData: passData,
@@ -159,6 +252,7 @@ class _CardItemState extends State<CardItem> {
           );
         }
         return CardLayoutLoading(
+          index: widget.index,
           passNumber: widget.pass.number,
           passName: widget.pass.name,
         );
