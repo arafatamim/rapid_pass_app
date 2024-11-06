@@ -7,6 +7,7 @@
   "cardInactive": "কার্ড নিষ্ক্রিয়",
   "lowBalance": "ব্যালেন্স কম",
   "inactive": "নিষ্ক্রিয়",
+  "cached": "সংরক্ষিত তথ্য",
   "errorWhileLoading": "কার্ডটি লোড করতে সমস্যা হয়েছে",
 
   "addFirstCard": "নিচের + বাটন ব্যাবহার করে আপনার প্রথম কার্ডটি যোগ করুন",
@@ -18,5 +19,12 @@
   "cardNameValidator": "কার্ড সংরক্ষণের জন্য একটি নাম দিন",
 
   "about": "আমাদের সম্পর্কে",
-  "aboutDescription": "ডেভেলপারঃ তামিম আরাফাত (tamim.arafat@gmail.com)"
+  "aboutDescription": "ডেভেলপারঃ তামিম আরাফাত (tamim.arafat@gmail.com)",
+
+  "settings": "সেটিংস",
+  "clearAll": "সমস্ত সংরক্ষিত পাস মুছে ফেলুন",
+  "clearAllConfirmation": "সমস্ত সংরক্ষিত পাস মুছে ফেলতে চান?",
+  "yes": "হ্যাঁ",
+  "no": "না",
+  "cancel": "বাতিল করুন"
 }

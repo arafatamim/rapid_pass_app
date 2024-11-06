@@ -7,6 +7,7 @@
   "cardInactive": "card inactive",
   "lowBalance": "low balance",
   "inactive": "inactive",
+  "cached": "cached data",
   "errorWhileLoading": "An error occurred while loading the card",
 
   "addFirstCard": "Add your first card using the + button below",
@@ -18,5 +19,12 @@
   "cardNameValidator": "Enter a name to save this card as",
 
   "about": "About",
-  "aboutDescription": "Made by Tamim Arafat (tamim.arafat@gmail.com)"
+  "aboutDescription": "Made by Tamim Arafat (tamim.arafat@gmail.com)",
+
+  "settings": "Settings",
+  "clearAll": "Clear all saved passes",
+  "clearAllConfirmation": "Are you sure you want to clear all saved passes?",
+  "yes": "Yes",
+  "no": "No",
+  "cancel": "Cancel"
 }
