@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:rapid_pass_info/models/rapid_pass.dart';
-import 'package:rapid_pass_info/widgets/flippable_card.dart';
+import 'package:rapid_pass_info/widgets/shimmer.dart';
 import 'package:relative_time/relative_time.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:reorderable_grid/reorderable_grid.dart';
+
+// TODO: refactor to prevent code duplication
 
 class CardLayoutBase extends StatefulWidget {
   final VoidCallback? onDelete;
@@ -31,14 +34,6 @@ class CardLayoutBase extends StatefulWidget {
 }
 
 class _CardLayoutBaseState extends State<CardLayoutBase> {
-  final _controller = FlippableCardController();
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
@@ -96,14 +91,14 @@ class _CardLayoutBaseState extends State<CardLayoutBase> {
 }
 
 class CardLayoutLoading extends StatelessWidget {
-  final int passNumber;
-  final String passName;
+  final String id;
+  final String name;
   final int index;
 
   const CardLayoutLoading({
     super.key,
-    required this.passNumber,
-    required this.passName,
+    required this.id,
+    required this.name,
     required this.index,
   });
 
@@ -126,12 +121,12 @@ class CardLayoutLoading extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                [passName, "RP$passNumber"].join(" • "),
+                [name, id].join(" • "),
                 style: TextStyle(color: hintColor),
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            ReorderableDragStartListener(
+            ReorderableGridDragStartListener(
               index: index,
               child: Icon(
                 Icons.drag_handle,
@@ -141,13 +136,13 @@ class CardLayoutLoading extends StatelessWidget {
           ],
         ),
         const Spacer(),
-        Container(
-          width: 100,
+        Shimmer(
           height: 40,
+          width: 100,
           color: hintColor,
         ),
         const Spacer(),
-        Container(
+        Shimmer(
           width: 100,
           height: 20,
           color: hintColor,
@@ -159,18 +154,20 @@ class CardLayoutLoading extends StatelessWidget {
 
 class CardLayoutSuccess extends StatelessWidget {
   final int index;
-  final String passName;
-  final int passNumber;
+  final String name;
+  final String id;
   final RapidPassData passData;
   final VoidCallback? onDelete;
   final VoidCallback? onCopy;
+  final bool isCached;
 
   const CardLayoutSuccess({
     super.key,
     required this.index,
-    required this.passName,
-    required this.passNumber,
+    required this.name,
+    required this.id,
     required this.passData,
+    required this.isCached,
     this.onDelete,
     this.onCopy,
   });
@@ -184,6 +181,10 @@ class CardLayoutSuccess extends StatelessWidget {
 
     if (passData.balance < 100) {
       messages.add(AppLocalizations.of(context)!.lowBalance);
+    }
+
+    if (isCached) {
+      messages.add(AppLocalizations.of(context)!.cached);
     }
 
     if (messages.isEmpty) return const SizedBox.shrink();
@@ -227,12 +228,12 @@ class CardLayoutSuccess extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                [passName, "RP$passNumber"].join(" • "),
+                [name, id].join(" • "),
                 style: TextStyle(color: activeForegroundColor),
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            ReorderableDragStartListener(
+            ReorderableGridDragStartListener(
               index: index,
               child: Icon(
                 Icons.drag_handle,
@@ -269,11 +270,96 @@ class CardLayoutSuccess extends StatelessWidget {
   }
 }
 
+class CardLayoutCached extends StatelessWidget {
+  final int index;
+  final String name;
+  final String id;
+  final RapidPassData passData;
+  final VoidCallback? onDelete;
+  final VoidCallback? onCopy;
+
+  const CardLayoutCached({
+    super.key,
+    required this.index,
+    required this.name,
+    required this.id,
+    required this.passData,
+    this.onDelete,
+    this.onCopy,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final activeForegroundColor = passData.isActive
+        ? Theme.of(context).colorScheme.onSecondary
+        : Theme.of(context).hintColor;
+    return CardLayoutBase(
+      color: Colors.green,
+      foregroundColor: Colors.white,
+      elevation: passData.isActive ? 1 : 0,
+      shape: passData.isActive
+          ? null
+          : RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+              side: BorderSide(
+                color: Theme.of(context).hintColor,
+                width: 2,
+              ),
+            ),
+      onCopy: onCopy,
+      onDelete: onDelete,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                [name, id].join(" • "),
+                style: TextStyle(color: activeForegroundColor),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            ReorderableGridDragStartListener(
+              index: index,
+              child: Icon(
+                Icons.drag_handle,
+                color: activeForegroundColor,
+              ),
+            ),
+          ],
+        ),
+        const Spacer(),
+        Row(
+          children: [
+            Text(
+              "৳${passData.balance}",
+              style: Theme.of(context)
+                  .textTheme
+                  .headlineLarge
+                  ?.copyWith(color: activeForegroundColor),
+            ),
+            const Padding(padding: EdgeInsets.only(right: 8)),
+            // TODO: _buildTooltip(context, activeForegroundColor),
+          ],
+        ),
+        const Spacer(),
+        Text(
+          "${RelativeTime(context).format(passData.lastUpdated)}"
+          "${!passData.isActive ? " • ${AppLocalizations.of(context)!.inactive}" : ""}",
+          style: Theme.of(context)
+              .textTheme
+              .bodySmall
+              ?.copyWith(color: activeForegroundColor),
+        ),
+      ],
+    );
+  }
+}
+
 class CardLayoutError extends StatelessWidget {
   final int index;
   final Object? message;
-  final int passNumber;
-  final String passName;
+  final String id;
+  final String name;
   final VoidCallback? onDelete;
   final VoidCallback? onCopy;
 
@@ -283,8 +369,8 @@ class CardLayoutError extends StatelessWidget {
     this.message,
     this.onDelete,
     this.onCopy,
-    required this.passName,
-    required this.passNumber,
+    required this.name,
+    required this.id,
   });
 
   @override
@@ -305,12 +391,12 @@ class CardLayoutError extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                [passName, "RP$passNumber"].join(" • "),
+                [name, id].join(" • "),
                 style: const TextStyle(color: Colors.red),
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            ReorderableDragStartListener(
+            ReorderableGridDragStartListener(
               index: index,
               child: Icon(
                 Icons.drag_handle,

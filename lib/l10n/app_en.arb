@@ -13,8 +13,8 @@
   "addFirstCard": "Add your first card using the + button below",
 
   "addRapidPass": "Add Rapid Pass",
-  "cardNumberHint": "14-digit card number",
-  "cardNumberValidator": "Enter a 14-digit card number, without the \"RP\" prefix",
+  "cardNumberHint": "16-digit card number",
+  "cardNumberValidator": "Enter a 16-digit card number",
   "cardNameHint": "Name",
   "cardNameValidator": "Enter a name to save this card as",
 

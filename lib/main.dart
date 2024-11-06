@@ -6,12 +6,13 @@ import 'package:rapid_pass_info/pages/home_page.dart';
 import 'package:rapid_pass_info/state/state.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:relative_time/relative_time.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 // TODO: single view when only one card
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-
+  sqfliteFfiInit();
+  databaseFactory = databaseFactoryFfi;
   runApp(const RapidPassApp());
 }
 
@@ -36,7 +37,6 @@ class RapidPassApp extends StatelessWidget {
             supportedLocales: const [
               Locale('en', 'UK'),
               Locale('en', 'US'),
-              Locale('en', 'UK'),
               Locale('en', 'IN'),
               Locale("bn", "BD"),
             ],

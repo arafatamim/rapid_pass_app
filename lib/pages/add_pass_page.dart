@@ -11,7 +11,7 @@ class AddPassPage extends StatefulWidget {
 }
 
 class _AddPassPageState extends State<AddPassPage> {
-  int? cardNumber;
+  String? id;
   String? name;
   final _formKey = GlobalKey<FormState>();
 
@@ -28,16 +28,12 @@ class _AddPassPageState extends State<AddPassPage> {
           child: Column(
             children: [
               TextFormField(
-                maxLength: 14,
+                maxLength: 16,
                 decoration: InputDecoration(
                   labelText: AppLocalizations.of(context)!.cardNumberHint,
-                  prefixText: "RP",
                 ),
                 validator: (value) {
-                  if (value == null ||
-                      value.isEmpty ||
-                      int.tryParse(value) == null ||
-                      value.length != 14) {
+                  if (value == null || value.isEmpty) {
                     return AppLocalizations.of(context)!.cardNumberValidator;
                   }
                   return null;
@@ -47,7 +43,7 @@ class _AddPassPageState extends State<AddPassPage> {
                     return;
                   }
                   setState(() {
-                    cardNumber = int.tryParse(value);
+                    id = value;
                   });
                 },
               ),
@@ -76,10 +72,10 @@ class _AddPassPageState extends State<AddPassPage> {
                     return;
                   }
                   _formKey.currentState!.save();
-                  if (cardNumber == null || name == null) {
+                  if (id == null || name == null) {
                     return;
                   }
-                  context.read<AppState>().addPass(name!, cardNumber!);
+                  context.read<AppState>().addPass(id!, name!);
 
                   if (context.mounted) {
                     Navigator.of(context).pop();

@@ -10,6 +10,9 @@ import 'package:rapid_pass_info/widgets/card_layout.dart';
 import 'package:rapid_pass_info/widgets/empty_message.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart' hide AppState;
+import 'package:rapid_pass_info/pages/settings.dart';
+import 'package:reorderable_grid/reorderable_grid.dart';
+import '../helpers/cache.dart';
 import '../helpers/ad_helper.dart';
 
 class HomePage extends StatefulWidget {
@@ -68,6 +71,35 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  Widget _buildAppBar() {
+    return SliverAppBar.large(
+      title: Text(
+        AppLocalizations.of(context)!.title,
+        textAlign: TextAlign.center,
+      ),
+      actions: [
+        PopupMenuButton<String>(
+          onSelected: (value) {
+            if (value == "settings") {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SettingsPage(),
+                ),
+              );
+            }
+          },
+          itemBuilder: (context) => [
+            PopupMenuItem<String>(
+              value: 'settings',
+              child: Text(AppLocalizations.of(context)!.settings),
+            ),
+          ],
+        )
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<AppState>(
@@ -97,42 +129,7 @@ class _HomePageState extends State<HomePage> {
             },
             child: CustomScrollView(
               slivers: [
-                SliverAppBar.large(
-                  title: Text(
-                    AppLocalizations.of(context)!.title,
-                    textAlign: TextAlign.center,
-                  ),
-                  actions: [
-                    PopupMenuButton<String>(
-                      onSelected: (value) {
-                        if (value == 'about') {
-                          showAboutDialog(
-                            context: context,
-                            applicationName:
-                                AppLocalizations.of(context)!.title,
-                            applicationVersion: '1.0.0',
-                            applicationIcon: Image.asset(
-                              'assets/icon/icon.png',
-                              width: 48,
-                              height: 48,
-                            ),
-                            children: [
-                              Text(
-                                AppLocalizations.of(context)!.aboutDescription,
-                              ),
-                            ],
-                          );
-                        }
-                      },
-                      itemBuilder: (context) => [
-                        PopupMenuItem<String>(
-                          value: 'about',
-                          child: Text(AppLocalizations.of(context)!.about),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
+                _buildAppBar(),
                 SliverPadding(
                   padding: const EdgeInsets.only(
                     left: 8,
@@ -177,26 +174,41 @@ class CardList extends StatefulWidget {
 class _CardListState extends State<CardList> {
   @override
   Widget build(BuildContext context) {
-    return SliverReorderableList(
-      itemCount: widget.passes.length,
-      onReorder: (oldIndex, newIndex) {
-        context.read<AppState>().reorderPasses(oldIndex, newIndex);
-      },
-      itemBuilder: (context, index) {
-        final pass = widget.passes[index];
-        return AnimatedSwitcher(
-          key: ValueKey(pass.id),
-          transitionBuilder: (child, animation) {
-            return SizeTransition(
-              sizeFactor: animation,
-              child: FadeTransition(
-                opacity: animation,
-                child: child,
+    return Consumer<AppState>(
+      builder: (context, state, _) {
+        return SliverReorderableGrid(
+          itemCount: widget.passes.length,
+          onReorder: (oldIndex, newIndex) {
+            context.read<AppState>().reorderPasses(oldIndex, newIndex);
+          },
+          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: 400,
+            childAspectRatio: 1.8,
+            crossAxisSpacing: 6,
+            mainAxisSpacing: 6,
+          ),
+          itemBuilder: (context, index) {
+            final pass = widget.passes[index];
+            return AnimatedSwitcher(
+              key: ValueKey(pass.id),
+              transitionBuilder: (child, animation) {
+                return SizeTransition(
+                  sizeFactor: animation,
+                  child: FadeTransition(
+                    opacity: animation,
+                    child: child,
+                  ),
+                );
+              },
+              duration: const Duration(milliseconds: 300),
+              child: CardItem(
+                key: ValueKey(pass.id),
+                pass: pass,
+                index: index,
+                cache: state.cache,
               ),
             );
           },
-          duration: const Duration(milliseconds: 300),
-          child: CardItem(pass: pass, index: index),
         );
       },
     );
@@ -206,11 +218,13 @@ class _CardListState extends State<CardList> {
 class CardItem extends StatefulWidget {
   final RapidPass pass;
   final int index;
+  final Cache? cache;
 
   const CardItem({
     super.key,
     required this.pass,
     required this.index,
+    required this.cache,
   });
 
   @override
@@ -218,43 +232,63 @@ class CardItem extends StatefulWidget {
 }
 
 class _CardItemState extends State<CardItem> {
+  bool _isCached = false;
+
+  Stream<RapidPassData> get data async* {
+    final cache = widget.cache;
+    final cachedData = await cache?.get(widget.pass.id);
+    if (cachedData != null) {
+      _isCached = true;
+      yield cachedData;
+    }
+
+    try {
+      final remoteData = await widget.pass.data;
+      _isCached = false;
+      yield remoteData;
+      cache?.set(widget.pass.id, remoteData);
+    } catch (e) {
+      if (cachedData == null) {
+        yield* Stream.error(e);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
+    return StreamBuilder<RapidPassData>(
       key: ValueKey(widget.pass.id),
-      future: widget.pass.data,
+      stream: data,
       builder: (context, snapshot) {
-        if ((snapshot.connectionState == ConnectionState.done ||
-                snapshot.connectionState == ConnectionState.active) &&
-            snapshot.hasError) {
+        if (snapshot.hasError) {
           return CardLayoutError(
             index: widget.index,
             message: switch (snapshot.error) {
               SocketException _ => AppLocalizations.of(context)!.noInternet,
-              _ => snapshot.error,
+              _ => snapshot.error?.toString().replaceAll("Exception: ", ""),
             },
-            passName: widget.pass.name,
-            passNumber: widget.pass.number,
-            onCopy: () => _onCopy(widget.pass),
-            onDelete: () => _onDelete(widget.pass),
+            name: widget.pass.name,
+            id: widget.pass.id,
+            onCopy: onCopy,
+            onDelete: onDelete,
           );
         }
-        if (snapshot.connectionState == ConnectionState.done &&
-            snapshot.hasData) {
+        if (snapshot.hasData) {
           final passData = snapshot.data!;
           return CardLayoutSuccess(
             index: widget.index,
-            passName: widget.pass.name,
-            passNumber: widget.pass.number,
+            name: widget.pass.name,
+            id: widget.pass.id,
             passData: passData,
-            onCopy: () => _onCopy(widget.pass),
-            onDelete: () => _onDelete(widget.pass),
+            isCached: _isCached,
+            onCopy: onCopy,
+            onDelete: onDelete,
           );
         }
         return CardLayoutLoading(
           index: widget.index,
-          passNumber: widget.pass.number,
-          passName: widget.pass.name,
+          id: widget.pass.id,
+          name: widget.pass.name,
         );
       },
     );
@@ -266,7 +300,7 @@ class _CardItemState extends State<CardItem> {
 
   void _onCopy(RapidPass pass) async {
     await Clipboard.setData(
-      ClipboardData(text: "RP${pass.number}"),
+      ClipboardData(text: pass.id),
     );
 
     if (!mounted) return;
@@ -275,5 +309,13 @@ class _CardItemState extends State<CardItem> {
         content: Text(AppLocalizations.of(context)!.cardNumberCopied),
       ),
     );
+  }
+
+  void onDelete() {
+    _onDelete(widget.pass);
+  }
+
+  void onCopy() {
+    _onCopy(widget.pass);
   }
 }

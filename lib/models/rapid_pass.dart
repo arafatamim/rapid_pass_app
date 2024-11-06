@@ -42,13 +42,11 @@ class RapidPassData {
 
 class RapidPass {
   final String id;
-  final int number;
   final String name;
   final Future<RapidPassData> data;
 
   const RapidPass(
     this.id, {
-    required this.number,
     required this.name,
     required this.data,
   });
@@ -56,7 +54,6 @@ class RapidPass {
   String toJson() {
     final Map<String, dynamic> object = {
       'id': id,
-      'number': number,
       'name': name,
     };
     final jsonString = jsonEncode(object);
@@ -64,16 +61,12 @@ class RapidPass {
   }
 
   factory RapidPass.fromJson(Map<String, dynamic> json) {
+    final passId = json["id"] as String;
     final passName = json["name"] as String;
-    final passNumber = json["number"] as int;
     return RapidPass(
-      json["id"],
-      number: passNumber,
+      passId,
       name: passName,
-      data: RapidPassService.getRapidPass(
-        passName,
-        passNumber,
-      ),
+      data: RapidPassService.getRapidPass(passId),
     );
   }
 }

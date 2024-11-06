@@ -16,14 +16,15 @@ http.Client makeClient() {
 final random = Random();
 
 class RapidPassService {
-  static Future<RapidPassData> getRapidPass(String name, int number) async {
+  /// [id] is the two digit prefix + the pass number.
+  static Future<RapidPassData> getRapidPass(String id) async {
     final client = makeClient();
     try {
       final response = await client.post(
         Uri.parse(
           "https://rapidpass.com.bd/bn/index.php/welcome/searchRegistraionInfo",
         ),
-        body: {"search": "RP$number"},
+        body: {"search": id},
       );
       final body = response.body;
       return RapidPassData.fromHTML(body);

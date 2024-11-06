@@ -13,8 +13,8 @@
   "addFirstCard": "নিচের + বাটন ব্যাবহার করে আপনার প্রথম কার্ডটি যোগ করুন",
 
   "addRapidPass": "র‍্যাপিড পাস যোগ করুন",
-  "cardNumberHint": "১৪-অঙ্কের কার্ড নাম্বার",
-  "cardNumberValidator": "\"RP\" উপসর্গ বাদে ১৪-অঙ্কের নাম্বার লিখুন",
+  "cardNumberHint": "১৬-অঙ্কের কার্ড নাম্বার",
+  "cardNumberValidator": "১৬-অঙ্কের কার্ড নাম্বার লিখুন",
   "cardNameHint": "নাম",
   "cardNameValidator": "কার্ড সংরক্ষণের জন্য একটি নাম দিন",
 
