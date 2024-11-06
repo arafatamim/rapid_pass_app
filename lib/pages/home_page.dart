@@ -9,11 +9,9 @@ import 'package:rapid_pass_info/state/state.dart';
 import 'package:rapid_pass_info/widgets/card_layout.dart';
 import 'package:rapid_pass_info/widgets/empty_message.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart' hide AppState;
 import 'package:rapid_pass_info/pages/settings.dart';
 import 'package:reorderable_grid/reorderable_grid.dart';
 import '../helpers/cache.dart';
-import '../helpers/ad_helper.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -23,54 +21,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  BannerAd? _bannerAd;
-
-  Future<InitializationStatus> _initGoogleMobileAds() {
-    return MobileAds.instance.initialize();
-  }
-
-  void _loadAd() {
-    final bannerAd = BannerAd(
-      size: AdSize.banner,
-      adUnitId: AdHelper.bannerAdUnitId,
-      request: const AdRequest(),
-      listener: BannerAdListener(
-        onAdLoaded: (ad) {
-          if (!mounted) {
-            ad.dispose();
-            return;
-          }
-          setState(() {
-            _bannerAd = ad as BannerAd;
-          });
-        },
-        onAdFailedToLoad: (ad, error) {
-          debugPrint('BannerAd failed to load: $error');
-          ad.dispose();
-        },
-        onAdClosed: (ad) {
-          setState(() {
-            _bannerAd = null;
-          });
-          ad.dispose();
-        },
-      ),
-    );
-
-    // Start loading.
-    bannerAd.load();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    if (Platform.isAndroid) {
-      _initGoogleMobileAds().then((status) {
-        _loadAd();
-      });
-    }
-  }
-
   Widget _buildAppBar() {
     return SliverAppBar.large(
       title: Text(
@@ -116,13 +66,6 @@ class _HomePageState extends State<HomePage> {
       builder: (context, state, child) {
         return Scaffold(
           floatingActionButton: child,
-          bottomNavigationBar: (_bannerAd != null)
-              ? SizedBox(
-                  width: _bannerAd!.size.width.toDouble(),
-                  height: _bannerAd!.size.height.toDouble(),
-                  child: AdWidget(ad: _bannerAd!),
-                )
-              : null,
           body: RefreshIndicator(
             onRefresh: () async {
               setState(() {});
@@ -150,12 +93,6 @@ class _HomePageState extends State<HomePage> {
         );
       },
     );
-  }
-
-  @override
-  void dispose() {
-    _bannerAd?.dispose();
-    super.dispose();
   }
 }
 
