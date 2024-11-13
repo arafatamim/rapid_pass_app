@@ -45,6 +45,7 @@ class _CardListState extends State<CardList>
       itemBuilder: (context, index) {
         final pass = widget.passes[index];
         return CardItem(
+          key: ValueKey(pass.id),
           pass: pass,
           index: index,
         );
