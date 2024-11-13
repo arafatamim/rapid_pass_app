@@ -22,19 +22,13 @@ class _HomePageState extends State<HomePage> {
     return ValueListenableBuilder(
       valueListenable: Hive.box<RapidPass>(RapidPass.boxName).listenable(),
       child: FloatingActionButton(
+        onPressed: _showAddPassPage,
         tooltip: AppLocalizations.of(context)!.addRapidPass,
-        onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => const AddPassPage(),
-            ),
-          );
-        },
         child: const Icon(Icons.add_card),
       ),
       builder: (context, box, child) {
         return Scaffold(
-          floatingActionButton: child,
+          floatingActionButton: box.isEmpty ? child : null,
           body: RefreshIndicator(
             onRefresh: () async {
               setState(() {});
@@ -66,6 +60,39 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Widget _buildNoticeButton(String data) {
+    return PopInWidget(
+      child: IconButton(
+        icon: const Icon(Icons.warning_amber_rounded),
+        tooltip: AppLocalizations.of(context)!.noticeTitle,
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                key: ValueKey(data),
+                title: Text(
+                  AppLocalizations.of(context)!.noticeFromAuthorities,
+                ),
+                content: Text(data),
+                actions: [
+                  TextButton(
+                    child: Text(
+                      MaterialLocalizations.of(context).closeButtonLabel,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  )
+                ],
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+
   Widget _buildAppBar() {
     return SliverAppBar.large(
       title: Text(
@@ -79,36 +106,19 @@ class _HomePageState extends State<HomePage> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               final data = snapshot.data!;
-              return PopInWidget(
-                child: IconButton(
-                  icon: const Icon(Icons.warning_amber_rounded),
-                  tooltip: AppLocalizations.of(context)!.noticeTitle,
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          key: ValueKey(data),
-                          title: Text(
-                            AppLocalizations.of(context)!.noticeFromAuthorities,
-                          ),
-                          content: Text(data),
-                          actions: [
-                            TextButton(
-                              child: Text(
-                                MaterialLocalizations.of(context)
-                                    .closeButtonLabel,
-                              ),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            )
-                          ],
-                        );
-                      },
-                    );
-                  },
-                ),
+              return _buildNoticeButton(data);
+            }
+            return const SizedBox.shrink();
+          },
+        ),
+        ValueListenableBuilder(
+          valueListenable: Hive.box<RapidPass>(RapidPass.boxName).listenable(),
+          builder: (context, box, _) {
+            if (box.isNotEmpty) {
+              return IconButton(
+                icon: const Icon(Icons.add_card),
+                tooltip: AppLocalizations.of(context)!.addRapidPass,
+                onPressed: _showAddPassPage,
               );
             }
             return const SizedBox.shrink();
@@ -133,6 +143,15 @@ class _HomePageState extends State<HomePage> {
           ],
         )
       ],
+    );
+  }
+
+  void _showAddPassPage() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return const AddPassPage();
+      },
     );
   }
 }
