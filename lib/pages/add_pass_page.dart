@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:rapid_pass_info/state/state.dart';
+import 'package:hive_ce/hive.dart';
+import 'package:rapid_pass_info/models/rapid_pass.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AddPassPage extends StatefulWidget {
@@ -13,7 +14,15 @@ class AddPassPage extends StatefulWidget {
 class _AddPassPageState extends State<AddPassPage> {
   String? id;
   String? name;
+  String _prefix = "RP";
+
   final _formKey = GlobalKey<FormState>();
+
+  void switchPrefix() {
+    setState(() {
+      _prefix = _prefix == "RP" ? "DC" : "RP";
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,14 +37,29 @@ class _AddPassPageState extends State<AddPassPage> {
           child: Column(
             children: [
               TextFormField(
-                maxLength: 16,
+                keyboardType: TextInputType.number,
+                maxLength: 14,
+                maxLengthEnforcement:
+                    MaxLengthEnforcement.truncateAfterCompositionEnds,
                 decoration: InputDecoration(
                   labelText: AppLocalizations.of(context)!.cardNumberHint,
+                  prefix: InkWell(
+                    onTap: () => switchPrefix(),
+                    child: Text(_prefix),
+                  ),
                 ),
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
+                  if (value == null || value.isEmpty || value.length != 14) {
                     return AppLocalizations.of(context)!.cardNumberValidator;
                   }
+                  final idWithPrefix = "$_prefix$value";
+                  final passExists = Hive.box<RapidPass>(RapidPass.boxName)
+                      .values
+                      .any((element) => element.id == idWithPrefix);
+                  if (passExists) {
+                    return AppLocalizations.of(context)!.cardNumberExists;
+                  }
+
                   return null;
                 },
                 onSaved: (value) {
@@ -46,13 +70,16 @@ class _AddPassPageState extends State<AddPassPage> {
                     id = value;
                   });
                 },
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               ),
               const SizedBox(height: 8),
               TextFormField(
+                keyboardType: TextInputType.name,
+                textCapitalization: TextCapitalization.words,
                 decoration: InputDecoration(
                   labelText: AppLocalizations.of(context)!.cardNameHint,
                 ),
-                maxLength: 15,
+                maxLength: 20,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return AppLocalizations.of(context)!.cardNameValidator;
@@ -67,6 +94,9 @@ class _AddPassPageState extends State<AddPassPage> {
               ),
               const SizedBox(height: 24),
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+                ),
                 onPressed: () async {
                   if (!_formKey.currentState!.validate()) {
                     return;
@@ -75,13 +105,19 @@ class _AddPassPageState extends State<AddPassPage> {
                   if (id == null || name == null) {
                     return;
                   }
-                  context.read<AppState>().addPass(id!, name!);
+
+                  final pass = RapidPass("$_prefix${id!}", name!);
+
+                  Hive.box<RapidPass>(RapidPass.boxName).add(pass);
 
                   if (context.mounted) {
                     Navigator.of(context).pop();
                   }
                 },
-                child: Text(AppLocalizations.of(context)!.addRapidPass),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(AppLocalizations.of(context)!.addRapidPass),
+                ),
               ),
             ],
           ),

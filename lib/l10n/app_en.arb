@@ -1,30 +1,36 @@
 {
   "title": "Amar Rapid Pass",
-  "cardNumberCopied": "Card number copied to clipboard",
-  "noInternet": "No internet connection or server is down",
+  "noticeTitle": "Notice",
+  "noticeFromAuthorities": "Notice from authorities",
+  "cardNumberCopied": "Card number copied to clipboard: {number}",
   "removeCard": "Remove card",
   "copyCardNumber": "Copy card number",
   "cardInactive": "card inactive",
   "lowBalance": "low balance",
   "inactive": "inactive",
-  "cached": "cached data",
+  "cached": "displaying cached information due to server issues",
   "errorWhileLoading": "An error occurred while loading the card",
+  "dragToReorder": "Long press and drag this to reorder",
 
   "addFirstCard": "Add your first card using the + button below",
 
   "addRapidPass": "Add Rapid Pass",
-  "cardNumberHint": "16-digit card number",
-  "cardNumberValidator": "Enter a 16-digit card number",
+  "cardNumberHint": "Card number",
+  "cardNumberValidator": "Enter the 14-digit card number on the back of your card",
   "cardNameHint": "Name",
   "cardNameValidator": "Enter a name to save this card as",
+  "cardNumberExists": "A card with this number already exists",
 
   "about": "About",
-  "aboutDescription": "Made by Tamim Arafat (tamim.arafat@gmail.com)",
+  "aboutDescription": "Made by Tamim Arafat (tamim.arafat@gmail.com). DISCLAIMER: This app is not officially affiliated with Dhaka Transport Coordination Authority (DTCA) or any other organisation. The data is fetched from the official DTCA website. Use at your own discretion.",
 
   "settings": "Settings",
   "clearAll": "Clear all saved passes",
   "clearAllConfirmation": "Are you sure you want to clear all saved passes?",
   "yes": "Yes",
   "no": "No",
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+
+  "networkException": "No internet connection or server is down",
+  "serverException": "Server maintenance ongoing"
 }

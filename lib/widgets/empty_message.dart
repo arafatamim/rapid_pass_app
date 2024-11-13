@@ -11,6 +11,7 @@ class EmptyMessage extends StatelessWidget {
     return AspectRatio(
       aspectRatio: 1.8,
       child: Card(
+        color: Theme.of(context).colorScheme.onInverseSurface,
         elevation: 0,
         child: Padding(
           padding: const EdgeInsets.all(16.0),

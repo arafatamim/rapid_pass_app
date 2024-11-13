@@ -90,6 +90,50 @@ class _CardLayoutBaseState extends State<CardLayoutBase> {
   }
 }
 
+List<Widget> _buildHeader(
+  BuildContext context, {
+  required int index,
+  required String name,
+  required String id,
+  required Color activeForegroundColor,
+  required Color activeForegroundColorDimmed,
+}) {
+  return [
+    Row(
+      children: [
+        Expanded(
+          child: Text(
+            name,
+            style: TextStyle(
+              color: activeForegroundColor,
+              fontSize: Theme.of(context).textTheme.titleLarge?.fontSize,
+              fontWeight: FontWeight.w500,
+            ),
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        Tooltip(
+          message: AppLocalizations.of(context)?.dragToReorder,
+          triggerMode: TooltipTriggerMode.tap,
+          child: ReorderableGridDelayedDragStartListener(
+            index: index,
+            child: Icon(
+              Icons.drag_handle,
+              color: activeForegroundColor,
+            ),
+          ),
+        ),
+      ],
+    ),
+    Text(
+      id,
+      style: TextStyle(
+        color: activeForegroundColorDimmed,
+      ),
+    )
+  ];
+}
+
 class CardLayoutLoading extends StatelessWidget {
   final String id;
   final String name;
@@ -108,32 +152,16 @@ class CardLayoutLoading extends StatelessWidget {
     return CardLayoutBase(
       elevation: 0,
       disableDropdownMenu: true,
-      color: Theme.of(context).scaffoldBackgroundColor,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-        side: BorderSide(
-          color: hintColor,
-          width: 1,
-        ),
-      ),
+      // color: Theme.of(context).scaffoldBackgroundColor,
+      color: Theme.of(context).colorScheme.onInverseSurface,
       children: [
-        Row(
-          children: [
-            Expanded(
-              child: Text(
-                [name, id].join(" • "),
-                style: TextStyle(color: hintColor),
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            ReorderableGridDragStartListener(
-              index: index,
-              child: Icon(
-                Icons.drag_handle,
-                color: hintColor,
-              ),
-            ),
-          ],
+        ..._buildHeader(
+          context,
+          id: id,
+          name: name,
+          index: index,
+          activeForegroundColor: hintColor,
+          activeForegroundColorDimmed: hintColor,
         ),
         const Spacer(),
         Shimmer(
@@ -207,6 +235,7 @@ class CardLayoutSuccess extends StatelessWidget {
     final activeForegroundColor = passData.isActive
         ? Theme.of(context).colorScheme.onSecondary
         : Theme.of(context).hintColor;
+    final activeForegroundColorDimmed = activeForegroundColor.withOpacity(0.8);
 
     return CardLayoutBase(
       color: activeBackgroundColor,
@@ -224,122 +253,43 @@ class CardLayoutSuccess extends StatelessWidget {
       onCopy: onCopy,
       onDelete: onDelete,
       children: [
-        Row(
-          children: [
-            Expanded(
-              child: Text(
-                [name, id].join(" • "),
-                style: TextStyle(color: activeForegroundColor),
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            ReorderableGridDragStartListener(
-              index: index,
-              child: Icon(
-                Icons.drag_handle,
-                color: activeForegroundColor,
-              ),
-            ),
-          ],
+        ..._buildHeader(
+          context,
+          id: id,
+          name: name,
+          index: index,
+          activeForegroundColor: activeForegroundColor,
+          activeForegroundColorDimmed: activeForegroundColorDimmed,
         ),
         const Spacer(),
-        Row(
-          children: [
-            Text(
-              "৳${passData.balance}",
-              style: Theme.of(context)
-                  .textTheme
-                  .headlineLarge
-                  ?.copyWith(color: activeForegroundColor),
-            ),
-            const Padding(padding: EdgeInsets.only(right: 8)),
-            _buildTooltip(context, activeForegroundColor),
-          ],
-        ),
-        const Spacer(),
-        Text(
-          "${RelativeTime(context).format(passData.lastUpdated)}"
-          "${!passData.isActive ? " • ${AppLocalizations.of(context)!.inactive}" : ""}",
-          style: Theme.of(context)
-              .textTheme
-              .bodySmall
-              ?.copyWith(color: activeForegroundColor),
-        ),
-      ],
-    );
-  }
-}
-
-class CardLayoutCached extends StatelessWidget {
-  final int index;
-  final String name;
-  final String id;
-  final RapidPassData passData;
-  final VoidCallback? onDelete;
-  final VoidCallback? onCopy;
-
-  const CardLayoutCached({
-    super.key,
-    required this.index,
-    required this.name,
-    required this.id,
-    required this.passData,
-    this.onDelete,
-    this.onCopy,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final activeForegroundColor = passData.isActive
-        ? Theme.of(context).colorScheme.onSecondary
-        : Theme.of(context).hintColor;
-    return CardLayoutBase(
-      color: Colors.green,
-      foregroundColor: Colors.white,
-      elevation: passData.isActive ? 1 : 0,
-      shape: passData.isActive
-          ? null
-          : RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-              side: BorderSide(
-                color: Theme.of(context).hintColor,
-                width: 2,
+        Expanded(
+          flex: 6,
+          child: Row(
+            children: [
+              Align(
+                alignment: const Alignment(0, -0.3),
+                child: Text(
+                  "৳",
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                        fontSize: 20,
+                        color: activeForegroundColorDimmed,
+                      ),
+                ),
               ),
-            ),
-      onCopy: onCopy,
-      onDelete: onDelete,
-      children: [
-        Row(
-          children: [
-            Expanded(
-              child: Text(
-                [name, id].join(" • "),
-                style: TextStyle(color: activeForegroundColor),
-                overflow: TextOverflow.ellipsis,
+              Text(
+                "${passData.balance}",
+                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                      color: activeForegroundColor,
+                      fontWeight: FontWeight.w600,
+                    ),
               ),
-            ),
-            ReorderableGridDragStartListener(
-              index: index,
-              child: Icon(
-                Icons.drag_handle,
-                color: activeForegroundColor,
+              const Padding(padding: EdgeInsets.only(right: 8)),
+              Align(
+                alignment: Alignment.center,
+                child: _buildTooltip(context, activeForegroundColorDimmed),
               ),
-            ),
-          ],
-        ),
-        const Spacer(),
-        Row(
-          children: [
-            Text(
-              "৳${passData.balance}",
-              style: Theme.of(context)
-                  .textTheme
-                  .headlineLarge
-                  ?.copyWith(color: activeForegroundColor),
-            ),
-            const Padding(padding: EdgeInsets.only(right: 8)),
-            // TODO: _buildTooltip(context, activeForegroundColor),
-          ],
+            ],
+          ),
         ),
         const Spacer(),
         Text(
@@ -348,7 +298,7 @@ class CardLayoutCached extends StatelessWidget {
           style: Theme.of(context)
               .textTheme
               .bodySmall
-              ?.copyWith(color: activeForegroundColor),
+              ?.copyWith(color: activeForegroundColorDimmed),
         ),
       ],
     );
@@ -377,33 +327,17 @@ class CardLayoutError extends StatelessWidget {
   Widget build(BuildContext context) {
     return CardLayoutBase(
       elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-        side: const BorderSide(
-          color: Colors.red,
-          width: 1,
-        ),
-      ),
+      color: Theme.of(context).colorScheme.onInverseSurface,
       onCopy: onCopy,
       onDelete: onDelete,
       children: [
-        Row(
-          children: [
-            Expanded(
-              child: Text(
-                [name, id].join(" • "),
-                style: const TextStyle(color: Colors.red),
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            ReorderableGridDragStartListener(
-              index: index,
-              child: Icon(
-                Icons.drag_handle,
-                color: Theme.of(context).hintColor,
-              ),
-            ),
-          ],
+        ..._buildHeader(
+          context,
+          id: id,
+          name: name,
+          index: index,
+          activeForegroundColor: Colors.redAccent,
+          activeForegroundColorDimmed: Colors.red.withOpacity(0.8),
         ),
         const Spacer(),
         Text(
