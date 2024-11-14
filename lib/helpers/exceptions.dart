@@ -2,6 +2,7 @@ enum AppExceptionType {
   network,
   server,
   invalidLocale,
+  notFound,
   unknown,
 }
 

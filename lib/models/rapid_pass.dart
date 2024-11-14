@@ -71,15 +71,21 @@ class RapidPassData extends HiveObject {
 
   factory RapidPassData.fromHTML(String html) {
     final document = dom.Document.html(html);
-    final str = document.querySelector("table");
-    if (str == null) {
+    final cardBodyStr = document.querySelector(".card-body");
+    final matchNoCardStr = cardBodyStr?.text.trim().toLowerCase();
+    if (matchNoCardStr == "no result found!") {
+      throw AppException(AppExceptionType.notFound);
+    }
+
+    final infoEl = document.querySelector("table");
+    if (infoEl == null) {
       throw AppException(AppExceptionType.server);
     }
-    final el1 = str
+    final el1 = infoEl
         .querySelectorAll("td.text-right")
         .map((e) => e.text.trim())
         .toList();
-    final el2 = str
+    final el2 = infoEl
         .getElementsByClassName("badge badge-warning")[0]
         .text
         .trim()

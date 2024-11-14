@@ -127,6 +127,8 @@ class _CardItemState extends State<CardItem> {
                   AppLocalizations.of(context)!.networkException,
                 AppException(code: AppExceptionType.server) =>
                   AppLocalizations.of(context)!.serverException,
+                AppException(code: AppExceptionType.notFound) =>
+                  AppLocalizations.of(context)!.notFoundException,
                 _ => _error?.toString().replaceAll("Exception: ", ""),
               },
               name: widget.pass.name,

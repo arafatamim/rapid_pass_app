@@ -32,5 +32,6 @@
   "cancel": "Cancel",
 
   "networkException": "No internet connection or server is down",
-  "serverException": "Server maintenance ongoing"
+  "serverException": "Server maintenance ongoing",
+  "notFoundException": "Card not found"
 }

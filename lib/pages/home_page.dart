@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> {
                     right: 8,
                     bottom: 8,
                   ),
-                  sliver: box.values.isEmpty
+                  sliver: box.isEmpty
                       ? const SliverToBoxAdapter(
                           child: Center(
                             child: EmptyMessage(),
