@@ -1,4 +1,3 @@
-
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -8,6 +7,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:relative_time/relative_time.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:rapid_pass_info/hive_registrar.g.dart';
+import 'package:upgrader/upgrader.dart';
+import 'package:rapid_pass_info/services/upgrader.dart';
 
 // TODO: single view when only one card
 
@@ -61,7 +62,15 @@ class RapidPassApp extends StatelessWidget {
             textTheme: textTheme,
             fontFamily: fontFamily,
           ),
-          home: const HomePage(),
+          home: UpgradeAlert(
+            upgrader: Upgrader(
+              storeController: UpgraderStoreController(
+                onLinux: () => UpgraderGitHubReleases(),
+              ),
+            ),
+            showIgnore: false,
+            child: const HomePage(),
+          ),
         );
       },
     );

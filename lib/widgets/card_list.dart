@@ -81,7 +81,6 @@ class _CardItemState extends State<CardItem> {
     // fetch from cache first if available
     final cached = _cacheBox.get(widget.pass.id);
     if (cached != null) {
-      _isCached = true;
       _data = cached;
     }
     WidgetsBinding.instance.addPostFrameCallback(
@@ -109,6 +108,7 @@ class _CardItemState extends State<CardItem> {
     ).catchError((e) {
       if (!mounted) return;
       setState(() {
+        _isCached = true;
         _error = e;
       });
     });
