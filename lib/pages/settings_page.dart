@@ -63,6 +63,26 @@ class SettingsPage extends StatelessWidget {
                   },
                 ),
                 ListTile(
+                  title: Text(AppLocalizations.of(context)!.viewPrivacyPolicy),
+                  onTap: () async {
+                    final repoUrlStr = meta["repoUrl"];
+                    if (repoUrlStr != null) {
+                      final docUrl = Uri.parse(
+                          "$repoUrlStr/blob/master/privacy-policy.md");
+                      if (await canLaunchUrl(docUrl)) {
+                        launchUrl(docUrl);
+                      }
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                              AppLocalizations.of(context)!.cannotLaunchUrl),
+                        ),
+                      );
+                    }
+                  },
+                ),
+                ListTile(
                   title: Text(AppLocalizations.of(context)!.viewSource),
                   onTap: () async {
                     final repoUrlStr = meta["repoUrl"];
