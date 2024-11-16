@@ -65,6 +65,7 @@ class RapidPassApp extends StatelessWidget {
           home: UpgradeAlert(
             upgrader: Upgrader(
               storeController: UpgraderStoreController(
+                onAndroid: () => UpgraderGitHubReleases(),
                 onLinux: () => UpgraderGitHubReleases(),
               ),
             ),

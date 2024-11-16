@@ -23,8 +23,8 @@ class SettingsPage extends StatelessWidget {
             showIgnore: false,
             margin: const EdgeInsets.all(8),
             upgrader: Upgrader(
-              durationUntilAlertAgain: const Duration(milliseconds: 1),
               storeController: UpgraderStoreController(
+                onAndroid: () => UpgraderGitHubReleases(),
                 onLinux: () => UpgraderGitHubReleases(),
               ),
             ),
@@ -65,39 +65,51 @@ class SettingsPage extends StatelessWidget {
                 ListTile(
                   title: Text(AppLocalizations.of(context)!.viewPrivacyPolicy),
                   onTap: () async {
-                    final repoUrlStr = meta["repoUrl"];
-                    if (repoUrlStr != null) {
+                    try {
+                      final repoUrlStr = meta["repoUrl"];
+                      if (repoUrlStr == null) {
+                        throw Exception("repoUrl is not defined in meta");
+                      }
                       final docUrl = Uri.parse(
                           "$repoUrlStr/blob/master/privacy-policy.md");
-                      if (await canLaunchUrl(docUrl)) {
-                        launchUrl(docUrl);
+                      if (!await launchUrl(docUrl)) {
+                        throw Exception("Failed to launch $docUrl");
                       }
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                              AppLocalizations.of(context)!.cannotLaunchUrl),
-                        ),
-                      );
+                    } catch (e) {
+                      debugPrint(e.toString());
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                AppLocalizations.of(context)!.cannotLaunchUrl),
+                          ),
+                        );
+                      }
                     }
                   },
                 ),
                 ListTile(
                   title: Text(AppLocalizations.of(context)!.viewSource),
                   onTap: () async {
-                    final repoUrlStr = meta["repoUrl"];
-                    if (repoUrlStr != null) {
-                      final repoUrl = Uri.parse(repoUrlStr);
-                      if (await canLaunchUrl(repoUrl)) {
-                        launchUrl(repoUrl);
+                    try {
+                      final repoUrlStr = meta["repoUrl"];
+                      if (repoUrlStr == null) {
+                        throw Exception("repoUrl is not defined in meta");
                       }
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                              AppLocalizations.of(context)!.cannotLaunchUrl),
-                        ),
-                      );
+                      final repoUrl = Uri.parse(repoUrlStr);
+                      if (!await launchUrl(repoUrl)) {
+                        throw Exception("Failed to launch $repoUrl");
+                      }
+                    } catch (e) {
+                      debugPrint(e.toString());
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                AppLocalizations.of(context)!.cannotLaunchUrl),
+                          ),
+                        );
+                      }
                     }
                   },
                 ),
