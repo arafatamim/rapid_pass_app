@@ -1,6 +1,6 @@
 # Privacy Policy for Amar Rapid Pass
 
-Last Updated: November 15, 2024
+Last Updated: November 16, 2024
 
 ## Introduction
 This Privacy Policy describes how Amar Rapid Pass ("we," "our," or "the app") handles your information. We are committed to protecting your privacy and being transparent about our practices.
@@ -8,7 +8,7 @@ This Privacy Policy describes how Amar Rapid Pass ("we," "our," or "the app") ha
 ## Important Disclaimers
 - Amar Rapid Pass is NOT affiliated with, endorsed by, or connected to DTCA (Dhaka Transport Coordination Authority) in any way
 - We are an independent application that helps users check their Rapid Pass balance
-- Our source code is open source and available for inspection at https://github.com/arafatamim/rapid_pass_info
+- Our source code is open source and available for inspection at https://github.com/arafatamim/rapid_pass_app
 - We only access publicly available information from DTCA's official website
 
 ## Information Collection and Use
@@ -59,7 +59,7 @@ Our app does not knowingly collect or maintain information from persons under 13
 
 ## Contact Us
 If you have any questions about this Privacy Policy, our practices, or would like to contribute to the project, please:
-- Visit our open source repository at https://github.com/arafatamim/amar_rapid_pass
+- Visit our open source repository at https://github.com/arafatamim/rapid_pass_app
 - Contact us at our email: tamim.arafat@gmail.com
 - Submit an issue on our GitHub repository
 
