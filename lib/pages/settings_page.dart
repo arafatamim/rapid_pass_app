@@ -3,7 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:rapid_pass_info/models/rapid_pass.dart';
 import 'package:upgrader/upgrader.dart';
-import 'package:rapid_pass_info/services/upgrader.dart';
+import 'package:rapid_pass_info/helpers/upgrader.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:rapid_pass_info/meta.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -22,12 +22,7 @@ class SettingsPage extends StatelessWidget {
           UpgradeCard(
             showIgnore: false,
             margin: const EdgeInsets.all(8),
-            upgrader: Upgrader(
-              durationUntilAlertAgain: const Duration(milliseconds: 1),
-              storeController: UpgraderStoreController(
-                onLinux: () => UpgraderGitHubReleases(),
-              ),
-            ),
+            upgrader: upgrader,
           ),
           Expanded(
             child: ListView(
