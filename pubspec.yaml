@@ -14,7 +14,6 @@ dependencies:
   http: ^1.2.1
   relative_time: ^5.0.0
   dynamic_color: ^1.7.0
-  provider: ^6.1.2
   flutter_flip_card: ^0.0.6
   animated_reorderable_list: ^1.0.7
   flutter_localizations:
@@ -28,6 +27,9 @@ dependencies:
   version: ^3.0.2
   package_info_plus: ^8.1.1
   url_launcher: ^6.3.1
+  dropdown_search: ^6.0.1
+  # collection: ^1.18.0
+  # sliver_tools: ^0.2.12
 
 dev_dependencies:
   flutter_test:

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:rapid_pass_info/helpers/exceptions.dart';
+import 'package:rapid_pass_info/helpers/refresh_notifier.dart';
 import 'package:rapid_pass_info/models/rapid_pass.dart';
 import 'package:rapid_pass_info/services/rapid_pass.dart';
 import 'package:rapid_pass_info/widgets/card_layout.dart';
@@ -10,18 +11,19 @@ import 'package:reorderable_grid/reorderable_grid.dart';
 
 class CardList extends StatefulWidget {
   final List<RapidPass> passes;
+  final SliverGridDelegate gridDelegate;
 
   const CardList({
     super.key,
     required this.passes,
+    required this.gridDelegate,
   });
 
   @override
   State<CardList> createState() => _CardListState();
 }
 
-class _CardListState extends State<CardList>
-    with SingleTickerProviderStateMixin {
+class _CardListState extends State<CardList> {
   @override
   Widget build(BuildContext context) {
     return SliverReorderableGrid(
@@ -36,12 +38,7 @@ class _CardListState extends State<CardList>
         box.putAt(oldIndex, newItem.copyWith());
         box.putAt(newIndex, oldItem.copyWith());
       },
-      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 400,
-        childAspectRatio: 1.8,
-        crossAxisSpacing: 6,
-        mainAxisSpacing: 6,
-      ),
+      gridDelegate: widget.gridDelegate,
       itemBuilder: (context, index) {
         final pass = widget.passes[index];
         return CardItem(
@@ -85,6 +82,9 @@ class _CardItemState extends State<CardItem> {
     }
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
+        context.registerRefreshCallback(() async {
+          await _fetchRemoteData();
+        });
         if (mounted) {
           _fetchRemoteData();
         }
@@ -92,26 +92,25 @@ class _CardItemState extends State<CardItem> {
     );
   }
 
-  void _fetchRemoteData() {
+  Future<void> _fetchRemoteData() async {
     if (!mounted) return;
 
-    RapidPassService.instance.getRapidPass(widget.pass.id).then(
-      (value) {
-        if (!mounted) return;
-        setState(() {
-          _isCached = false;
-          _data = value;
-          // populate cache
-          _cacheBox.put(widget.pass.id, value);
-        });
-      },
-    ).catchError((e) {
+    try {
+      final data = await RapidPassService.instance.getRapidPass(widget.pass.id);
       if (!mounted) return;
       setState(() {
-        _isCached = true;
+        _isCached = false;
+        _data = data;
+        // populate cache
+        _cacheBox.put(widget.pass.id, data);
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        if (_data != null) _isCached = true; // just show cached data
         _error = e;
       });
-    });
+    }
   }
 
   @override

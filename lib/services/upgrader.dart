@@ -5,6 +5,10 @@ import 'package:version/version.dart';
 import 'dart:convert';
 
 class UpgraderGitHubReleases extends UpgraderStore {
+  UpgraderGitHubReleases._();
+
+  static final UpgraderGitHubReleases instance = UpgraderGitHubReleases._();
+
   @override
   Future<UpgraderVersionInfo> getVersionInfo({
     required UpgraderState state,
