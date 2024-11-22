@@ -16,7 +16,6 @@ class UpgraderGitHubReleases extends UpgraderStore {
     required String? country,
     required String? language,
   }) async {
-    UpgraderPlayStore();
     final githubReleaseUrl = meta["githubReleaseUrl"];
 
     if (githubReleaseUrl == null) {

@@ -11,6 +11,8 @@ import 'package:rapid_pass_info/hive_registrar.g.dart';
 import 'package:upgrader/upgrader.dart';
 import 'package:rapid_pass_info/helpers/upgrader.dart';
 import 'package:rapid_pass_info/helpers/transport_route_localizations.dart';
+import 'package:rapid_pass_info/meta.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 // TODO: single view when only one card
 
@@ -74,6 +76,17 @@ class RapidPassApp extends StatelessWidget {
           home: UpgradeAlert(
             upgrader: !kDebugMode ? upgrader : null,
             showIgnore: false,
+            showReleaseNotes: false,
+            onUpdate: () {
+              final repoUrlStr = meta["repoUrl"];
+              if (repoUrlStr == null) {
+                return false;
+              }
+              final repoUrl = Uri.parse("$repoUrlStr/releases/latest");
+              launchUrl(repoUrl);
+
+              return true;
+            },
             child: const HomePage(),
           ),
         );
