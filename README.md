@@ -1,6 +1,6 @@
 # Amar Rapid Pass
 
-Check the balance of your Rapid Passes and MRT Passes easily.
+Check the balance of your [Rapid Passes](https://rapidpass.com.bd) and MRT Passes easily.
 
 ## Screenshots
 <img src="https://github.com/user-attachments/assets/d414c78a-c673-4c34-803f-a0f00937e0a3" width="250px" alt="Home page">
@@ -11,6 +11,7 @@ Check the balance of your Rapid Passes and MRT Passes easily.
 
 ## Features
 - Save multiple Rapid Pass and MRT Pass cards locally on your device.
+- Find fare information for different routes.
 - Requires only internet access to fetch balance information.
 - Supports both Bangla and English language, along with dark mode.
 
