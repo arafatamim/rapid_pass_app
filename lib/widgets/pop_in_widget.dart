@@ -30,9 +30,11 @@ class _PopInWidgetState extends State<PopInWidget> {
   void initState() {
     super.initState();
     Future.delayed(duration, () {
-      setState(() {
-        _scale = 1.0;
-      });
+      if (mounted) {
+        setState(() {
+          _scale = 1.0;
+        });
+      }
     });
   }
 }

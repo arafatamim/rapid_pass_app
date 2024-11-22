@@ -3,7 +3,7 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:rapid_pass_info/models/rapid_pass.dart';
-import 'package:rapid_pass_info/pages/home_page/home_page.dart';
+import 'package:rapid_pass_info/pages/home_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:relative_time/relative_time.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';

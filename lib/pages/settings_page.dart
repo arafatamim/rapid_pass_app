@@ -47,6 +47,7 @@ class SettingsPage extends StatelessWidget {
                             TextButton(
                               onPressed: () {
                                 Hive.box<RapidPass>(RapidPass.boxName).clear();
+                                Hive.box<RapidPassData>(RapidPassData.boxName).clear();
                                 Navigator.pop(context);
                               },
                               child: Text(AppLocalizations.of(context)!.yes),

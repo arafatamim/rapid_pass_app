@@ -20,7 +20,12 @@ class _AddPassPageState extends State<AddPassPage> {
 
   void switchPrefix() {
     setState(() {
-      _prefix = _prefix == "RP" ? "DC" : "RP";
+      _prefix = switch (_prefix) {
+        "RP" => "DC",
+        "DC" => "MP",
+        "MP" => "RP",
+        _ => "RP",
+      };
     });
   }
 

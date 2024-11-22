@@ -30,14 +30,14 @@ class StationEntry {
   }
 }
 
-class FindFareView extends StatefulWidget {
-  const FindFareView({super.key});
+class FindFaresView extends StatefulWidget {
+  const FindFaresView({super.key});
 
   @override
-  State<FindFareView> createState() => _FindFareViewState();
+  State<FindFaresView> createState() => _FindFaresViewState();
 }
 
-class _FindFareViewState extends State<FindFareView> {
+class _FindFaresViewState extends State<FindFaresView> {
   List<DropdownMenuEntry<StationEntry>> _originEntries = [];
   List<DropdownMenuEntry<StationEntry>> _destinationEntries = [];
 
