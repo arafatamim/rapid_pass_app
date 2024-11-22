@@ -44,8 +44,8 @@ class _FindFaresViewState extends State<FindFaresView> {
   StationEntry? _selectedOrigin;
   StationEntry? _selectedDestination;
 
-  final TextEditingController _originController = TextEditingController();
-  final TextEditingController _destinationController = TextEditingController();
+  final _originController = TextEditingController();
+  final _destinationController = TextEditingController();
 
   List<DropdownMenuEntry<StationEntry>> getStationEntries([int? routeIndex]) {
     Set<StationEntry> stations = {};
@@ -300,9 +300,19 @@ class FareCalculator extends StatelessWidget {
     );
   }
 
-  Widget _buildPaymentMethod(BuildContext context, String method, int fare) {
+  Widget _buildPaymentMethod(
+    BuildContext context,
+    IconData icon,
+    String method,
+    int fare,
+  ) {
     return Row(
       children: [
+        Icon(
+          icon,
+          color: Theme.of(context).hintColor,
+        ),
+        const SizedBox(width: 8),
         Text(method),
         const Spacer(),
         _buildFare(context, fare),
@@ -327,11 +337,13 @@ class FareCalculator extends StatelessWidget {
           const SizedBox(height: 8),
           _buildPaymentMethod(
             context,
+            Icons.credit_card,
             AppLocalizations.of(context)!.rapidPass,
             (fare * 0.9).toInt(),
           ),
           _buildPaymentMethod(
             context,
+            Icons.money,
             AppLocalizations.of(context)!.cash,
             fare,
           ),
