@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rapid_pass_info/l10n/app_localizations.dart';
 import 'package:rapid_pass_info/constants/transport_routes/transport_routes.dart';
 import 'package:rapid_pass_info/helpers/transport_route_localizations.dart';
 import 'package:rapid_pass_info/models/transport_route.dart';

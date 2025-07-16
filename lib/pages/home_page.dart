@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rapid_pass_info/l10n/app_localizations.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:rapid_pass_info/models/rapid_pass.dart';
 import 'package:rapid_pass_info/pages/add_pass_page.dart';

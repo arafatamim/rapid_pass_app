@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rapid_pass_info/l10n/app_localizations.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:rapid_pass_info/models/rapid_pass.dart';
 import 'package:upgrader/upgrader.dart';
@@ -47,7 +47,8 @@ class SettingsPage extends StatelessWidget {
                             TextButton(
                               onPressed: () {
                                 Hive.box<RapidPass>(RapidPass.boxName).clear();
-                                Hive.box<RapidPassData>(RapidPassData.boxName).clear();
+                                Hive.box<RapidPassData>(RapidPassData.boxName)
+                                    .clear();
                                 Navigator.pop(context);
                               },
                               child: Text(AppLocalizations.of(context)!.yes),

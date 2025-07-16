@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rapid_pass_info/models/rapid_pass.dart';
 import 'package:rapid_pass_info/widgets/shimmer.dart';
 import 'package:relative_time/relative_time.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:rapid_pass_info/l10n/app_localizations.dart';
 import 'package:reorderable_grid/reorderable_grid.dart';
 
 // TODO: refactor to prevent code duplication
