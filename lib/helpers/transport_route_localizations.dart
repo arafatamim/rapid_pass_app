@@ -14,8 +14,8 @@ class TransportRouteLocalizations {
       _TransportRouteLocalizationsDelegate();
 
   static final _localizedRouteNames = {
-    'en': {5: 'MRT Line 6'},
-    'bn': {5: 'এমআরটি লাইন ৬'},
+    'en': {5: 'MRT Line 6', 6: "Hatirjheel Bus"},
+    'bn': {5: 'এমআরটি লাইন ৬', 6: "হাতিরঝিল বাস"},
   };
 
   static final _localizedStations = {
@@ -40,6 +40,15 @@ class TransportRouteLocalizations {
         15: 'Motijheel',
         16: 'Kamalapur',
       },
+      6: {
+        // Hatirjheel Bus
+        0: "Rampura",
+        2: "Mohanagar",
+        3: "FDC",
+        4: "Kunipara",
+        5: "Police Plaza",
+        6: "Badda"
+      }
     },
     'bn': {
       5: {
@@ -62,7 +71,22 @@ class TransportRouteLocalizations {
         15: 'মতিঝিল',
         16: 'কমলাপুর',
       },
+      6: {
+        // হাতিরঝিল
+        0: 'রামপুরা',
+        2: 'মহানগর',
+        3: 'এফডিসি',
+        4: 'কুনিপাড়া',
+        5: 'পুলিশ প্লাজা',
+        6: 'বাড্ডা'
+      }
     }
+  };
+
+  static final _arbitraryTranslations = {
+    "FDC(HJ)": {"en": "FDC", "bn": "এফডিসি"},
+    "Rampura(HJ)": {"en": "Rampura", "bn": "রামপুরা"},
+    "Police Plaza(HJ)": {"en": "Police Plaza", "bn": "পুলিশ প্লাজা"},
   };
 
   String translate(int routeIndex, int stationIndex) {
@@ -80,6 +104,32 @@ class TransportRouteLocalizations {
       return _localizedRouteNames['en']![routeIndex]!;
     }
     return name;
+  }
+
+  String? translateFromLocale(String stationName, String sourceLocale) {
+    if (_arbitraryTranslations.containsKey(stationName)) {
+      return _arbitraryTranslations[stationName]?[locale.languageCode];
+    }
+
+    // Find the station in the source locale
+    final sourceStations = _localizedStations[sourceLocale];
+    if (sourceStations == null) return null;
+
+    for (final routeEntry in sourceStations.entries) {
+      for (final stationEntry in routeEntry.value.entries) {
+        if (stationEntry.value == stationName) {
+          // Found the station, now get it in the current locale
+          final currentLocaleStations =
+              _localizedStations[locale.languageCode]?[routeEntry.key];
+          if (currentLocaleStations != null) {
+            return currentLocaleStations[stationEntry.key];
+          }
+          // Fallback to English if current locale not found
+          return _localizedStations['en']![routeEntry.key]![stationEntry.key]!;
+        }
+      }
+    }
+    return null; // Station not found
   }
 }
 

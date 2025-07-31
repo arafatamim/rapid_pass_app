@@ -41,10 +41,71 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cached => 'displaying cached information due to server issues';
 
   @override
-  String get errorWhileLoading => 'An error occurred while loading the card';
+  String get errorWhileLoading => 'An error occurred while loading cards';
 
   @override
   String get dragToReorder => 'Long press and drag this to reorder';
+
+  @override
+  String get credentialsCleared => 'Logged out successfully';
+
+  @override
+  String get unknown => 'Unknown';
+
+  @override
+  String get recharge => 'Recharge';
+
+  @override
+  String get cardIssued => 'Card issued';
+
+  @override
+  String get balance => 'Balance';
+
+  @override
+  String get lastUpdated => 'Last updated';
+
+  @override
+  String statisticsFooter(
+      Object totalValue, Object transactions, Object trips) {
+    return '$transactions transactions, ৳$totalValue spent on $trips total trips';
+  }
+
+  @override
+  String spentAmount(Object value) {
+    return 'Spent ৳$value';
+  }
+
+  @override
+  String get login => 'Login';
+
+  @override
+  String get emailOrPhone => 'Email or Mobile Number';
+
+  @override
+  String get emailValidation => 'Enter a valid email address or phone number';
+
+  @override
+  String get password => 'Password';
+
+  @override
+  String get passwordValidation => 'Enter a valid password';
+
+  @override
+  String get forgotPassword => 'Forgot Password?';
+
+  @override
+  String get createAnAccount => 'Create an account';
+
+  @override
+  String get logout => 'Logout';
+
+  @override
+  String logoutConfirmation(Object username) {
+    return 'Are you sure you want to logout $username?';
+  }
+
+  @override
+  String get loginFailed => 'Login failed. Check username and password.';
 
   @override
   String get addFirstCard => 'Add your first card using the + button below';

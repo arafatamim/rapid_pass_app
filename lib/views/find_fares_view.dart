@@ -3,6 +3,7 @@ import 'package:rapid_pass_info/l10n/app_localizations.dart';
 import 'package:rapid_pass_info/constants/transport_routes/transport_routes.dart';
 import 'package:rapid_pass_info/helpers/transport_route_localizations.dart';
 import 'package:rapid_pass_info/models/transport_route.dart';
+import 'package:rapid_pass_info/widgets/currency_label.dart';
 
 class StationEntry {
   final int routeIndex;
@@ -222,7 +223,7 @@ class _FindFaresViewState extends State<FindFaresView> {
         if (_selectedOrigin != null && _selectedDestination != null)
           Card(
             color: Theme.of(context).colorScheme.onInverseSurface,
-            child: FareCalculator(
+            child: FareResult(
               origin: _selectedOrigin!,
               destination: _selectedDestination!,
             ),
@@ -232,26 +233,38 @@ class _FindFaresViewState extends State<FindFaresView> {
   }
 }
 
-class FareCalculator extends StatelessWidget {
+class FareResult extends StatelessWidget {
   final StationEntry origin;
   final StationEntry destination;
 
-  const FareCalculator({
+  const FareResult({
     super.key,
     required this.origin,
     required this.destination,
   });
 
   Widget _buildTitle(BuildContext context) {
-    return Text(
-      "${TransportRouteLocalizations.of(context).translate(
-        origin.routeIndex,
-        origin.stationIndex,
-      )} ⇔ ${TransportRouteLocalizations.of(context).translate(
-        destination.routeIndex,
-        destination.stationIndex,
-      )}",
-      style: Theme.of(context).textTheme.headlineSmall,
+    return Wrap(
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: [
+        Text(
+          TransportRouteLocalizations.of(context).translate(
+            origin.routeIndex,
+            origin.stationIndex,
+          ),
+          style: Theme.of(context).textTheme.headlineSmall,
+        ),
+        const SizedBox(width: 8),
+        const Icon(Icons.swap_horiz),
+        const SizedBox(width: 8),
+        Text(
+          TransportRouteLocalizations.of(context).translate(
+            destination.routeIndex,
+            destination.stationIndex,
+          ),
+          style: Theme.of(context).textTheme.headlineSmall,
+        )
+      ],
     );
   }
 
@@ -278,25 +291,8 @@ class FareCalculator extends StatelessWidget {
   }
 
   Widget _buildFare(BuildContext context, int fare) {
-    return Row(
-      children: [
-        Align(
-          alignment: const Alignment(0, -0.3),
-          child: Text(
-            "৳",
-            style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                  fontSize: 20,
-                  color: Theme.of(context).hintColor,
-                ),
-          ),
-        ),
-        Text(
-          "$fare",
-          style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
-        ),
-      ],
+    return CurrencyLabel(
+      amount: fare.toDouble(),
     );
   }
 

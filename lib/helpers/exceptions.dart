@@ -3,6 +3,7 @@ enum AppExceptionType {
   server,
   invalidLocale,
   notFound,
+  auth,
   unknown,
 }
 

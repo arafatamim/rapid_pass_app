@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:rapid_pass_info/services/rapid_pass.dart';
+import 'package:provider/provider.dart';
 import 'package:rapid_pass_info/l10n/app_localizations.dart';
-import 'package:hive_ce_flutter/hive_flutter.dart';
-import 'package:rapid_pass_info/models/rapid_pass.dart';
 import 'package:rapid_pass_info/pages/settings_page.dart';
-import 'package:rapid_pass_info/widgets/pop_in_widget.dart';
+import 'package:rapid_pass_info/store/state.dart';
 import 'package:rapid_pass_info/widgets/adaptive_scaffold.dart';
 import 'package:rapid_pass_info/helpers/media_queries.dart';
 
@@ -49,37 +47,29 @@ class AdaptiveAppBar extends StatelessWidget {
     const pinned = true;
 
     final actions = [
-      FutureBuilder<String?>(
-        future: RapidPassService.instance
-            .getLatestNotice(Localizations.localeOf(context)),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            final data = snapshot.data!;
-            return NoticeButton(data: data);
+      Consumer<CardsModel>(
+        builder: (context, state, child) {
+          if (selectedIndex == 0 && state.cards.isNotEmpty) {
+            return child!;
           }
           return const SizedBox.shrink();
         },
-      ),
-      ValueListenableBuilder(
-        valueListenable: Hive.box<RapidPass>(RapidPass.boxName).listenable(),
-        builder: (context, box, _) {
-          if (selectedIndex == 0 && box.isNotEmpty) {
-            return IconButton(
-              icon: const Icon(Icons.add_card),
-              tooltip: AppLocalizations.of(context)!.addRapidPass,
-              onPressed: onAddCardPressed,
-            );
-          }
-          return const SizedBox.shrink();
-        },
+        child: IconButton(
+          icon: const Icon(Icons.add_card),
+          tooltip: AppLocalizations.of(context)!.addRapidPass,
+          onPressed: onAddCardPressed,
+        ),
       ),
       PopupMenuButton<String>(
         onSelected: (value) {
           if (value == "settings") {
-            Navigator.push(
-              context,
+            final cardsModel = Provider.of<CardsModel>(context, listen: false);
+            Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => const SettingsPage(),
+                builder: (context) => ChangeNotifierProvider.value(
+                  value: cardsModel,
+                  child: const SettingsPage(),
+                ),
               ),
             );
           }
@@ -114,49 +104,6 @@ class AdaptiveAppBar extends StatelessWidget {
       floating: floating,
       pinned: pinned,
       actions: actions,
-    );
-  }
-}
-
-class NoticeButton extends StatelessWidget {
-  final String data;
-
-  const NoticeButton({
-    super.key,
-    required this.data,
-  });
-
-  @override
-  Widget build(context) {
-    return PopInWidget(
-      child: IconButton(
-        icon: const Icon(Icons.warning_amber_rounded),
-        tooltip: AppLocalizations.of(context)!.noticeTitle,
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                key: ValueKey(data),
-                title: Text(
-                  AppLocalizations.of(context)!.noticeFromAuthorities,
-                ),
-                content: SingleChildScrollView(child: Text(data)),
-                actions: [
-                  TextButton(
-                    child: Text(
-                      MaterialLocalizations.of(context).closeButtonLabel,
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  )
-                ],
-              );
-            },
-          );
-        },
-      ),
     );
   }
 }

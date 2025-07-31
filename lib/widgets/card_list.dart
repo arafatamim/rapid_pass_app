@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rapid_pass_info/l10n/app_localizations.dart';
-import 'package:hive_ce_flutter/hive_flutter.dart';
-import 'package:rapid_pass_info/helpers/exceptions.dart';
-import 'package:rapid_pass_info/helpers/refresh_notifier.dart';
-import 'package:rapid_pass_info/models/rapid_pass.dart';
-import 'package:rapid_pass_info/services/rapid_pass.dart';
+import 'package:rapid_pass_info/models/transit_card.dart';
 import 'package:rapid_pass_info/widgets/card_layout.dart';
-import 'package:reorderable_grid/reorderable_grid.dart';
+import 'package:rapid_pass_info/pages/card_details.dart';
 
 class CardList extends StatefulWidget {
-  final List<RapidPass> passes;
+  final List<TransitCard> cards;
   final SliverGridDelegate gridDelegate;
 
   const CardList({
     super.key,
-    required this.passes,
+    required this.cards,
     required this.gridDelegate,
   });
 
@@ -26,38 +22,30 @@ class CardList extends StatefulWidget {
 class _CardListState extends State<CardList> {
   @override
   Widget build(BuildContext context) {
-    return SliverReorderableGrid(
-      itemCount: widget.passes.length,
-      onReorderStart: (index) {
-        HapticFeedback.heavyImpact();
-      },
-      onReorder: (oldIndex, newIndex) async {
-        final box = Hive.box<RapidPass>(RapidPass.boxName);
-        final oldItem = widget.passes[oldIndex];
-        final newItem = widget.passes[newIndex];
-        box.putAt(oldIndex, newItem.copyWith());
-        box.putAt(newIndex, oldItem.copyWith());
-      },
+    return SliverGrid(
       gridDelegate: widget.gridDelegate,
-      itemBuilder: (context, index) {
-        final pass = widget.passes[index];
-        return CardItem(
-          key: ValueKey(pass.id),
-          pass: pass,
-          index: index,
-        );
-      },
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          final card = widget.cards[index];
+          return CardItem(
+            key: ValueKey(card.id),
+            card: card,
+            index: index,
+          );
+        },
+        childCount: widget.cards.length,
+      ),
     );
   }
 }
 
 class CardItem extends StatefulWidget {
-  final RapidPass pass;
+  final TransitCard card;
   final int index;
 
   const CardItem({
     super.key,
-    required this.pass,
+    required this.card,
     required this.index,
   });
 
@@ -66,120 +54,74 @@ class CardItem extends StatefulWidget {
 }
 
 class _CardItemState extends State<CardItem> {
-  final Box<RapidPassData> _cacheBox =
-      Hive.box<RapidPassData>(RapidPassData.boxName);
-  RapidPassData? _data;
-  Object? _error;
-  bool _isCached = false;
-
-  @override
-  void initState() {
-    super.initState();
-    // fetch from cache first if available
-    final cached = _cacheBox.get(widget.pass.id);
-    if (cached != null) {
-      _data = cached;
-    }
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) {
-        context.registerRefreshCallback(() async {
-          await _fetchRemoteData();
-        });
-        if (mounted) {
-          _fetchRemoteData();
-        }
-      },
-    );
-  }
-
-  Future<void> _fetchRemoteData() async {
-    if (!mounted) return;
-
-    try {
-      final data = await RapidPassService.instance.getRapidPass(widget.pass.id);
-      if (!mounted) return;
-      setState(() {
-        _isCached = false;
-        _data = data;
-        // populate cache
-        _cacheBox.put(widget.pass.id, data);
-      });
-    } catch (e) {
-      if (!mounted) return;
-      setState(() {
-        if (_data != null) _isCached = true; // just show cached data
-        _error = e;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return RepaintBoundary(
-      child: Builder(
-        builder: (context) {
-          if (_error != null && _data == null) {
-            return CardLayoutError(
-              index: widget.index,
-              message: switch (_error) {
-                AppException(code: AppExceptionType.network) =>
-                  AppLocalizations.of(context)!.networkException,
-                AppException(code: AppExceptionType.server) =>
-                  AppLocalizations.of(context)!.serverException,
-                AppException(code: AppExceptionType.notFound) =>
-                  AppLocalizations.of(context)!.notFoundException,
-                _ => _error?.toString().replaceAll("Exception: ", ""),
-              },
-              name: widget.pass.name,
-              id: widget.pass.id,
-              onCopy: onCopy,
-              onDelete: onDelete,
-            );
-          }
-          if (_data != null) {
-            return CardLayoutSuccess(
-              index: widget.index,
-              name: widget.pass.name,
-              id: widget.pass.id,
-              passData: _data!,
-              isCached: _isCached,
-              onCopy: onCopy,
-              onDelete: onDelete,
-            );
-          }
-          return CardLayoutLoading(
-            index: widget.index,
-            id: widget.pass.id,
-            name: widget.pass.name,
-          );
-        },
-      ),
+      child: Builder(builder: (context) {
+        return CardLayoutSuccess(
+          index: widget.index,
+          data: widget.card,
+          onCopy: onCopy,
+          onTap: onTap,
+          heroTag: "card_hero_${widget.card.cardNumber}",
+        );
+      }),
     );
   }
 
+  void onTap() {
+    _navigateToDetails();
+  }
+
   void onCopy() {
-    _onCopy(widget.pass);
+    _onCopy(widget.card);
   }
 
-  void onDelete() {
-    _onDelete(widget.pass);
-  }
-
-  void _onCopy(RapidPass pass) async {
+  void _onCopy(TransitCard card) async {
     await Clipboard.setData(
-      ClipboardData(text: pass.id),
+      ClipboardData(text: card.cardNumber),
     );
 
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(AppLocalizations.of(context)!.cardNumberCopied(pass.id)),
+        content: Text(
+            AppLocalizations.of(context)!.cardNumberCopied(card.cardNumber)),
       ),
     );
   }
 
-  void _onDelete(RapidPass pass) {
-    Hive.box<RapidPass>(RapidPass.boxName).deleteAt(widget.index);
-    Hive.box<RapidPassData>(RapidPassData.boxName).delete(pass.id);
+  void _navigateToDetails() {
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            CardDetailsPage(
+          card: widget.card,
+          index: widget.index,
+        ),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          // Elastic slide up
+          final slideTween = Tween<Offset>(
+            begin: const Offset(0.0, 1.0),
+            end: Offset.zero,
+          ).chain(CurveTween(curve: Curves.fastEaseInToSlowEaseOut));
+
+          // Fade in
+          final fadeTween = Tween<double>(
+            begin: 0.0,
+            end: 1.0,
+          ).chain(CurveTween(curve: Curves.ease));
+
+          return SlideTransition(
+            position: animation.drive(slideTween),
+            child: FadeTransition(
+              opacity: animation.drive(fadeTween),
+              child: child,
+            ),
+          );
+        },
+        transitionDuration: const Duration(milliseconds: 500),
+      ),
+    );
   }
 }

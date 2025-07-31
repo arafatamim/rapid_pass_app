@@ -1,15 +1,19 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:rapid_pass_info/models/rapid_pass.dart';
+import 'package:intl/intl.dart';
+import 'package:rapid_pass_info/models/transit_card.dart';
+import 'package:rapid_pass_info/widgets/currency_label.dart';
 import 'package:rapid_pass_info/widgets/shimmer.dart';
 import 'package:relative_time/relative_time.dart';
 import 'package:rapid_pass_info/l10n/app_localizations.dart';
-import 'package:reorderable_grid/reorderable_grid.dart';
 
 // TODO: refactor to prevent code duplication
 
 class CardLayoutBase extends StatefulWidget {
-  final VoidCallback? onDelete;
   final VoidCallback? onCopy;
+  final VoidCallback? onTap;
+  final String? heroTag;
   final bool disableDropdownMenu;
   final List<Widget> children;
   final double? elevation;
@@ -19,8 +23,9 @@ class CardLayoutBase extends StatefulWidget {
 
   const CardLayoutBase({
     super.key,
-    this.onDelete,
     this.onCopy,
+    this.onTap,
+    this.heroTag,
     this.elevation,
     this.shape,
     this.color,
@@ -36,7 +41,7 @@ class CardLayoutBase extends StatefulWidget {
 class _CardLayoutBaseState extends State<CardLayoutBase> {
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
+    final cardWidget = AspectRatio(
       aspectRatio: 1.8,
       child: GestureDetector(
         onLongPressStart: (details) async {
@@ -57,37 +62,111 @@ class _CardLayoutBaseState extends State<CardLayoutBase> {
                 value: "copy",
                 child: Text(AppLocalizations.of(context)!.copyCardNumber),
               ),
-              PopupMenuItem(
-                value: "delete",
-                child: Text(AppLocalizations.of(context)!.removeCard),
-              ),
             ],
           );
           switch (value) {
             case "copy":
               widget.onCopy?.call();
               break;
-            case "delete":
-              widget.onDelete?.call();
-              break;
           }
         },
-        child: Card(
+        child: Material(
           color: widget.color,
-          elevation: widget.elevation,
-          shape: widget.shape,
-          child: Padding(
-            padding: const EdgeInsets.all(18),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: widget.children,
+          elevation: widget.elevation ?? 1.0,
+          shape: widget.shape ??
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+          child: InkWell(
+            onTap: widget.onTap,
+            borderRadius: BorderRadius.circular(16),
+            child: Padding(
+              padding: const EdgeInsets.all(18),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: widget.children,
+              ),
             ),
           ),
         ),
       ),
     );
+
+    if (widget.heroTag != null) {
+      return Hero(
+        tag: widget.heroTag!,
+        flightShuttleBuilder: _buildHeroFlightShuttle,
+        child: cardWidget,
+      );
+    }
+
+    return cardWidget;
   }
+}
+
+Widget _buildHeroFlightShuttle(
+  BuildContext flightContext,
+  Animation<double> animation,
+  HeroFlightDirection flightDirection,
+  BuildContext fromHeroContext,
+  BuildContext toHeroContext,
+) {
+  final Hero fromHero = fromHeroContext.widget as Hero;
+  final Hero toHero = toHeroContext.widget as Hero;
+
+  return AnimatedBuilder(
+    animation: animation,
+    builder: (context, child) {
+      // Create fade animations for smooth crossfade
+      final fadeOutAnimation = Tween<double>(
+        begin: 1.0,
+        end: 0.0,
+      ).animate(CurvedAnimation(
+        parent: animation,
+        curve: const Interval(0.0, 0.6, curve: Curves.easeOut),
+      ));
+
+      final fadeInAnimation = Tween<double>(
+        begin: 0.0,
+        end: 1.0,
+      ).animate(CurvedAnimation(
+        parent: animation,
+        curve: const Interval(0.4, 1.0, curve: Curves.easeIn),
+      ));
+
+      // Add slight overshoot for more natural bounce
+      final scaleValue = flightDirection == HeroFlightDirection.push
+          ? 1.0 + (animation.value * 0.08 * (1 - animation.value) * 4)
+          : 1.0 + ((1 - animation.value) * 0.08 * animation.value * 4);
+
+      // Create crossfade effect with bounce
+      return Material(
+        color: Colors.transparent,
+        child: Transform.scale(
+          scale: scaleValue,
+          child: Stack(
+            children: [
+              // Source widget with fade out
+              Opacity(
+                opacity: flightDirection == HeroFlightDirection.push
+                    ? fadeOutAnimation.value
+                    : fadeInAnimation.value,
+                child: fromHero.child,
+              ),
+              // Destination widget with fade in
+              Opacity(
+                opacity: flightDirection == HeroFlightDirection.push
+                    ? fadeInAnimation.value
+                    : fadeOutAnimation.value,
+                child: toHero.child,
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
 }
 
 List<Widget> _buildHeader(
@@ -99,31 +178,14 @@ List<Widget> _buildHeader(
   required Color activeForegroundColorDimmed,
 }) {
   return [
-    Row(
-      children: [
-        Expanded(
-          child: Text(
-            name,
-            style: TextStyle(
-              color: activeForegroundColor,
-              fontSize: Theme.of(context).textTheme.titleLarge?.fontSize,
-              fontWeight: FontWeight.w500,
-            ),
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-        Tooltip(
-          message: AppLocalizations.of(context)?.dragToReorder,
-          triggerMode: TooltipTriggerMode.tap,
-          child: ReorderableGridDelayedDragStartListener(
-            index: index,
-            child: Icon(
-              Icons.drag_handle,
-              color: activeForegroundColor,
-            ),
-          ),
-        ),
-      ],
+    Text(
+      name,
+      style: TextStyle(
+        color: activeForegroundColor,
+        fontSize: Theme.of(context).textTheme.titleLarge?.fontSize,
+        fontWeight: FontWeight.w500,
+      ),
+      overflow: TextOverflow.ellipsis,
     ),
     Text(
       id,
@@ -182,37 +244,31 @@ class CardLayoutLoading extends StatelessWidget {
 
 class CardLayoutSuccess extends StatelessWidget {
   final int index;
-  final String name;
-  final String id;
-  final RapidPassData passData;
-  final VoidCallback? onDelete;
+  final TransitCard data;
   final VoidCallback? onCopy;
-  final bool isCached;
+  final VoidCallback? onTap;
+  final String? heroTag;
 
   const CardLayoutSuccess({
     super.key,
     required this.index,
-    required this.name,
-    required this.id,
-    required this.passData,
-    required this.isCached,
-    this.onDelete,
+    required this.data,
     this.onCopy,
+    this.onTap,
+    this.heroTag,
   });
 
   Widget _buildTooltip(BuildContext context, Color foregroundColor) {
     final List<String> messages = [];
 
-    if (!passData.isActive) {
+    if (data.status != "Active") {
       messages.add(AppLocalizations.of(context)!.inactive);
     }
 
-    if (passData.balance < 100) {
-      messages.add(AppLocalizations.of(context)!.lowBalance);
-    }
+    final balance = double.tryParse(data.balance);
 
-    if (isCached) {
-      messages.add(AppLocalizations.of(context)!.cached);
+    if (balance != null && balance < 100) {
+      messages.add(AppLocalizations.of(context)!.lowBalance);
     }
 
     if (messages.isEmpty) return const SizedBox.shrink();
@@ -229,19 +285,24 @@ class CardLayoutSuccess extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final activeBackgroundColor = passData.isActive
+    final isActive = data.status == "Active";
+    final balance = double.tryParse(data.balance);
+    final lastUpdated = DateTime.tryParse(data.transactionEndDate);
+
+    final activeBackgroundColor = isActive
         ? Theme.of(context).colorScheme.secondary
         : Theme.of(context).colorScheme.surface;
-    final activeForegroundColor = passData.isActive
+    final activeForegroundColor = isActive
         ? Theme.of(context).colorScheme.onSecondary
         : Theme.of(context).hintColor;
-    final activeForegroundColorDimmed = activeForegroundColor.withOpacity(0.8);
+    final activeForegroundColorDimmed =
+        activeForegroundColor.withValues(alpha: 0.8);
 
     return CardLayoutBase(
       color: activeBackgroundColor,
       foregroundColor: activeForegroundColor,
-      elevation: passData.isActive ? 1 : 0,
-      shape: passData.isActive
+      elevation: isActive ? 1 : 0,
+      shape: isActive
           ? null
           : RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
@@ -251,12 +312,13 @@ class CardLayoutSuccess extends StatelessWidget {
               ),
             ),
       onCopy: onCopy,
-      onDelete: onDelete,
+      onTap: onTap,
+      heroTag: heroTag,
       children: [
         ..._buildHeader(
           context,
-          id: id,
-          name: name,
+          id: data.cardNumber,
+          name: data.name,
           index: index,
           activeForegroundColor: activeForegroundColor,
           activeForegroundColorDimmed: activeForegroundColorDimmed,
@@ -264,37 +326,34 @@ class CardLayoutSuccess extends StatelessWidget {
         const Spacer(),
         Expanded(
           flex: 6,
-          child: Row(
-            children: [
-              Align(
-                alignment: const Alignment(0, -0.3),
-                child: Text(
-                  "৳",
-                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                        fontSize: 20,
-                        color: activeForegroundColorDimmed,
-                      ),
-                ),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(
+              maxWidth: 100,
+              minWidth: 50,
+            ),
+            child: FittedBox(
+              alignment: Alignment.centerLeft,
+              child: Row(
+                children: [
+                  CurrencyLabel(
+                    amount: balance ?? 0,
+                    amountColor: activeForegroundColor,
+                    symbolColor: activeForegroundColorDimmed,
+                  ),
+                  const Padding(padding: EdgeInsets.only(right: 8)),
+                  Align(
+                    alignment: Alignment.center,
+                    child: _buildTooltip(context, activeForegroundColorDimmed),
+                  ),
+                ],
               ),
-              Text(
-                "${passData.balance}",
-                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                      color: activeForegroundColor,
-                      fontWeight: FontWeight.w600,
-                    ),
-              ),
-              const Padding(padding: EdgeInsets.only(right: 8)),
-              Align(
-                alignment: Alignment.center,
-                child: _buildTooltip(context, activeForegroundColorDimmed),
-              ),
-            ],
+            ),
           ),
         ),
         const Spacer(),
         Text(
-          "${RelativeTime(context).format(passData.lastUpdated)}"
-          "${!passData.isActive ? " • ${AppLocalizations.of(context)!.inactive}" : ""}",
+          "${lastUpdated != null ? RelativeTime(context).format(lastUpdated) : 'N/A'}"
+          "${!isActive ? " • ${AppLocalizations.of(context)!.inactive}" : ""}",
           style: Theme.of(context)
               .textTheme
               .bodySmall
@@ -305,58 +364,120 @@ class CardLayoutSuccess extends StatelessWidget {
   }
 }
 
-class CardLayoutError extends StatelessWidget {
+class HeroCardLayout extends StatelessWidget {
+  final TransitCard data;
+  final String heroTag;
   final int index;
-  final Object? message;
-  final String id;
-  final String name;
-  final VoidCallback? onDelete;
-  final VoidCallback? onCopy;
 
-  const CardLayoutError({
+  const HeroCardLayout({
     super.key,
+    required this.data,
+    required this.heroTag,
     required this.index,
-    this.message,
-    this.onDelete,
-    this.onCopy,
-    required this.name,
-    required this.id,
   });
 
   @override
   Widget build(BuildContext context) {
-    return CardLayoutBase(
-      elevation: 0,
-      color: Theme.of(context).colorScheme.onInverseSurface,
-      onCopy: onCopy,
-      onDelete: onDelete,
-      children: [
-        ..._buildHeader(
-          context,
-          id: id,
-          name: name,
-          index: index,
-          activeForegroundColor: Colors.redAccent,
-          activeForegroundColorDimmed: Colors.red.withOpacity(0.8),
+    final isActive = data.status == "Active";
+    final balance = double.tryParse(data.balance);
+    final lastUpdated = DateTime.tryParse(data.transactionEndDate);
+
+    final activeBackgroundColor = isActive
+        ? Theme.of(context).colorScheme.secondary
+        : Theme.of(context).colorScheme.surface;
+    final activeForegroundColor = isActive
+        ? Theme.of(context).colorScheme.onSecondary
+        : Theme.of(context).hintColor;
+    final activeForegroundColorDimmed =
+        activeForegroundColor.withValues(alpha: 0.8);
+
+    return Hero(
+      tag: heroTag,
+      flightShuttleBuilder: _buildHeroFlightShuttle,
+      child: Material(
+        color: activeBackgroundColor,
+        elevation: 0,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.zero,
         ),
-        const Spacer(),
-        Text(
-          AppLocalizations.of(context)!.errorWhileLoading,
-          style: const TextStyle(
-            color: Colors.red,
-            fontSize: 14,
+        child: Container(
+          width: double.infinity,
+          height: double.infinity,
+          padding: const EdgeInsets.fromLTRB(18, 8, 18, 18),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  BackButton(
+                    color: activeForegroundColor,
+                  ),
+                  const SizedBox(width: 16),
+                  Column(
+                    children: [
+                      ..._buildHeader(
+                        context,
+                        id: data.cardNumber,
+                        name: data.name,
+                        index: index,
+                        activeForegroundColor: activeForegroundColor,
+                        activeForegroundColorDimmed:
+                            activeForegroundColorDimmed,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              const Spacer(),
+              Expanded(
+                flex: 2,
+                child: balance != null
+                    ? CurrencyLabel(
+                        amount: balance,
+                        amountColor: activeForegroundColor,
+                        symbolColor: activeForegroundColorDimmed,
+                      )
+                    : Icon(Icons.error, color: activeForegroundColor),
+              ),
+              const Spacer(),
+              if (lastUpdated != null)
+                Text(
+                  "${AppLocalizations.of(context)!.lastUpdated}: ${DateFormat.yMMMd(Platform.localeName).format(lastUpdated)}",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(color: activeForegroundColorDimmed),
+                ),
+            ],
           ),
         ),
-        const Spacer(),
-        Text(
-          "$message",
-          overflow: TextOverflow.ellipsis,
-          style: const TextStyle(
-            color: Colors.red,
-            fontSize: 14,
-          ),
-        ),
-      ],
+      ),
+    );
+  }
+
+  Widget _buildTooltip(BuildContext context, Color foregroundColor) {
+    final List<String> messages = [];
+
+    if (data.status != "Active") {
+      messages.add(AppLocalizations.of(context)!.inactive);
+    }
+
+    final balance = double.tryParse(data.balance);
+
+    if (balance != null && balance < 100) {
+      messages.add(AppLocalizations.of(context)!.lowBalance);
+    }
+
+    if (messages.isEmpty) return const SizedBox.shrink();
+
+    return Tooltip(
+      triggerMode: TooltipTriggerMode.tap,
+      message: messages.join("; "),
+      child: Icon(
+        Icons.warning_amber_rounded,
+        color: foregroundColor,
+      ),
     );
   }
 }

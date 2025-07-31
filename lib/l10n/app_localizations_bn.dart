@@ -19,7 +19,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String cardNumberCopied(Object number) {
-    return 'কার্ড নাম্বার কপি করা হয়েছে: $number';
+    return 'কার্ড নাম্বার কপি করা হয়েছে: $number';
   }
 
   @override
@@ -29,22 +29,84 @@ class AppLocalizationsBn extends AppLocalizations {
   String get copyCardNumber => 'কার্ড নাম্বার কপি করুন';
 
   @override
-  String get cardInactive => 'কার্ড নিষ্ক্রিয়';
+  String get cardInactive => 'কার্ড নিষ্ক্রিয়';
 
   @override
   String get lowBalance => 'ব্যালেন্স কম';
 
   @override
-  String get inactive => 'নিষ্ক্রিয়';
+  String get inactive => 'নিষ্ক্রিয়';
 
   @override
   String get cached => 'সার্ভার জটিলতার কারণে পুরনো তথ্য দেখানো হচ্ছে';
 
   @override
-  String get errorWhileLoading => 'কার্ডটি লোড করতে সমস্যা হয়েছে';
+  String get errorWhileLoading => 'কার্ড লোড করতে সমস্যা হয়েছে';
 
   @override
-  String get dragToReorder => 'এটি প্রেস করে টেনে সিরিয়াল বদলান';
+  String get dragToReorder => 'এটি প্রেস করে টেনে সিরিয়াল বদলান';
+
+  @override
+  String get credentialsCleared => 'সফলভাবে লগআউট হয়েছে';
+
+  @override
+  String get unknown => 'অজানা';
+
+  @override
+  String get recharge => 'রিচার্জ';
+
+  @override
+  String get cardIssued => 'কার্ড প্রদান';
+
+  @override
+  String get balance => 'ব্যালেন্স';
+
+  @override
+  String get lastUpdated => 'সর্বশেষ হালনাগাদ';
+
+  @override
+  String statisticsFooter(
+      Object totalValue, Object transactions, Object trips) {
+    return '$transactionsটি লেনদেন, মোট $tripsটি যাত্রায় খরচ হয়েছে ৳$totalValue';
+  }
+
+  @override
+  String spentAmount(Object value) {
+    return 'খরচ ৳$value';
+  }
+
+  @override
+  String get login => 'লগইন';
+
+  @override
+  String get emailOrPhone => 'ইমেইল বা ফোন নম্বর';
+
+  @override
+  String get emailValidation => 'ইমেইল বা ফোন চেক করুন';
+
+  @override
+  String get password => 'পাসওয়ার্ড';
+
+  @override
+  String get passwordValidation => 'পাসওয়ার্ড চেক করুন';
+
+  @override
+  String get forgotPassword => 'পাসওয়ার্ড ভুলে গেছেন?';
+
+  @override
+  String get createAnAccount => 'একাউন্ট তৈরি করুন';
+
+  @override
+  String get logout => 'লগআউট';
+
+  @override
+  String logoutConfirmation(Object username) {
+    return 'আপনি কি নিশ্চিত যে আপনি $username লগআউট করতে চান?';
+  }
+
+  @override
+  String get loginFailed =>
+      'লগইন ব্যর্থ হয়েছে। ইউজারনেম ও পাসওয়ার্ড চেক করুন';
 
   @override
   String get addFirstCard =>

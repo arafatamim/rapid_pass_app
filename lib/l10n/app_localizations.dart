@@ -161,7 +161,7 @@ abstract class AppLocalizations {
   /// No description provided for @errorWhileLoading.
   ///
   /// In en, this message translates to:
-  /// **'An error occurred while loading the card'**
+  /// **'An error occurred while loading cards'**
   String get errorWhileLoading;
 
   /// No description provided for @dragToReorder.
@@ -169,6 +169,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Long press and drag this to reorder'**
   String get dragToReorder;
+
+  /// No description provided for @credentialsCleared.
+  ///
+  /// In en, this message translates to:
+  /// **'Logged out successfully'**
+  String get credentialsCleared;
+
+  /// No description provided for @unknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get unknown;
+
+  /// No description provided for @recharge.
+  ///
+  /// In en, this message translates to:
+  /// **'Recharge'**
+  String get recharge;
+
+  /// No description provided for @cardIssued.
+  ///
+  /// In en, this message translates to:
+  /// **'Card issued'**
+  String get cardIssued;
+
+  /// No description provided for @balance.
+  ///
+  /// In en, this message translates to:
+  /// **'Balance'**
+  String get balance;
+
+  /// No description provided for @lastUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Last updated'**
+  String get lastUpdated;
+
+  /// No description provided for @statisticsFooter.
+  ///
+  /// In en, this message translates to:
+  /// **'{transactions} transactions, ৳{totalValue} spent on {trips} total trips'**
+  String statisticsFooter(Object totalValue, Object transactions, Object trips);
+
+  /// No description provided for @spentAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Spent ৳{value}'**
+  String spentAmount(Object value);
+
+  /// No description provided for @login.
+  ///
+  /// In en, this message translates to:
+  /// **'Login'**
+  String get login;
+
+  /// No description provided for @emailOrPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Email or Mobile Number'**
+  String get emailOrPhone;
+
+  /// No description provided for @emailValidation.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid email address or phone number'**
+  String get emailValidation;
+
+  /// No description provided for @password.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get password;
+
+  /// No description provided for @passwordValidation.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid password'**
+  String get passwordValidation;
+
+  /// No description provided for @forgotPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot Password?'**
+  String get forgotPassword;
+
+  /// No description provided for @createAnAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Create an account'**
+  String get createAnAccount;
+
+  /// No description provided for @logout.
+  ///
+  /// In en, this message translates to:
+  /// **'Logout'**
+  String get logout;
+
+  /// No description provided for @logoutConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to logout {username}?'**
+  String logoutConfirmation(Object username);
+
+  /// No description provided for @loginFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Login failed. Check username and password.'**
+  String get loginFailed;
 
   /// No description provided for @addFirstCard.
   ///

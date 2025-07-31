@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:rapid_pass_info/models/rapid_pass.dart';
 import 'package:rapid_pass_info/l10n/app_localizations.dart';
-import 'package:rapid_pass_info/pages/home_page.dart';
+import 'package:rapid_pass_info/widgets/auth_gate.dart';
 import 'package:relative_time/relative_time.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:rapid_pass_info/hive_registrar.g.dart';
@@ -13,15 +13,19 @@ import 'package:rapid_pass_info/helpers/upgrader.dart';
 import 'package:rapid_pass_info/helpers/transport_route_localizations.dart';
 import 'package:rapid_pass_info/meta.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 // TODO: single view when only one card
 
 void main() async {
   await Hive.initFlutter();
   Hive.registerAdapters();
 
-  await Hive.openBox<RapidPass>(RapidPass.boxName);
-  await Hive.openBox<RapidPassData>(RapidPassData.boxName);
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      systemNavigationBarColor: Colors.transparent,
+    ),
+  );
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
   runApp(const RapidPassApp());
 }
@@ -87,7 +91,7 @@ class RapidPassApp extends StatelessWidget {
 
               return true;
             },
-            child: const HomePage(),
+            child: const AuthGate(),
           ),
         );
       },
