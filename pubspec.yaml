@@ -34,8 +34,8 @@ dependencies:
   flutter_secure_storage: ^9.2.4
   provider: ^6.1.5
   grouped_list: ^6.0.0
-  material_new_shapes: ^1.0.0
-
+  material_loading_indicator:
+    git: git@github.com:ksokolovskyi/material_loading_indicator.git
   shared_preferences: any
 dev_dependencies:
   flutter_test:

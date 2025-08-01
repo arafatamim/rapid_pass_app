@@ -1,12 +1,12 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:material_loading_indicator/loading_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:rapid_pass_info/l10n/app_localizations.dart';
 import 'package:rapid_pass_info/pages/home_page.dart';
 import 'package:rapid_pass_info/services/auth_service.dart';
 import 'package:rapid_pass_info/services/rapid_pass.dart';
 import 'package:rapid_pass_info/store/state.dart';
-import 'package:rapid_pass_info/widgets/loading_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LoginPage extends StatefulWidget {
@@ -135,7 +135,7 @@ class _LoginPageState extends State<LoginPage> {
 
                     // Login button
                     _isSubmitting
-                        ? const SizedBox(
+                        ? SizedBox(
                             height: 64,
                             width: 64,
                             child: LoadingIndicator(),
