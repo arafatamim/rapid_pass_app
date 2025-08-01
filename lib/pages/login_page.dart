@@ -135,11 +135,7 @@ class _LoginPageState extends State<LoginPage> {
 
                     // Login button
                     _isSubmitting
-                        ? SizedBox(
-                            height: 64,
-                            width: 64,
-                            child: LoadingIndicator(),
-                          )
+                        ? const LinearProgressIndicator()
                         : FilledButton(
                             onPressed: _submitForm,
                             style: FilledButton.styleFrom(

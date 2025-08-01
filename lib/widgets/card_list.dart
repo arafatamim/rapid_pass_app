@@ -4,6 +4,30 @@ import 'package:rapid_pass_info/l10n/app_localizations.dart';
 import 'package:rapid_pass_info/models/transit_card.dart';
 import 'package:rapid_pass_info/widgets/card_layout.dart';
 import 'package:rapid_pass_info/pages/card_details.dart';
+import 'package:flutter/physics.dart';
+
+class SpringCurve extends Curve {
+  final SpringSimulation _simulation;
+  SpringCurve({
+    double mass = 1,
+    double stiffness = 500,
+    double damping = 15,
+    double initialVelocity = 0,
+  }) : _simulation = SpringSimulation(
+          SpringDescription(
+            mass: mass,
+            stiffness: stiffness,
+            damping: damping,
+          ),
+          0,
+          1,
+          initialVelocity,
+          snapToEnd: true,
+        );
+
+  @override
+  double transform(double t) => _simulation.x(t);
+}
 
 class CardList extends StatefulWidget {
   final List<TransitCard> cards;
@@ -100,27 +124,42 @@ class _CardItemState extends State<CardItem> {
           index: widget.index,
         ),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          // Elastic slide up
-          final slideTween = Tween<Offset>(
+          // Spring simulation curve
+          final springCurve = SpringCurve(
+            mass: 0.01,
+            stiffness: 100,
+            damping: 15,
+            initialVelocity: 0,
+          );
+
+          // Apply spring to slide (spring on enter, ease-out on exit)
+          final slideAnimation = Tween<Offset>(
             begin: const Offset(0.0, 1.0),
             end: Offset.zero,
-          ).chain(CurveTween(curve: Curves.fastEaseInToSlowEaseOut));
+          ).animate(
+            CurvedAnimation(
+              parent: animation,
+              curve: Curves.easeOutQuart,
+              reverseCurve: Curves.fastLinearToSlowEaseIn,
+            ),
+          );
 
-          // Fade in
-          final fadeTween = Tween<double>(
-            begin: 0.0,
-            end: 1.0,
-          ).chain(CurveTween(curve: Curves.ease));
+          // Fade with ease curve on enter and exit
+          final fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+            CurvedAnimation(
+              parent: animation,
+              curve: const Interval(0.0, 0.6, curve: Curves.ease),
+            ),
+          );
 
-          return SlideTransition(
-            position: animation.drive(slideTween),
-            child: FadeTransition(
-              opacity: animation.drive(fadeTween),
+          return FadeTransition(
+            opacity: fadeAnimation,
+            child: SlideTransition(
+              position: slideAnimation,
               child: child,
             ),
           );
         },
-        transitionDuration: const Duration(milliseconds: 500),
       ),
     );
   }

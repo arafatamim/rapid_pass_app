@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:intl/intl.dart';
 import 'package:rapid_pass_info/models/transit_card.dart';
 import 'package:rapid_pass_info/widgets/currency_label.dart';
@@ -118,13 +119,12 @@ Widget _buildHeroFlightShuttle(
   return AnimatedBuilder(
     animation: animation,
     builder: (context, child) {
-      // Create fade animations for smooth crossfade
       final fadeOutAnimation = Tween<double>(
         begin: 1.0,
         end: 0.0,
       ).animate(CurvedAnimation(
         parent: animation,
-        curve: const Interval(0.0, 0.6, curve: Curves.easeOut),
+        curve: const Interval(0.0, 1, curve: Curves.easeOut),
       ));
 
       final fadeInAnimation = Tween<double>(
@@ -132,38 +132,24 @@ Widget _buildHeroFlightShuttle(
         end: 1.0,
       ).animate(CurvedAnimation(
         parent: animation,
-        curve: const Interval(0.4, 1.0, curve: Curves.easeIn),
+        curve: const Interval(0, 1.0, curve: Curves.easeIn),
       ));
 
-      // Add slight overshoot for more natural bounce
-      final scaleValue = flightDirection == HeroFlightDirection.push
-          ? 1.0 + (animation.value * 0.08 * (1 - animation.value) * 4)
-          : 1.0 + ((1 - animation.value) * 0.08 * animation.value * 4);
-
-      // Create crossfade effect with bounce
-      return Material(
-        color: Colors.transparent,
-        child: Transform.scale(
-          scale: scaleValue,
-          child: Stack(
-            children: [
-              // Source widget with fade out
-              Opacity(
-                opacity: flightDirection == HeroFlightDirection.push
-                    ? fadeOutAnimation.value
-                    : fadeInAnimation.value,
-                child: fromHero.child,
-              ),
-              // Destination widget with fade in
-              Opacity(
-                opacity: flightDirection == HeroFlightDirection.push
-                    ? fadeInAnimation.value
-                    : fadeOutAnimation.value,
-                child: toHero.child,
-              ),
-            ],
+      return Stack(
+        children: [
+          Opacity(
+            opacity: flightDirection == HeroFlightDirection.push
+                ? fadeOutAnimation.value
+                : fadeInAnimation.value,
+            child: fromHero.child,
           ),
-        ),
+          Opacity(
+            opacity: flightDirection == HeroFlightDirection.push
+                ? fadeInAnimation.value
+                : fadeOutAnimation.value,
+            child: toHero.child,
+          ),
+        ],
       );
     },
   );
@@ -360,6 +346,15 @@ class CardLayoutSuccess extends StatelessWidget {
               ?.copyWith(color: activeForegroundColorDimmed),
         ),
       ],
+    );
+  }
+}
+
+class CollapsedCard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Theme.of(context).colorScheme.surfaceDim,
     );
   }
 }

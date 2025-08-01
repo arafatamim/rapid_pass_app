@@ -7,12 +7,14 @@ class CurrencyLabel extends StatelessWidget {
   final double amount;
   final bool isCharge;
   final Color? amountColor;
+  final TextStyle? amountTextStyle;
   final Color? symbolColor;
 
   const CurrencyLabel({
     required this.amount,
     this.isCharge = false,
     this.amountColor,
+    this.amountTextStyle,
     this.symbolColor,
     super.key,
   });
@@ -49,13 +51,17 @@ class CurrencyLabel extends StatelessWidget {
           ),
           Text(
             NumberFormat.compact(locale: Platform.localeName).format(amountVal),
-            style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+            style: Theme.of(context)
+                .textTheme
+                .headlineLarge
+                ?.copyWith(
                   fontWeight: FontWeight.w600,
                   color: amountColor ??
                       (isCharge
                           ? localColor
                           : Theme.of(context).colorScheme.onSurface),
-                ),
+                )
+                .merge(amountTextStyle),
           ),
         ],
       ),
