@@ -9,6 +9,7 @@ class CurrencyLabel extends StatelessWidget {
   final Color? amountColor;
   final TextStyle? amountTextStyle;
   final Color? symbolColor;
+  final bool compactFormatting;
 
   const CurrencyLabel({
     required this.amount,
@@ -16,6 +17,7 @@ class CurrencyLabel extends StatelessWidget {
     this.amountColor,
     this.amountTextStyle,
     this.symbolColor,
+    this.compactFormatting = true,
     super.key,
   });
 
@@ -50,7 +52,10 @@ class CurrencyLabel extends StatelessWidget {
             ),
           ),
           Text(
-            NumberFormat.compact(locale: Platform.localeName).format(amountVal),
+            (compactFormatting
+                    ? NumberFormat.compact(locale: Platform.localeName)
+                    : NumberFormat.decimalPattern(Platform.localeName))
+                .format(amountVal),
             style: Theme.of(context)
                 .textTheme
                 .headlineLarge

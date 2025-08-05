@@ -32,7 +32,7 @@ class TransitCard {
   final String? unsyncedAt;
   final String createdAt;
   final String updatedAt;
-  final List<_RawTransaction> transactionHistory;
+  final List<RawTransaction> transactionHistory;
 
   TransitCard({
     required this.id,
@@ -99,7 +99,7 @@ class TransitCard {
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],
       transactionHistory: (json['transaction_history'] as List)
-          .map((transaction) => _RawTransaction.fromJson(transaction))
+          .map((transaction) => RawTransaction.fromJson(transaction))
           .toList(),
     );
   }
@@ -203,7 +203,7 @@ class TransitCard {
   }
 }
 
-class _RawTransaction {
+class RawTransaction {
   final int id;
   final String phoneNumber;
   final String cardNumber;
@@ -219,7 +219,7 @@ class _RawTransaction {
   final String createdAt;
   final String updatedAt;
 
-  _RawTransaction({
+  RawTransaction({
     required this.id,
     required this.phoneNumber,
     required this.cardNumber,
@@ -236,8 +236,8 @@ class _RawTransaction {
     required this.updatedAt,
   });
 
-  factory _RawTransaction.fromJson(Map<String, dynamic> json) {
-    return _RawTransaction(
+  factory RawTransaction.fromJson(Map<String, dynamic> json) {
+    return RawTransaction(
       id: json['id'],
       phoneNumber: json['phone_number'],
       cardNumber: json['card_number'],

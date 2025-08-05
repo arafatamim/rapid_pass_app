@@ -218,6 +218,12 @@ abstract class AppLocalizations {
   /// **'Spent ৳{value}'**
   String spentAmount(Object value);
 
+  /// No description provided for @transactions.
+  ///
+  /// In en, this message translates to:
+  /// **'Transactions'**
+  String get transactions;
+
   /// No description provided for @login.
   ///
   /// In en, this message translates to:

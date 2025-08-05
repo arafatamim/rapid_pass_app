@@ -19,6 +19,7 @@
   "lastUpdated": "Last updated",
   "statisticsFooter": "{transactions} transactions, ৳{totalValue} spent on {trips} total trips",
   "spentAmount": "Spent ৳{value}",
+  "transactions": "Transactions",
 
   "login": "Login",
   "emailOrPhone": "Email or Mobile Number",

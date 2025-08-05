@@ -29,6 +29,7 @@ class TransactionDetails extends StatelessWidget {
                       transaction.originStation ?? "",
                       "en",
                     ) ??
+                    transaction.originStation ??
                     AppLocalizations.of(context)!.unknown,
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
@@ -68,6 +69,7 @@ class TransactionDetails extends StatelessWidget {
                       transaction.destinationStation ?? "",
                       "en",
                     ) ??
+                    transaction.destinationStation ??
                     AppLocalizations.of(context)!.unknown,
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
@@ -96,7 +98,7 @@ class TransactionDetails extends StatelessWidget {
                     ? AppLocalizations.of(context)!.recharge
                     : transaction.type == TransactionType.issue
                         ? AppLocalizations.of(context)!.cardIssued
-                        : "",
+                        : AppLocalizations.of(context)!.unknown,
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
             ),
@@ -154,6 +156,7 @@ class TransactionDetails extends StatelessWidget {
                 CurrencyLabel(
                   amount: transaction.charge,
                   isCharge: true,
+                  compactFormatting: false,
                 )
               ],
             ),
@@ -164,7 +167,10 @@ class TransactionDetails extends StatelessWidget {
                 Text(AppLocalizations.of(context)!.balance),
                 const Spacer(),
                 Text(
-                    "৳${NumberFormat.compact(locale: Platform.localeName).format(transaction.balance)}")
+                  NumberFormat.simpleCurrency(
+                          name: "BDT", locale: Platform.localeName)
+                      .format(transaction.balance),
+                )
               ],
             )
           ],

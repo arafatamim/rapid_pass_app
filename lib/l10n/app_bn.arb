@@ -19,6 +19,7 @@
   "lastUpdated": "সর্বশেষ হালনাগাদ",
   "statisticsFooter": "{transactions}টি লেনদেন, মোট {trips}টি যাত্রায় খরচ হয়েছে ৳{totalValue}",
   "spentAmount": "খরচ ৳{value}",
+  "transactions": "লেনদেন",
 
   "login": "লগইন",
   "emailOrPhone": "ইমেইল বা ফোন নম্বর",

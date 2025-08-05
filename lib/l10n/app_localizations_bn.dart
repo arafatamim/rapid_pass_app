@@ -76,6 +76,9 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
+  String get transactions => 'লেনদেন';
+
+  @override
   String get login => 'লগইন';
 
   @override

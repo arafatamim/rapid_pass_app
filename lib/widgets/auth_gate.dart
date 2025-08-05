@@ -15,7 +15,10 @@ class AuthGate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<
-        ({AuthenticatedSession? session, List<TransitCard>? cards})?>(
+        ({
+          AuthenticatedSession? session,
+          List<TransitCard>? cards,
+        })?>(
       future: _checkAutoLogin(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {

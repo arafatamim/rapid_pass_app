@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:grouped_list/grouped_list.dart';
 import 'package:grouped_list/sliver_grouped_list.dart';
 import 'package:intl/intl.dart';
 import 'package:rapid_pass_info/helpers/transport_route_localizations.dart';
@@ -85,10 +86,7 @@ class TransactionList extends StatelessWidget {
 
         return Padding(
           padding: const EdgeInsets.only(
-            left: 16.0,
-            right: 16.0,
-            top: 24.0,
-            bottom: 16.0,
+            top: 16.0,
           ),
           child: Container(
             padding:
@@ -141,6 +139,7 @@ class TransactionList extends StatelessWidget {
                       TransportRouteLocalizations.of(context)
                               .translateFromLocale(
                                   transaction.destinationStation ?? '', "en") ??
+                          transaction.destinationStation ??
                           AppLocalizations.of(context)!.unknown,
                     ),
           subtitle: transaction.charge < 0
@@ -167,7 +166,7 @@ class TransactionList extends StatelessWidget {
         );
       },
       footer: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.only(top: 16.0),
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
           decoration: BoxDecoration(
