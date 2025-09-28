@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:rapid_pass_info/l10n/app_localizations.dart';
-import 'package:rapid_pass_info/models/dummy_transit_cards.dart';
 import 'package:rapid_pass_info/models/transit_card.dart';
 import 'package:rapid_pass_info/widgets/card_list.dart';
 import 'package:rapid_pass_info/widgets/empty_message.dart';
@@ -45,23 +43,23 @@ class _CardsViewState extends State<CardsView> {
                 },
               ),
               const SizedBox(height: 24),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Row(
-                  children: [
-                    Text(
-                      AppLocalizations.of(context)!.transactions,
-                      style: Theme.of(context).textTheme.headlineMedium,
-                    ),
-                    const Spacer(),
-                    Text(
-                      widget.cards[_selectedCardIndex].cardNumber,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Theme.of(context).hintColor,
-                          ),
-                    )
-                  ],
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                textBaseline: TextBaseline.ideographic,
+                children: [
+                  Text(
+                    AppLocalizations.of(context)!.transactions,
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
+                  const Spacer(),
+                  Text(
+                    widget.cards[_selectedCardIndex].cardNumber,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Theme.of(context).hintColor,
+                        ),
+                  )
+                ],
               ),
               const SizedBox(height: 8),
             ],

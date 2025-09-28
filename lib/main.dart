@@ -3,11 +3,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
 import 'package:rapid_pass_info/helpers/transport_route_localizations.dart';
 import 'package:rapid_pass_info/helpers/upgrader.dart';
 import 'package:rapid_pass_info/l10n/app_localizations.dart';
 import 'package:rapid_pass_info/meta.dart';
-import 'package:rapid_pass_info/widgets/auth_gate.dart';
+import 'package:rapid_pass_info/pages/home_page.dart';
+import 'package:rapid_pass_info/pages/login_page.dart';
+import 'package:rapid_pass_info/services/account_service.dart';
 import 'package:relative_time/relative_time.dart';
 import 'package:upgrader/upgrader.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -20,6 +23,8 @@ void main() async {
     ),
   );
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+
+  await AccountService.instance.initialize();
 
   runApp(const RapidPassApp());
 }
@@ -85,7 +90,17 @@ class RapidPassApp extends StatelessWidget {
 
               return true;
             },
-            child: const AuthGate(),
+            child: ChangeNotifierProvider(
+              create: (_) => AccountService.instance,
+              builder: (context, child) {
+                final hasAccounts =
+                    context.read<AccountService>().accounts.isNotEmpty;
+                if (!hasAccounts) {
+                  return const LoginPage(isFirstAccount: true);
+                }
+                return const HomePage();
+              },
+            ),
           ),
         );
       },

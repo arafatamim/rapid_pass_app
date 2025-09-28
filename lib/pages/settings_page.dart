@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rapid_pass_info/l10n/app_localizations.dart';
-import 'package:rapid_pass_info/services/auth_service.dart';
-import 'package:rapid_pass_info/store/state.dart';
-import 'package:rapid_pass_info/widgets/auth_gate.dart';
+import 'package:rapid_pass_info/services/account_service.dart';
 import 'package:upgrader/upgrader.dart';
 import 'package:rapid_pass_info/helpers/upgrader.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -19,7 +17,7 @@ class SettingsPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.settings),
       ),
-      body: Consumer<CardsModel>(
+      body: Consumer<AccountService>(
         builder: (context, state, child) {
           return Column(
             children: [
@@ -31,62 +29,6 @@ class SettingsPage extends StatelessWidget {
               Expanded(
                 child: ListView(
                   children: [
-                    ListTile(
-                      title: Text(
-                        "${AppLocalizations.of(context)!.logout} ${state.session.username}",
-                      ),
-                      onTap: () {
-                        // show confirmation dialog
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: Text(AppLocalizations.of(context)!.logout),
-                              content: Text(
-                                AppLocalizations.of(context)!
-                                    .logoutConfirmation(state.session.username),
-                              ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text(AppLocalizations.of(context)!.no),
-                                ),
-                                TextButton(
-                                  onPressed: () async {
-                                    await AuthService.instance
-                                        .clearCredentials();
-                                    if (context.mounted) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                            AppLocalizations.of(context)!
-                                                .credentialsCleared,
-                                          ),
-                                        ),
-                                      );
-                                      Navigator.pop(context);
-                                      Navigator.pushAndRemoveUntil(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const AuthGate(),
-                                        ),
-                                        (route) => false,
-                                      );
-                                    }
-                                  },
-                                  child:
-                                      Text(AppLocalizations.of(context)!.yes),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      },
-                    ),
                     ListTile(
                       title:
                           Text(AppLocalizations.of(context)!.viewPrivacyPolicy),

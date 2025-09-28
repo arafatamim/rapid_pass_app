@@ -284,6 +284,24 @@ abstract class AppLocalizations {
   /// **'Login failed. Check username and password.'**
   String get loginFailed;
 
+  /// No description provided for @accounts.
+  ///
+  /// In en, this message translates to:
+  /// **'Accounts'**
+  String get accounts;
+
+  /// No description provided for @addAnAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Add an account'**
+  String get addAnAccount;
+
+  /// No description provided for @manageAccounts.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage accounts'**
+  String get manageAccounts;
+
   /// No description provided for @addFirstCard.
   ///
   /// In en, this message translates to:

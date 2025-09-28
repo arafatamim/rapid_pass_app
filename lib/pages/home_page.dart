@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rapid_pass_info/helpers/refresh_notifier.dart';
 import 'package:rapid_pass_info/l10n/app_localizations.dart';
+import 'package:rapid_pass_info/pages/accounts_page.dart';
 import 'package:rapid_pass_info/pages/settings_page.dart';
-import 'package:rapid_pass_info/store/state.dart';
+import 'package:rapid_pass_info/services/account_service.dart';
 import 'package:rapid_pass_info/views/cards_view.dart';
 import 'package:rapid_pass_info/views/find_fares_view.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -75,10 +76,10 @@ class _HomePageState extends State<HomePage> {
       ),
     ];
 
-    return Consumer<CardsModel>(
+    return Consumer<AccountService>(
       builder: (context, state, child) {
         final actions = [
-          if (_currentPageIndex == 0 && state.cards.isNotEmpty)
+          if (_currentPageIndex == 0)
             IconButton(
               icon: const Icon(Icons.add_card),
               tooltip: AppLocalizations.of(context)!.addRapidPass,
@@ -96,8 +97,23 @@ class _HomePageState extends State<HomePage> {
                   ),
                 );
               }
+              if (value == "manage_accounts") {
+                Navigator.of(context).push(
+                  ModalBottomSheetRoute(
+                    isScrollControlled: false,
+                    builder: (context) => ChangeNotifierProvider.value(
+                      value: state,
+                      child: const AccountsPage(),
+                    ),
+                  ),
+                );
+              }
             },
             itemBuilder: (context) => [
+              PopupMenuItem<String>(
+                value: 'manage_accounts',
+                child: Text(AppLocalizations.of(context)!.manageAccounts),
+              ),
               PopupMenuItem<String>(
                 value: 'settings',
                 child: Text(AppLocalizations.of(context)!.settings),
@@ -112,7 +128,8 @@ class _HomePageState extends State<HomePage> {
               title: Text(AppLocalizations.of(context)!.title),
               actions: actions,
             ),
-            floatingActionButton: _currentPageIndex == 0 && state.cards.isEmpty
+            floatingActionButton: _currentPageIndex == 0 &&
+                    state.consolidatedData.allCards.isEmpty
                 ? FloatingActionButton(
                     onPressed: _launchCardCreationURL,
                     tooltip: AppLocalizations.of(context)!.addRapidPass,
@@ -134,8 +151,9 @@ class _HomePageState extends State<HomePage> {
                   child: RefreshIndicator(
                     onRefresh: () async {
                       try {
-                        await Provider.of<CardsModel>(context, listen: false)
-                            .refreshCards();
+                        await Provider.of<AccountService>(context,
+                                listen: false)
+                            .refreshAllAccounts();
                       } catch (e) {
                         debugPrint('Error while loading cards: $e');
                         if (context.mounted) {
@@ -150,7 +168,7 @@ class _HomePageState extends State<HomePage> {
                       }
                     },
                     child: CardsView(
-                      cards: state.cards,
+                      cards: state.consolidatedData.allCards,
                     ),
                   ),
                 ),

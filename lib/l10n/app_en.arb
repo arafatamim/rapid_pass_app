@@ -31,6 +31,9 @@
   "logout": "Logout",
   "logoutConfirmation": "Are you sure you want to logout {username}?",
   "loginFailed": "Login failed. Check username and password.",
+  "accounts": "Accounts",
+  "addAnAccount": "Add an account",
+  "manageAccounts": "Manage accounts",
 
   "addFirstCard": "Add your first card using the + button below",
   "cannotLaunchUrl": "Cannot launch URL",

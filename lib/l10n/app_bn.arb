@@ -31,6 +31,9 @@
   "logout": "লগআউট",
   "logoutConfirmation": "আপনি কি নিশ্চিত যে আপনি {username} লগআউট করতে চান?",
   "loginFailed": "লগইন ব্যর্থ হয়েছে। ইউজারনেম ও পাসওয়ার্ড চেক করুন",
+  "accounts": "একাউন্ট",
+  "addAnAccount": "একাউন্ট যোগ করুন",
+  "manageAccounts": "একাউন্ট পরিচালনা",
 
   "addFirstCard": "নিচের + বাটন ব্যাবহার করে আপনার প্রথম কার্ডটি যোগ করুন",
   "cannotLaunchUrl": "URL চালানো যাচ্ছে না",

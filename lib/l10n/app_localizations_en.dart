@@ -111,6 +111,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loginFailed => 'Login failed. Check username and password.';
 
   @override
+  String get accounts => 'Accounts';
+
+  @override
+  String get addAnAccount => 'Add an account';
+
+  @override
+  String get manageAccounts => 'Manage accounts';
+
+  @override
   String get addFirstCard => 'Add your first card using the + button below';
 
   @override

@@ -112,6 +112,15 @@ class AppLocalizationsBn extends AppLocalizations {
       'লগইন ব্যর্থ হয়েছে। ইউজারনেম ও পাসওয়ার্ড চেক করুন';
 
   @override
+  String get accounts => 'একাউন্ট';
+
+  @override
+  String get addAnAccount => 'একাউন্ট যোগ করুন';
+
+  @override
+  String get manageAccounts => 'একাউন্ট পরিচালনা';
+
+  @override
   String get addFirstCard =>
       'নিচের + বাটন ব্যাবহার করে আপনার প্রথম কার্ডটি যোগ করুন';
 

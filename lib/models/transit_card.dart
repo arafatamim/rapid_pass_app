@@ -5,6 +5,7 @@ import 'dart:io';
 class TransitCard {
   final int id;
   final int userId;
+  final String username;
   final String cardNumber;
   final String hexCardNo;
   final String name;
@@ -37,6 +38,7 @@ class TransitCard {
   TransitCard({
     required this.id,
     required this.userId,
+    required this.username,
     required this.cardNumber,
     required this.hexCardNo,
     required this.name,
@@ -67,9 +69,10 @@ class TransitCard {
     required this.transactionHistory,
   });
 
-  factory TransitCard.fromJson(Map<String, dynamic> json) {
+  factory TransitCard.fromJson(Map<String, dynamic> json, String username) {
     return TransitCard(
       id: json['id'],
+      username: username,
       userId: json['user_id'],
       cardNumber: json['card_number'],
       hexCardNo: json['hex_card_no'],

@@ -30,7 +30,6 @@ class _CardListState extends State<CardList> {
       );
     }
 
-    // Ensure selected index is valid
     if (_selectedIndex >= widget.cards.length) {
       _selectedIndex = 0;
     }

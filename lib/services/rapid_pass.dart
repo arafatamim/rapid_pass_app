@@ -158,7 +158,7 @@ class RapidPassService {
         if (matchedString != null) {
           try {
             final cardJson = jsonDecode(matchedString);
-            cards.add(TransitCard.fromJson(cardJson));
+            cards.add(TransitCard.fromJson(cardJson, session.username));
           } catch (e) {
             debugPrint('Error parsing JSON: $e');
             continue;

@@ -1,18 +1,20 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:material_loading_indicator/loading_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:rapid_pass_info/l10n/app_localizations.dart';
 import 'package:rapid_pass_info/pages/home_page.dart';
-import 'package:rapid_pass_info/services/auth_service.dart';
-import 'package:rapid_pass_info/services/rapid_pass.dart';
-import 'package:rapid_pass_info/store/state.dart';
+import 'package:rapid_pass_info/services/account_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LoginPage extends StatefulWidget {
   final String? initialMessage;
+  final bool isFirstAccount;
 
-  const LoginPage({super.key, this.initialMessage});
+  const LoginPage({
+    super.key,
+    this.initialMessage,
+    this.isFirstAccount = false,
+  });
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -23,7 +25,6 @@ class _LoginPageState extends State<LoginPage> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isPasswordVisible = false;
-  final bool _rememberMe = true;
 
   bool _isSubmitting = false;
 
@@ -35,7 +36,9 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          AppLocalizations.of(context)!.login,
+          widget.isFirstAccount
+              ? AppLocalizations.of(context)!.login
+              : AppLocalizations.of(context)!.addAnAccount,
           style: textTheme.titleLarge,
         ),
         elevation: 0,
@@ -55,15 +58,17 @@ class _LoginPageState extends State<LoginPage> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     // Logo or app name
-                    Text(
-                      AppLocalizations.of(context)!.title,
-                      textAlign: TextAlign.center,
-                      style: textTheme.headlineLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: colorScheme.primary,
+                    if (widget.isFirstAccount) ...[
+                      Text(
+                        AppLocalizations.of(context)!.title,
+                        textAlign: TextAlign.center,
+                        style: textTheme.headlineLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: colorScheme.primary,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 40),
+                      const SizedBox(height: 40),
+                    ],
 
                     // Username field
                     TextFormField(
@@ -193,7 +198,6 @@ class _LoginPageState extends State<LoginPage> {
         SnackBar(content: Text(widget.initialMessage!)),
       );
     }
-    _loadSavedCredentials();
   }
 
   Future<void> _launchForgotPasswordURL() async {
@@ -218,23 +222,6 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  Future<void> _loadSavedCredentials() async {
-    final rememberMe = await AuthService.instance.getRememberMe();
-    if (rememberMe) {
-      debugPrint('Loading saved credentials...');
-      final credentials = await AuthService.instance.getSavedCredentials();
-      if (credentials['username'] != null) {
-        _usernameController.text = credentials['username']!;
-      }
-      if (credentials['password'] != null) {
-        _passwordController.text = credentials['password']!;
-      }
-    }
-    setState(() {
-      // _rememberMe = rememberMe;
-    });
-  }
-
   void _submitForm() async {
     if (_formKey.currentState!.validate()) {
       setState(() {
@@ -242,35 +229,21 @@ class _LoginPageState extends State<LoginPage> {
       });
 
       try {
-        final session = await RapidPassService.instance.login(
+        await AccountService.instance.addAccount(
           username: _usernameController.text,
           password: _passwordController.text,
         );
 
-        if (_rememberMe) {
-          debugPrint('Saving credentials...');
-          await AuthService.instance.saveCredentials(
-            _usernameController.text,
-            _passwordController.text,
-          );
-          await AuthService.instance.setRememberMe(true);
-        } else {
-          debugPrint('Not saving credentials...');
-          await AuthService.instance.clearCredentials();
-        }
-
-        final cards = await RapidPassService.instance.getCards(session);
+        _usernameController.clear();
+        _passwordController.clear();
 
         if (mounted) {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
               builder: (context) => ChangeNotifierProvider(
-                create: (_) => CardsModel(
-                  session: session,
-                  cards: cards,
-                ),
-                builder: (context, child) => const HomePage(),
+                create: (_) => AccountService.instance,
+                child: const HomePage(),
               ),
             ),
           );
