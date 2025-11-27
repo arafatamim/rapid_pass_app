@@ -55,7 +55,7 @@ class AuthenticatedSession {
 
   @override
   String toString() {
-    return 'LoginResult{cookies: $cookies, redirectUri: $redirectUri}';
+    return 'AuthenticatedSession(cookies: $cookies, redirectUri: $redirectUri, username: $username)';
   }
 }
 
@@ -143,7 +143,7 @@ class RapidPassService {
 
     final doc = dom.Document.html(res.body);
 
-    final cardsHtml = doc.querySelectorAll("._rp_card > a:first-child");
+    final cardsHtml = doc.querySelectorAll("._rp_card > .info > a");
 
     final cards = <TransitCard>[];
     for (final card in cardsHtml) {

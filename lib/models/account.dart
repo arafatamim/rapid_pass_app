@@ -75,4 +75,9 @@ class Account {
       redirectUri: Uri.parse(""),
     );
   }
+
+  @override
+  String toString() {
+    return "Account(id: $id, username: $username, cards: $cards, session: $session)";
+  }
 }

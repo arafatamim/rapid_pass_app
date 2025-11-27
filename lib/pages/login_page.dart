@@ -249,6 +249,7 @@ class _LoginPageState extends State<LoginPage> {
           );
         }
       } catch (e) {
+        debugPrint('Error: $e');
         setState(() {
           _isSubmitting = false;
         });
