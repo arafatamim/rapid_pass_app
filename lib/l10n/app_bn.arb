@@ -20,6 +20,93 @@
   "statisticsFooter": "{transactions}টি লেনদেন, মোট {trips}টি যাত্রায় খরচ হয়েছে ৳{totalValue}",
   "spentAmount": "খরচ ৳{value}",
   "transactions": "লেনদেন",
+  "cardInfo": "কার্ডের তথ্য",
+  "cardNumberLabel": "কার্ড নাম্বার",
+  "nfcLinkStatus": "এনএফসি সংযোগ",
+  "linkedShort": "লিংকড",
+  "notLinked": "লিংক নেই",
+  "notLinkedYet": "এখনও সংযুক্ত করা হয়নি",
+  "unlinkPhysicalCard": "ফিজিক্যাল কার্ডের লিংক সরান",
+  "syncStatus": "সিঙ্ক অবস্থা",
+  "nfcHistoryLabel": "এনএফসি ইতিহাস",
+  "scanCard": "কার্ড স্ক্যান করুন",
+  "nfcLabel": "এনএফসি",
+  "nfcRecord": "এনএফসি রেকর্ড",
+  "linkedIdm": "লিংক করা আছে: {idm}",
+  "@linkedIdm": {
+    "placeholders": {
+      "idm": {}
+    }
+  },
+  "nfcScanNewerThanServer": "এনএফসি স্ক্যান সার্ভারের তথ্যের চেয়ে নতুন",
+  "serverSnapshotCurrent": "সার্ভারের তথ্য হালনাগাদ আছে",
+  "nfcOnlyTransactionsCount": "{count, plural, =1{১টি শুধু-এনএফসি লেনদেন} other{{count}টি শুধু-এনএফসি লেনদেন}}",
+  "@nfcOnlyTransactionsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "scanYourCard": "কার্ড স্ক্যান করুন",
+  "chooseMatchingCard": "কার্ডটি সংযুক্ত করুন",
+  "scanCardInstructions": "একটি ফিজিক্যাল কার্ড ফোনের পেছনে ধরুন। স্ক্যান শেষ হলে কোন সংরক্ষিত কার্ডের সাথে লিংক করবেন তা বেছে নিতে পারবেন।",
+  "chooseMatchingCardInstructions": "যে সংরক্ষিত কার্ডটি সদ্য স্ক্যান করা ফিজিক্যাল কার্ডের সাথে মিলে, সেটিতে চাপুন।",
+  "close": "বন্ধ করুন",
+  "scanAgain": "আবার স্ক্যান করুন",
+  "tryAgain": "আবার চেষ্টা করুন",
+  "savingCardScan": "কার্ড স্ক্যান সংরক্ষণ করা হচ্ছে",
+  "savingCardScanMessage": "অনুগ্রহ করে অপেক্ষা করুন। এখনই এই শিটটি বন্ধ করবেন না।",
+  "couldNotScanCard": "কার্ডটি স্ক্যান করা যায়নি",
+  "holdCardToBackOfPhone": "কার্ডটি ফোনের পেছনে ধরে রাখুন",
+  "keepStillUntilPhoneReads": "ফোনটি কার্ড পড়া শেষ না করা পর্যন্ত এক সেকেন্ড স্থির রাখুন।",
+  "readingCard": "কার্ড পড়া হচ্ছে",
+  "keepCardInPlace": "এটি শেষ না হওয়া পর্যন্ত কার্ডটি একই জায়গায় ধরে রাখুন।",
+  "cardReadSuccessfully": "কার্ড সফলভাবে পড়া হয়েছে",
+  "currentBalanceValue": "বর্তমান ব্যালেন্স: {amount}",
+  "@currentBalanceValue": {
+    "placeholders": {
+      "amount": {}
+    }
+  },
+  "turnOnNfcFirst": "আগে এনএফসি চালু করুন",
+  "enableNfcThenTryAgain": "ফোনে এনএফসি চালু করে তারপর \"আবার চেষ্টা করুন\" চাপুন।",
+  "phoneDoesNotSupportNfc": "এই ফোনে এনএফসি সাপোর্ট নেই",
+  "usePhoneWithNfc": "ফিজিক্যাল র‍্যাপিড পাস কার্ড স্ক্যান করতে এনএফসি-যুক্ত ফোন ব্যবহার করুন।",
+  "readFailed": "পড়া ব্যর্থ হয়েছে",
+  "failedToStartNfcScanning": "এনএফসি স্ক্যান শুরু করা যায়নি: {error}",
+  "@failedToStartNfcScanning": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "linkedCardToIdm": "{cardNumber} কার্ডটি {idm} এর সাথে লিংক করা হয়েছে।",
+  "@linkedCardToIdm": {
+    "placeholders": {
+      "cardNumber": {},
+      "idm": {}
+    }
+  },
+  "physicalCardAlreadyLinked": "এই ফিজিক্যাল কার্ডটি ইতিমধ্যে {cardNumber} এর সাথে লিংক করা আছে।",
+  "@physicalCardAlreadyLinked": {
+    "placeholders": {
+      "cardNumber": {}
+    }
+  },
+  "failedToSaveScan": "স্ক্যান সংরক্ষণ করা যায়নি: {error}",
+  "@failedToSaveScan": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "rapidPassBalanceSystem": "র‍্যাপিড পাস ব্যালেন্স সিস্টেম",
+  "rapidPassCardSystem": "র‍্যাপিড পাস কার্ড সিস্টেম",
+  "unknownService": "অজানা সেবা",
+  "boarding": "বোর্ডিং",
+  "alighting": "নামা",
+  "trip": "যাত্রা",
+  "balanceUpdate": "ব্যালেন্স আপডেট",
+  "issue": "ইস্যু",
 
   "login": "লগইন",
   "emailOrPhone": "ইমেইল বা ফোন নম্বর",

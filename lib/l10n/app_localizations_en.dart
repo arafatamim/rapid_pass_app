@@ -79,6 +79,179 @@ class AppLocalizationsEn extends AppLocalizations {
   String get transactions => 'Transactions';
 
   @override
+  String get cardInfo => 'Card info';
+
+  @override
+  String get cardNumberLabel => 'Card number';
+
+  @override
+  String get nfcLinkStatus => 'NFC link';
+
+  @override
+  String get linkedShort => 'Linked';
+
+  @override
+  String get notLinked => 'Not linked';
+
+  @override
+  String get notLinkedYet => 'Not linked yet';
+
+  @override
+  String get unlinkPhysicalCard => 'Unlink physical card';
+
+  @override
+  String get syncStatus => 'Sync status';
+
+  @override
+  String get nfcHistoryLabel => 'NFC history';
+
+  @override
+  String get scanCard => 'Scan card';
+
+  @override
+  String get nfcLabel => 'NFC';
+
+  @override
+  String get nfcRecord => 'NFC record';
+
+  @override
+  String linkedIdm(Object idm) {
+    return 'Linked: $idm';
+  }
+
+  @override
+  String get nfcScanNewerThanServer => 'NFC scan is newer than server';
+
+  @override
+  String get serverSnapshotCurrent => 'Server snapshot current';
+
+  @override
+  String nfcOnlyTransactionsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count NFC-only transactions',
+      one: '1 NFC-only transaction',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get scanYourCard => 'Scan your card';
+
+  @override
+  String get chooseMatchingCard => 'Link this card';
+
+  @override
+  String get scanCardInstructions =>
+      'Hold one physical card on the back of your phone. You will choose which saved card to link after the scan finishes.';
+
+  @override
+  String get chooseMatchingCardInstructions =>
+      'Tap the saved card that matches the physical card you just scanned.';
+
+  @override
+  String get close => 'Close';
+
+  @override
+  String get scanAgain => 'Scan again';
+
+  @override
+  String get tryAgain => 'Try again';
+
+  @override
+  String get savingCardScan => 'Saving card scan';
+
+  @override
+  String get savingCardScanMessage =>
+      'Please wait. Do not close this sheet yet.';
+
+  @override
+  String get couldNotScanCard => 'Could not scan this card';
+
+  @override
+  String get holdCardToBackOfPhone => 'Hold the card on the back of your phone';
+
+  @override
+  String get keepStillUntilPhoneReads =>
+      'Keep it still for a second until the phone reads it.';
+
+  @override
+  String get readingCard => 'Reading card';
+
+  @override
+  String get keepCardInPlace => 'Keep the card in place until this finishes.';
+
+  @override
+  String get cardReadSuccessfully => 'Card read successfully';
+
+  @override
+  String currentBalanceValue(Object amount) {
+    return 'Current balance: $amount';
+  }
+
+  @override
+  String get turnOnNfcFirst => 'Turn on NFC first';
+
+  @override
+  String get enableNfcThenTryAgain =>
+      'Enable NFC on your phone, then tap \"Try again\".';
+
+  @override
+  String get phoneDoesNotSupportNfc => 'This phone does not support NFC';
+
+  @override
+  String get usePhoneWithNfc =>
+      'Use a phone with NFC to scan a physical Rapid Pass card.';
+
+  @override
+  String get readFailed => 'Read failed';
+
+  @override
+  String failedToStartNfcScanning(Object error) {
+    return 'Failed to start NFC scanning: $error';
+  }
+
+  @override
+  String linkedCardToIdm(Object cardNumber, Object idm) {
+    return 'Linked $cardNumber to $idm.';
+  }
+
+  @override
+  String physicalCardAlreadyLinked(Object cardNumber) {
+    return 'This physical card is already linked to $cardNumber.';
+  }
+
+  @override
+  String failedToSaveScan(Object error) {
+    return 'Failed to save scan: $error';
+  }
+
+  @override
+  String get rapidPassBalanceSystem => 'Rapid Pass Balance System';
+
+  @override
+  String get rapidPassCardSystem => 'Rapid Pass Card System';
+
+  @override
+  String get unknownService => 'Unknown Service';
+
+  @override
+  String get boarding => 'Boarding';
+
+  @override
+  String get alighting => 'Alighting';
+
+  @override
+  String get trip => 'Trip';
+
+  @override
+  String get balanceUpdate => 'Balance Update';
+
+  @override
+  String get issue => 'Issue';
+
+  @override
   String get login => 'Login';
 
   @override

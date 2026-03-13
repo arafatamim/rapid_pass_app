@@ -224,6 +224,300 @@ abstract class AppLocalizations {
   /// **'Transactions'**
   String get transactions;
 
+  /// No description provided for @cardInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Card info'**
+  String get cardInfo;
+
+  /// No description provided for @cardNumberLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Card number'**
+  String get cardNumberLabel;
+
+  /// No description provided for @nfcLinkStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'NFC link'**
+  String get nfcLinkStatus;
+
+  /// No description provided for @linkedShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Linked'**
+  String get linkedShort;
+
+  /// No description provided for @notLinked.
+  ///
+  /// In en, this message translates to:
+  /// **'Not linked'**
+  String get notLinked;
+
+  /// No description provided for @notLinkedYet.
+  ///
+  /// In en, this message translates to:
+  /// **'Not linked yet'**
+  String get notLinkedYet;
+
+  /// No description provided for @unlinkPhysicalCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlink physical card'**
+  String get unlinkPhysicalCard;
+
+  /// No description provided for @syncStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync status'**
+  String get syncStatus;
+
+  /// No description provided for @nfcHistoryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'NFC history'**
+  String get nfcHistoryLabel;
+
+  /// No description provided for @scanCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan card'**
+  String get scanCard;
+
+  /// No description provided for @nfcLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'NFC'**
+  String get nfcLabel;
+
+  /// No description provided for @nfcRecord.
+  ///
+  /// In en, this message translates to:
+  /// **'NFC record'**
+  String get nfcRecord;
+
+  /// No description provided for @linkedIdm.
+  ///
+  /// In en, this message translates to:
+  /// **'Linked: {idm}'**
+  String linkedIdm(Object idm);
+
+  /// No description provided for @nfcScanNewerThanServer.
+  ///
+  /// In en, this message translates to:
+  /// **'NFC scan is newer than server'**
+  String get nfcScanNewerThanServer;
+
+  /// No description provided for @serverSnapshotCurrent.
+  ///
+  /// In en, this message translates to:
+  /// **'Server snapshot current'**
+  String get serverSnapshotCurrent;
+
+  /// No description provided for @nfcOnlyTransactionsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 NFC-only transaction} other{{count} NFC-only transactions}}'**
+  String nfcOnlyTransactionsCount(int count);
+
+  /// No description provided for @scanYourCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan your card'**
+  String get scanYourCard;
+
+  /// No description provided for @chooseMatchingCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Link this card'**
+  String get chooseMatchingCard;
+
+  /// No description provided for @scanCardInstructions.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold one physical card on the back of your phone. You will choose which saved card to link after the scan finishes.'**
+  String get scanCardInstructions;
+
+  /// No description provided for @chooseMatchingCardInstructions.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the saved card that matches the physical card you just scanned.'**
+  String get chooseMatchingCardInstructions;
+
+  /// No description provided for @close.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get close;
+
+  /// No description provided for @scanAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan again'**
+  String get scanAgain;
+
+  /// No description provided for @tryAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get tryAgain;
+
+  /// No description provided for @savingCardScan.
+  ///
+  /// In en, this message translates to:
+  /// **'Saving card scan'**
+  String get savingCardScan;
+
+  /// No description provided for @savingCardScanMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Please wait. Do not close this sheet yet.'**
+  String get savingCardScanMessage;
+
+  /// No description provided for @couldNotScanCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not scan this card'**
+  String get couldNotScanCard;
+
+  /// No description provided for @holdCardToBackOfPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold the card on the back of your phone'**
+  String get holdCardToBackOfPhone;
+
+  /// No description provided for @keepStillUntilPhoneReads.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep it still for a second until the phone reads it.'**
+  String get keepStillUntilPhoneReads;
+
+  /// No description provided for @readingCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading card'**
+  String get readingCard;
+
+  /// No description provided for @keepCardInPlace.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep the card in place until this finishes.'**
+  String get keepCardInPlace;
+
+  /// No description provided for @cardReadSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Card read successfully'**
+  String get cardReadSuccessfully;
+
+  /// No description provided for @currentBalanceValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Current balance: {amount}'**
+  String currentBalanceValue(Object amount);
+
+  /// No description provided for @turnOnNfcFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on NFC first'**
+  String get turnOnNfcFirst;
+
+  /// No description provided for @enableNfcThenTryAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable NFC on your phone, then tap \"Try again\".'**
+  String get enableNfcThenTryAgain;
+
+  /// No description provided for @phoneDoesNotSupportNfc.
+  ///
+  /// In en, this message translates to:
+  /// **'This phone does not support NFC'**
+  String get phoneDoesNotSupportNfc;
+
+  /// No description provided for @usePhoneWithNfc.
+  ///
+  /// In en, this message translates to:
+  /// **'Use a phone with NFC to scan a physical Rapid Pass card.'**
+  String get usePhoneWithNfc;
+
+  /// No description provided for @readFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Read failed'**
+  String get readFailed;
+
+  /// No description provided for @failedToStartNfcScanning.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to start NFC scanning: {error}'**
+  String failedToStartNfcScanning(Object error);
+
+  /// No description provided for @linkedCardToIdm.
+  ///
+  /// In en, this message translates to:
+  /// **'Linked {cardNumber} to {idm}.'**
+  String linkedCardToIdm(Object cardNumber, Object idm);
+
+  /// No description provided for @physicalCardAlreadyLinked.
+  ///
+  /// In en, this message translates to:
+  /// **'This physical card is already linked to {cardNumber}.'**
+  String physicalCardAlreadyLinked(Object cardNumber);
+
+  /// No description provided for @failedToSaveScan.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to save scan: {error}'**
+  String failedToSaveScan(Object error);
+
+  /// No description provided for @rapidPassBalanceSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'Rapid Pass Balance System'**
+  String get rapidPassBalanceSystem;
+
+  /// No description provided for @rapidPassCardSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'Rapid Pass Card System'**
+  String get rapidPassCardSystem;
+
+  /// No description provided for @unknownService.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown Service'**
+  String get unknownService;
+
+  /// No description provided for @boarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Boarding'**
+  String get boarding;
+
+  /// No description provided for @alighting.
+  ///
+  /// In en, this message translates to:
+  /// **'Alighting'**
+  String get alighting;
+
+  /// No description provided for @trip.
+  ///
+  /// In en, this message translates to:
+  /// **'Trip'**
+  String get trip;
+
+  /// No description provided for @balanceUpdate.
+  ///
+  /// In en, this message translates to:
+  /// **'Balance Update'**
+  String get balanceUpdate;
+
+  /// No description provided for @issue.
+  ///
+  /// In en, this message translates to:
+  /// **'Issue'**
+  String get issue;
+
   /// No description provided for @login.
   ///
   /// In en, this message translates to:

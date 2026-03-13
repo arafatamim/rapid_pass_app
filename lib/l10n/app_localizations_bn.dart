@@ -79,6 +79,181 @@ class AppLocalizationsBn extends AppLocalizations {
   String get transactions => 'লেনদেন';
 
   @override
+  String get cardInfo => 'কার্ডের তথ্য';
+
+  @override
+  String get cardNumberLabel => 'কার্ড নাম্বার';
+
+  @override
+  String get nfcLinkStatus => 'এনএফসি সংযোগ';
+
+  @override
+  String get linkedShort => 'লিংকড';
+
+  @override
+  String get notLinked => 'লিংক নেই';
+
+  @override
+  String get notLinkedYet => 'এখনও সংযুক্ত করা হয়নি';
+
+  @override
+  String get unlinkPhysicalCard => 'ফিজিক্যাল কার্ডের লিংক সরান';
+
+  @override
+  String get syncStatus => 'সিঙ্ক অবস্থা';
+
+  @override
+  String get nfcHistoryLabel => 'এনএফসি ইতিহাস';
+
+  @override
+  String get scanCard => 'কার্ড স্ক্যান করুন';
+
+  @override
+  String get nfcLabel => 'এনএফসি';
+
+  @override
+  String get nfcRecord => 'এনএফসি রেকর্ড';
+
+  @override
+  String linkedIdm(Object idm) {
+    return 'লিংক করা আছে: $idm';
+  }
+
+  @override
+  String get nfcScanNewerThanServer =>
+      'এনএফসি স্ক্যান সার্ভারের তথ্যের চেয়ে নতুন';
+
+  @override
+  String get serverSnapshotCurrent => 'সার্ভারের তথ্য হালনাগাদ আছে';
+
+  @override
+  String nfcOnlyTransactionsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countটি শুধু-এনএফসি লেনদেন',
+      one: '১টি শুধু-এনএফসি লেনদেন',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get scanYourCard => 'কার্ড স্ক্যান করুন';
+
+  @override
+  String get chooseMatchingCard => 'কার্ডটি সংযুক্ত করুন';
+
+  @override
+  String get scanCardInstructions =>
+      'একটি ফিজিক্যাল কার্ড ফোনের পেছনে ধরুন। স্ক্যান শেষ হলে কোন সংরক্ষিত কার্ডের সাথে লিংক করবেন তা বেছে নিতে পারবেন।';
+
+  @override
+  String get chooseMatchingCardInstructions =>
+      'যে সংরক্ষিত কার্ডটি সদ্য স্ক্যান করা ফিজিক্যাল কার্ডের সাথে মিলে, সেটিতে চাপুন।';
+
+  @override
+  String get close => 'বন্ধ করুন';
+
+  @override
+  String get scanAgain => 'আবার স্ক্যান করুন';
+
+  @override
+  String get tryAgain => 'আবার চেষ্টা করুন';
+
+  @override
+  String get savingCardScan => 'কার্ড স্ক্যান সংরক্ষণ করা হচ্ছে';
+
+  @override
+  String get savingCardScanMessage =>
+      'অনুগ্রহ করে অপেক্ষা করুন। এখনই এই শিটটি বন্ধ করবেন না।';
+
+  @override
+  String get couldNotScanCard => 'কার্ডটি স্ক্যান করা যায়নি';
+
+  @override
+  String get holdCardToBackOfPhone => 'কার্ডটি ফোনের পেছনে ধরে রাখুন';
+
+  @override
+  String get keepStillUntilPhoneReads =>
+      'ফোনটি কার্ড পড়া শেষ না করা পর্যন্ত এক সেকেন্ড স্থির রাখুন।';
+
+  @override
+  String get readingCard => 'কার্ড পড়া হচ্ছে';
+
+  @override
+  String get keepCardInPlace =>
+      'এটি শেষ না হওয়া পর্যন্ত কার্ডটি একই জায়গায় ধরে রাখুন।';
+
+  @override
+  String get cardReadSuccessfully => 'কার্ড সফলভাবে পড়া হয়েছে';
+
+  @override
+  String currentBalanceValue(Object amount) {
+    return 'বর্তমান ব্যালেন্স: $amount';
+  }
+
+  @override
+  String get turnOnNfcFirst => 'আগে এনএফসি চালু করুন';
+
+  @override
+  String get enableNfcThenTryAgain =>
+      'ফোনে এনএফসি চালু করে তারপর \"আবার চেষ্টা করুন\" চাপুন।';
+
+  @override
+  String get phoneDoesNotSupportNfc => 'এই ফোনে এনএফসি সাপোর্ট নেই';
+
+  @override
+  String get usePhoneWithNfc =>
+      'ফিজিক্যাল র‍্যাপিড পাস কার্ড স্ক্যান করতে এনএফসি-যুক্ত ফোন ব্যবহার করুন।';
+
+  @override
+  String get readFailed => 'পড়া ব্যর্থ হয়েছে';
+
+  @override
+  String failedToStartNfcScanning(Object error) {
+    return 'এনএফসি স্ক্যান শুরু করা যায়নি: $error';
+  }
+
+  @override
+  String linkedCardToIdm(Object cardNumber, Object idm) {
+    return '$cardNumber কার্ডটি $idm এর সাথে লিংক করা হয়েছে।';
+  }
+
+  @override
+  String physicalCardAlreadyLinked(Object cardNumber) {
+    return 'এই ফিজিক্যাল কার্ডটি ইতিমধ্যে $cardNumber এর সাথে লিংক করা আছে।';
+  }
+
+  @override
+  String failedToSaveScan(Object error) {
+    return 'স্ক্যান সংরক্ষণ করা যায়নি: $error';
+  }
+
+  @override
+  String get rapidPassBalanceSystem => 'র‍্যাপিড পাস ব্যালেন্স সিস্টেম';
+
+  @override
+  String get rapidPassCardSystem => 'র‍্যাপিড পাস কার্ড সিস্টেম';
+
+  @override
+  String get unknownService => 'অজানা সেবা';
+
+  @override
+  String get boarding => 'বোর্ডিং';
+
+  @override
+  String get alighting => 'নামা';
+
+  @override
+  String get trip => 'যাত্রা';
+
+  @override
+  String get balanceUpdate => 'ব্যালেন্স আপডেট';
+
+  @override
+  String get issue => 'ইস্যু';
+
+  @override
   String get login => 'লগইন';
 
   @override

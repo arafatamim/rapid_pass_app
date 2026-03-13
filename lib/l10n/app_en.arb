@@ -20,6 +20,93 @@
   "statisticsFooter": "{transactions} transactions, ৳{totalValue} spent on {trips} total trips",
   "spentAmount": "Spent ৳{value}",
   "transactions": "Transactions",
+  "cardInfo": "Card info",
+  "cardNumberLabel": "Card number",
+  "nfcLinkStatus": "NFC link",
+  "linkedShort": "Linked",
+  "notLinked": "Not linked",
+  "notLinkedYet": "Not linked yet",
+  "unlinkPhysicalCard": "Unlink physical card",
+  "syncStatus": "Sync status",
+  "nfcHistoryLabel": "NFC history",
+  "scanCard": "Scan card",
+  "nfcLabel": "NFC",
+  "nfcRecord": "NFC record",
+  "linkedIdm": "Linked: {idm}",
+  "@linkedIdm": {
+    "placeholders": {
+      "idm": {}
+    }
+  },
+  "nfcScanNewerThanServer": "NFC scan is newer than server",
+  "serverSnapshotCurrent": "Server snapshot current",
+  "nfcOnlyTransactionsCount": "{count, plural, =1{1 NFC-only transaction} other{{count} NFC-only transactions}}",
+  "@nfcOnlyTransactionsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "scanYourCard": "Scan your card",
+  "chooseMatchingCard": "Link this card",
+  "scanCardInstructions": "Hold one physical card on the back of your phone. You will choose which saved card to link after the scan finishes.",
+  "chooseMatchingCardInstructions": "Tap the saved card that matches the physical card you just scanned.",
+  "close": "Close",
+  "scanAgain": "Scan again",
+  "tryAgain": "Try again",
+  "savingCardScan": "Saving card scan",
+  "savingCardScanMessage": "Please wait. Do not close this sheet yet.",
+  "couldNotScanCard": "Could not scan this card",
+  "holdCardToBackOfPhone": "Hold the card on the back of your phone",
+  "keepStillUntilPhoneReads": "Keep it still for a second until the phone reads it.",
+  "readingCard": "Reading card",
+  "keepCardInPlace": "Keep the card in place until this finishes.",
+  "cardReadSuccessfully": "Card read successfully",
+  "currentBalanceValue": "Current balance: {amount}",
+  "@currentBalanceValue": {
+    "placeholders": {
+      "amount": {}
+    }
+  },
+  "turnOnNfcFirst": "Turn on NFC first",
+  "enableNfcThenTryAgain": "Enable NFC on your phone, then tap \"Try again\".",
+  "phoneDoesNotSupportNfc": "This phone does not support NFC",
+  "usePhoneWithNfc": "Use a phone with NFC to scan a physical Rapid Pass card.",
+  "readFailed": "Read failed",
+  "failedToStartNfcScanning": "Failed to start NFC scanning: {error}",
+  "@failedToStartNfcScanning": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "linkedCardToIdm": "Linked {cardNumber} to {idm}.",
+  "@linkedCardToIdm": {
+    "placeholders": {
+      "cardNumber": {},
+      "idm": {}
+    }
+  },
+  "physicalCardAlreadyLinked": "This physical card is already linked to {cardNumber}.",
+  "@physicalCardAlreadyLinked": {
+    "placeholders": {
+      "cardNumber": {}
+    }
+  },
+  "failedToSaveScan": "Failed to save scan: {error}",
+  "@failedToSaveScan": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "rapidPassBalanceSystem": "Rapid Pass Balance System",
+  "rapidPassCardSystem": "Rapid Pass Card System",
+  "unknownService": "Unknown Service",
+  "boarding": "Boarding",
+  "alighting": "Alighting",
+  "trip": "Trip",
+  "balanceUpdate": "Balance Update",
+  "issue": "Issue",
 
   "login": "Login",
   "emailOrPhone": "Email or Mobile Number",
