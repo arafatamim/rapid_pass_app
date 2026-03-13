@@ -4,7 +4,10 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:rapid_pass_info/models/account.dart';
+import 'package:rapid_pass_info/models/merged_transit_card.dart';
 import 'package:rapid_pass_info/models/transit_card.dart';
+import 'package:rapid_pass_info/services/card_link_repository.dart';
+import 'package:rapid_pass_info/services/nfc.dart';
 import 'package:rapid_pass_info/services/rapid_pass.dart';
 import 'package:uuid/uuid.dart';
 
@@ -21,16 +24,25 @@ class AccountService extends ChangeNotifier {
   static AccountService? _instance;
   static AccountService get instance => _instance ??= AccountService._();
 
-  AccountService._();
+  AccountService._({
+    CardLinkRepository? cardLinkRepository,
+  }) : _cardLinkRepository = cardLinkRepository ?? CardLinkRepository.instance;
 
   List<Account> _accounts = [];
+  final CardLinkRepository _cardLinkRepository;
+  bool _repositoryListenerAttached = false;
 
   List<Account> get accounts => _accounts;
   bool get hasMultipleAccounts => _accounts.length > 1;
   ConsolidatedData get consolidatedData => getConsolidatedData();
+  MergedCardCollection get mergedCardCollection =>
+      _cardLinkRepository.getMergedCardCollection(_accounts);
 
   Future<void> initialize() async {
+    await _cardLinkRepository.initialize();
+    _attachRepositoryListener();
     await _loadAccounts();
+    await syncCurrentAccountsToLinkedCards();
   }
 
   Future<Account> addAccount({
@@ -57,6 +69,7 @@ class AccountService extends ChangeNotifier {
 
       _accounts.add(account);
 
+      await _cardLinkRepository.syncServerSnapshots(_accounts);
       await _saveAccounts();
       notifyListeners();
       return account;
@@ -71,6 +84,7 @@ class AccountService extends ChangeNotifier {
 
     await _clearAccountCredentials(accountId);
 
+    await _cardLinkRepository.removeAccountRecords(accountId);
     await _saveAccounts();
     notifyListeners();
   }
@@ -115,8 +129,47 @@ class AccountService extends ChangeNotifier {
       }
     }
 
+    await _cardLinkRepository.syncServerSnapshots(_accounts);
     await _saveAccounts();
     notifyListeners();
+  }
+
+  Future<void> syncCurrentAccountsToLinkedCards() async {
+    await _cardLinkRepository.syncServerSnapshots(_accounts);
+  }
+
+  Future<void> attachNfcScanToCard({
+    required String accountId,
+    required String cardNumber,
+    required CardReadResult readResult,
+  }) async {
+    await _cardLinkRepository.attachNfcSnapshot(
+      accountId: accountId,
+      cardNumber: cardNumber,
+      readResult: readResult,
+    );
+    notifyListeners();
+  }
+
+  Future<void> unlinkNfcScanFromCard({
+    required String accountId,
+    required String cardNumber,
+  }) async {
+    await _cardLinkRepository.unlinkNfcSnapshot(
+      accountId: accountId,
+      cardNumber: cardNumber,
+    );
+    notifyListeners();
+  }
+
+  LinkedCardRecord? getLinkedCardRecord({
+    required String accountId,
+    required String cardNumber,
+  }) {
+    return _cardLinkRepository.getRecord(
+      accountId: accountId,
+      cardNumber: cardNumber,
+    );
   }
 
   ConsolidatedData getConsolidatedData() {
@@ -181,6 +234,15 @@ class AccountService extends ChangeNotifier {
       return existingAccount;
     }
     return null;
+  }
+
+  void _attachRepositoryListener() {
+    if (_repositoryListenerAttached) {
+      return;
+    }
+
+    _cardLinkRepository.addListener(notifyListeners);
+    _repositoryListenerAttached = true;
   }
 }
 
