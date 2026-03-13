@@ -11,6 +11,7 @@ import 'package:rapid_pass_info/meta.dart';
 import 'package:rapid_pass_info/pages/home_page.dart';
 import 'package:rapid_pass_info/pages/login_page.dart';
 import 'package:rapid_pass_info/services/account_service.dart';
+import 'package:rapid_pass_info/services/nfc.dart';
 import 'package:relative_time/relative_time.dart';
 import 'package:upgrader/upgrader.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -25,6 +26,7 @@ void main() async {
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
   await AccountService.instance.initialize();
+  await RapidPassNfcService.instance.initialize();
 
   runApp(const RapidPassApp());
 }
