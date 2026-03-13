@@ -5,14 +5,14 @@ import 'package:grouped_list/sliver_grouped_list.dart';
 import 'package:intl/intl.dart';
 import 'package:rapid_pass_info/helpers/transport_route_localizations.dart';
 import 'package:rapid_pass_info/l10n/app_localizations.dart';
-import 'package:rapid_pass_info/models/transit_card.dart';
+import 'package:rapid_pass_info/models/merged_transit_card.dart';
 import 'package:rapid_pass_info/widgets/currency_label.dart';
 import 'package:rapid_pass_info/widgets/transaction_details.dart';
 import 'package:relative_time/relative_time.dart';
 
-double calculateTotalSpending(List<Transaction> transactions) {
-  return transactions
-      .map((item) => item.charge)
+double calculateTotalSpending(List<CardActivity> activities) {
+  return activities
+      .map((item) => item.charge ?? 0)
       .where((amount) => amount < 0)
       .fold(
         0.0,
@@ -20,20 +20,17 @@ double calculateTotalSpending(List<Transaction> transactions) {
       );
 }
 
-int getNumberOfTrips(List<Transaction> transactions) {
-  return transactions
-      .map((item) => item.charge)
-      .where((amount) => amount < 0)
-      .length;
+int getNumberOfTrips(List<CardActivity> activities) {
+  return activities.where(_isTripLike).length;
 }
 
-double getTotalSpentForDay(List<Transaction> transactions, DateTime date) {
-  return transactions
-      .where((transaction) =>
-          transaction.timeStamp.year == date.year &&
-          transaction.timeStamp.month == date.month &&
-          transaction.timeStamp.day == date.day)
-      .map((item) => item.charge)
+double getTotalSpentForDay(List<CardActivity> activities, DateTime date) {
+  return activities
+      .where((activity) =>
+          activity.timestamp.year == date.year &&
+          activity.timestamp.month == date.month &&
+          activity.timestamp.day == date.day)
+      .map((item) => item.charge ?? 0)
       .where((amount) => amount < 0)
       .fold(
         0.0,
@@ -42,21 +39,21 @@ double getTotalSpentForDay(List<Transaction> transactions, DateTime date) {
 }
 
 int getNumberOfTransactionsForDay(
-    List<Transaction> transactions, DateTime date) {
-  return transactions
-      .where((transaction) =>
-          transaction.timeStamp.year == date.year &&
-          transaction.timeStamp.month == date.month &&
-          transaction.timeStamp.day == date.day)
+    List<CardActivity> activities, DateTime date) {
+  return activities
+      .where((activity) =>
+          activity.timestamp.year == date.year &&
+          activity.timestamp.month == date.month &&
+          activity.timestamp.day == date.day)
       .length;
 }
 
 class TransactionList extends StatelessWidget {
-  final List<Transaction> transactions;
+  final List<CardActivity> activities;
 
   const TransactionList({
     super.key,
-    required this.transactions,
+    required this.activities,
   });
 
   @override
@@ -64,24 +61,24 @@ class TransactionList extends StatelessWidget {
     final numberFormat = NumberFormat.compact(locale: Platform.localeName);
 
     return SliverGroupedListView(
-      elements: transactions,
-      groupBy: (transaction) => DateTime(
-        transaction.timeStamp.year,
-        transaction.timeStamp.month,
-        transaction.timeStamp.day,
+      elements: activities,
+      groupBy: (activity) => DateTime(
+        activity.timestamp.year,
+        activity.timestamp.month,
+        activity.timestamp.day,
       ),
       order: GroupedListOrder.DESC,
       sort: true,
-      itemComparator: (a, b) => a.timeStamp.compareTo(b.timeStamp),
+      itemComparator: (a, b) => a.timestamp.compareTo(b.timestamp),
       groupHeaderBuilder: (item) {
         final now = DateTime.now();
-        final difference = now.difference(item.timeStamp);
+        final difference = now.difference(item.timestamp);
         final relativeTime = RelativeTime(context);
 
         final transactionsForDay =
-            getNumberOfTransactionsForDay(transactions, item.timeStamp);
+            getNumberOfTransactionsForDay(activities, item.timestamp);
         final totalSpentForDay =
-            getTotalSpentForDay(transactions, item.timeStamp);
+            getTotalSpentForDay(activities, item.timestamp);
 
         return Padding(
           padding: const EdgeInsets.only(
@@ -103,9 +100,9 @@ class TransactionList extends StatelessWidget {
               children: [
                 Text(
                   difference.inDays < 60
-                      ? relativeTime.format(item.timeStamp)
+                      ? relativeTime.format(item.timestamp)
                       : DateFormat.yMMMd(Platform.localeName)
-                          .format(item.timeStamp),
+                          .format(item.timestamp),
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 const Spacer(),
@@ -122,35 +119,34 @@ class TransactionList extends StatelessWidget {
           ),
         );
       },
-      indexedItemBuilder: (context, transaction, index) {
+      indexedItemBuilder: (context, activity, index) {
+        final translatedTitle = _displayTitle(context, activity);
         return ListTile(
           leading: Icon(
-            transaction.icon,
-            color: transaction.charge > 0
+            _iconForActivity(activity),
+            color: (activity.charge ?? 0) > 0
                 ? Colors.green
                 : Theme.of(context).colorScheme.tertiary,
           ),
-          title: transaction.type == TransactionType.recharge
-              ? Text(AppLocalizations.of(context)!.recharge)
-              : transaction.type == TransactionType.issue
-                  ? Text(AppLocalizations.of(context)!.cardIssued)
-                  : Text(
-                      TransportRouteLocalizations.of(context)
-                              .translateFromLocale(
-                                  transaction.destinationStation ?? '', "en") ??
-                          transaction.destinationStation ??
-                          AppLocalizations.of(context)!.unknown,
-                    ),
-          subtitle: transaction.charge < 0
-              ? Text(
-                  transaction.getFormattedTime(
-                      MediaQuery.of(context).alwaysUse24HourFormat),
-                )
-              : null,
-          trailing: CurrencyLabel(
-            amount: transaction.charge,
-            isCharge: true,
+          title: Text(translatedTitle),
+          subtitle: Text(
+            _buildSubtitle(
+              context,
+              activity,
+              MediaQuery.of(context).alwaysUse24HourFormat,
+            ),
           ),
+          trailing: activity.charge == null
+              ? Text(
+                  AppLocalizations.of(context)!.nfcLabel,
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                        color: Theme.of(context).colorScheme.tertiary,
+                      ),
+                )
+              : CurrencyLabel(
+                  amount: activity.charge!,
+                  isCharge: true,
+                ),
           onTap: () {
             showModalBottomSheet(
               context: context,
@@ -158,7 +154,7 @@ class TransactionList extends StatelessWidget {
                 minWidth: double.infinity,
               ),
               builder: (context) {
-                return TransactionDetails(transaction: transaction);
+                return TransactionDetails(activity: activity);
               },
             );
           },
@@ -179,9 +175,9 @@ class TransactionList extends StatelessWidget {
           ),
           child: Text(
             AppLocalizations.of(context)!.statisticsFooter(
-              numberFormat.format(calculateTotalSpending(transactions).abs()),
-              numberFormat.format(transactions.length),
-              numberFormat.format(getNumberOfTrips(transactions)),
+              numberFormat.format(calculateTotalSpending(activities).abs()),
+              numberFormat.format(activities.length),
+              numberFormat.format(getNumberOfTrips(activities)),
             ),
             style: Theme.of(context).textTheme.titleMedium,
           ),
@@ -189,4 +185,107 @@ class TransactionList extends StatelessWidget {
       ),
     );
   }
+}
+
+bool _isTripLike(CardActivity activity) {
+  if (activity.charge != null && activity.charge! < 0) {
+    return true;
+  }
+
+  return switch (activity.phase) {
+    CardActivityPhase.trip ||
+    CardActivityPhase.boarding ||
+    CardActivityPhase.alighting =>
+      true,
+    _ => false,
+  };
+}
+
+IconData _iconForActivity(CardActivity activity) {
+  if (activity.kind == CardActivityKind.recharge ||
+      activity.kind == CardActivityKind.issue ||
+      activity.kind == CardActivityKind.balanceUpdate ||
+      activity.phase == CardActivityPhase.balanceUpdate ||
+      activity.phase == CardActivityPhase.issue) {
+    return Icons.monetization_on;
+  }
+
+  if (_isTripLike(activity)) {
+    return switch (activity.routeIndex) {
+      5 => Icons.subway,
+      6 => Icons.directions_bus,
+      _ => Icons.directions_transit,
+    };
+  }
+
+  return Icons.receipt_long_outlined;
+}
+
+String _displayTitle(BuildContext context, CardActivity activity) {
+  final localizations = TransportRouteLocalizations.of(context);
+  final translatedDestination = localizeActivityStation(
+    localizations,
+    activity,
+    destination: true,
+  );
+
+  if (_isTripLike(activity) && activity.destinationStationIndex != null) {
+    return translatedDestination;
+  }
+
+  if (_isTripLike(activity) &&
+      activity.destination != null &&
+      !activity.destination!.startsWith('Unknown')) {
+    return translatedDestination;
+  }
+
+  if (activity.source == CardActivitySource.server &&
+      activity.kind == CardActivityKind.recharge) {
+    return AppLocalizations.of(context)!.recharge;
+  }
+
+  if (activity.source == CardActivitySource.server &&
+      activity.kind == CardActivityKind.issue) {
+    return AppLocalizations.of(context)!.cardIssued;
+  }
+
+  if (activity.kind == CardActivityKind.balanceUpdate) {
+    return AppLocalizations.of(context)!.balanceUpdate;
+  }
+
+  if (activity.kind == CardActivityKind.unknown) {
+    return AppLocalizations.of(context)!.unknown;
+  }
+
+  return activity.title;
+}
+
+String _buildSubtitle(
+  BuildContext context,
+  CardActivity activity,
+  bool is24Hour,
+) {
+  // final localizations = TransportRouteLocalizations.of(context);
+  final time = is24Hour
+      ? DateFormat.Hm(Platform.localeName).format(activity.timestamp)
+      : DateFormat.jm(Platform.localeName).format(activity.timestamp);
+
+  final parts = <String>[time];
+  // final routeName = localizeActivityServiceName(
+  //   AppLocalizations.of(context)!,
+  //   localizations,
+  //   activity,
+  // );
+  // if (routeName != null &&
+  //     routeName.isNotEmpty &&
+  //     routeName != activity.title &&
+  //     !(activity.routeIndex != null && _isTripLike(activity))) {
+  //   parts.add(routeName);
+  // }
+  // if (activity.eventPhase != null && !_isTripLike(activity)) {
+  //   parts.add(
+  //       localizeActivityEventPhase(AppLocalizations.of(context)!, activity)!);
+  // }
+
+  return parts.join(' • ');
 }
