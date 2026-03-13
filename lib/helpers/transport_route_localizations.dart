@@ -14,8 +14,8 @@ class TransportRouteLocalizations {
       _TransportRouteLocalizationsDelegate();
 
   static final _localizedRouteNames = {
-    'en': {5: 'MRT Line 6', 6: "Hatirjheel Bus"},
-    'bn': {5: 'এমআরটি লাইন ৬', 6: "হাতিরঝিল বাস"},
+    'en': {5: 'MRT Line 6', 6: "Hatirjheel Circular Bus"},
+    'bn': {5: 'এমআরটি লাইন ৬', 6: "হাতিরঝিল সার্কুলার বাস"},
   };
 
   static final _localizedStations = {
@@ -43,11 +43,13 @@ class TransportRouteLocalizations {
       6: {
         // Hatirjheel Bus
         0: "Rampura",
+        1: "Modhubag",
         2: "Mohanagar",
         3: "FDC",
         4: "Kunipara",
         5: "Police Plaza",
-        6: "Badda"
+        6: "Badda",
+        7: "Bou Bazar",
       }
     },
     'bn': {
@@ -74,11 +76,13 @@ class TransportRouteLocalizations {
       6: {
         // হাতিরঝিল
         0: 'রামপুরা',
+        1: 'মধুবাগ',
         2: 'মহানগর',
         3: 'এফডিসি',
         4: 'কুনিপাড়া',
         5: 'পুলিশ প্লাজা',
-        6: 'বাড্ডা'
+        6: 'বাড্ডা',
+        7: 'বউ বাজার',
       }
     }
   };
@@ -89,6 +93,14 @@ class TransportRouteLocalizations {
     "Police Plaza(HJ)": {"en": "Police Plaza", "bn": "পুলিশ প্লাজা"},
   };
 
+  static String? englishStationName(int routeIndex, int stationIndex) {
+    return _localizedStations['en']?[routeIndex]?[stationIndex];
+  }
+
+  static String? englishRouteName(int routeIndex) {
+    return _localizedRouteNames['en']?[routeIndex];
+  }
+
   String translate(int routeIndex, int stationIndex) {
     final name =
         _localizedStations[locale.languageCode]?[routeIndex]?[stationIndex];
@@ -98,12 +110,32 @@ class TransportRouteLocalizations {
     return name;
   }
 
+  String? translateOptional(int? routeIndex, int? stationIndex) {
+    if (routeIndex == null || stationIndex == null) {
+      return null;
+    }
+
+    final routeStations = _localizedStations[locale.languageCode]?[routeIndex];
+    if (routeStations == null) {
+      return _localizedStations['en']?[routeIndex]?[stationIndex];
+    }
+    return routeStations[stationIndex] ??
+        _localizedStations['en']?[routeIndex]?[stationIndex];
+  }
+
   String translateRouteName(int routeIndex) {
     final name = _localizedRouteNames[locale.languageCode]?[routeIndex];
     if (name == null) {
       return _localizedRouteNames['en']![routeIndex]!;
     }
     return name;
+  }
+
+  String? translateOptionalRouteName(int? routeIndex) {
+    if (routeIndex == null) {
+      return null;
+    }
+    return translateRouteName(routeIndex);
   }
 
   String? translateFromLocale(String stationName, String sourceLocale) {
