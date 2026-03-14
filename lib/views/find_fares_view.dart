@@ -222,7 +222,8 @@ class _FindFaresViewState extends State<FindFaresView> {
         const SizedBox(height: 16),
         if (_selectedOrigin != null && _selectedDestination != null)
           Card(
-            color: Theme.of(context).colorScheme.onInverseSurface,
+            elevation: 0,
+            color: Theme.of(context).colorScheme.secondary,
             child: FareResult(
               origin: _selectedOrigin!,
               destination: _selectedDestination!,
@@ -318,7 +319,10 @@ class FareResult extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fare = getFare();
+    final route = getRoute();
+    final baseFare =
+        route.fare.getFare(origin.stationIndex, destination.stationIndex);
+
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -331,30 +335,42 @@ class FareResult extends StatelessWidget {
           const SizedBox(height: 16),
           const Divider(),
           const SizedBox(height: 8),
-          _buildPaymentMethod(
-            context,
-            Icons.credit_card,
-            AppLocalizations.of(context)!.rapidPass,
-            (fare * 0.9).toInt(),
-          ),
-          _buildPaymentMethod(
-            context,
-            Icons.money,
-            AppLocalizations.of(context)!.cash,
-            fare,
-          ),
+          if (baseFare == null)
+            Row(
+              children: [
+                Icon(
+                  Icons.warning_amber_rounded,
+                  color: Theme.of(context).colorScheme.error,
+                ),
+                const SizedBox(width: 8),
+                Text(AppLocalizations.of(context)!.fareNotAvailable),
+              ],
+            )
+          else ...[
+            _buildPaymentMethod(
+              context,
+              Icons.credit_card,
+              AppLocalizations.of(context)!.rapidPass,
+              (baseFare * route.fare.rapidPassDiscount).toInt(),
+            ),
+            _buildPaymentMethod(
+              context,
+              Icons.money,
+              AppLocalizations.of(context)!.cash,
+              (baseFare * route.fare.cashDiscount).toInt(),
+            ),
+          ],
         ],
       ),
     );
   }
 
-  int getFare() {
+  TransportRoute getRoute() {
     final routeIndex = origin.routeIndex;
     final route = transportRoutes[routeIndex];
     if (route == null) {
       throw Exception("Route not found");
     }
-
-    return route.fareMatrix[origin.stationIndex][destination.stationIndex];
+    return route;
   }
 }

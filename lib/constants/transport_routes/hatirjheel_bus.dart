@@ -14,7 +14,7 @@ class HatirjheelBus {
 const hatirjheelBus = TransportRoute(
   index: 6,
   type: TransportRouteType.bus,
-  fareMatrix: [],
+  fare: Fare(),
   stations: {
     HatirjheelBus.rampura,
     HatirjheelBus.modhubag,

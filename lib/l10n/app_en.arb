@@ -137,6 +137,7 @@
 
   "chooseOrigin": "Choose start location",
   "chooseDestination": "Choose destination",
+  "fareNotAvailable": "Fare information not available for this route.",
 
   "rapidPass": "Rapid Pass",
   "cash": "Cash",

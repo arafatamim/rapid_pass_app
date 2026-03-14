@@ -24,7 +24,7 @@ class Line6Station {
 const line6 = TransportRoute(
   index: 5,
   type: TransportRouteType.subway,
-  fareMatrix: fareMatrix,
+  fare: Fare(fareMatrix: fareMatrix, rapidPassDiscount: 0.9),
   stations: {
     Line6Station.uttaraNorth,
     Line6Station.uttaraCenter,

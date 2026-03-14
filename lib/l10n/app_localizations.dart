@@ -668,6 +668,12 @@ abstract class AppLocalizations {
   /// **'Choose destination'**
   String get chooseDestination;
 
+  /// No description provided for @fareNotAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Fare information not available for this route.'**
+  String get fareNotAvailable;
+
   /// No description provided for @rapidPass.
   ///
   /// In en, this message translates to:

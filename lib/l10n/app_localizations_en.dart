@@ -330,6 +330,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chooseDestination => 'Choose destination';
 
   @override
+  String get fareNotAvailable =>
+      'Fare information not available for this route.';
+
+  @override
   String get rapidPass => 'Rapid Pass';
 
   @override

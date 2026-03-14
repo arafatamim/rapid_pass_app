@@ -333,6 +333,9 @@ class AppLocalizationsBn extends AppLocalizations {
   String get chooseDestination => 'গন্তব্য বেছে নিন';
 
   @override
+  String get fareNotAvailable => 'এই রুটের জন্য ভাড়ার তথ্য নেই।';
+
+  @override
   String get rapidPass => 'র‍্যাপিড পাস';
 
   @override
