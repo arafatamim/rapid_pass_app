@@ -57,31 +57,6 @@ class SettingsPage extends StatelessWidget {
                       },
                     ),
                     ListTile(
-                      title: Text(AppLocalizations.of(context)!.viewSource),
-                      onTap: () async {
-                        try {
-                          final repoUrlStr = meta["repoUrl"];
-                          if (repoUrlStr == null) {
-                            throw Exception("repoUrl is not defined in meta");
-                          }
-                          final repoUrl = Uri.parse(repoUrlStr);
-                          if (!await launchUrl(repoUrl)) {
-                            throw Exception("Failed to launch $repoUrl");
-                          }
-                        } catch (e) {
-                          debugPrint(e.toString());
-                          if (context.mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(AppLocalizations.of(context)!
-                                    .cannotLaunchUrl),
-                              ),
-                            );
-                          }
-                        }
-                      },
-                    ),
-                    ListTile(
                       title: Text(AppLocalizations.of(context)!.about),
                       onTap: () async {
                         final packageInfo = await PackageInfo.fromPlatform();

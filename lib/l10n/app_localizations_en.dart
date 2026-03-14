@@ -340,7 +340,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aboutDescription =>
-      'Made by Tamim Arafat (tamim.arafat@gmail.com). DISCLAIMER: This app is not officially affiliated with Dhaka Transport Coordination Authority (DTCA) or any other organisation. The data is fetched from the official DTCA website. Use at your own discretion.';
+      'Email support requests to Tamim Arafat (apps@arafatam.im). DISCLAIMER: This app is not officially affiliated with Dhaka Transport Coordination Authority (DTCA) or any other organisation. The data is fetched from the official DTCA website. Use at your own discretion.';
 
   @override
   String get viewSource => 'View source code';

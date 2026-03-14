@@ -689,7 +689,7 @@ abstract class AppLocalizations {
   /// No description provided for @aboutDescription.
   ///
   /// In en, this message translates to:
-  /// **'Made by Tamim Arafat (tamim.arafat@gmail.com). DISCLAIMER: This app is not officially affiliated with Dhaka Transport Coordination Authority (DTCA) or any other organisation. The data is fetched from the official DTCA website. Use at your own discretion.'**
+  /// **'Email support requests to Tamim Arafat (apps@arafatam.im). DISCLAIMER: This app is not officially affiliated with Dhaka Transport Coordination Authority (DTCA) or any other organisation. The data is fetched from the official DTCA website. Use at your own discretion.'**
   String get aboutDescription;
 
   /// No description provided for @viewSource.
