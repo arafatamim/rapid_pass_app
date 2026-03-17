@@ -17,13 +17,13 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: ^0.20.2
-  upgrader: ^11.4.0
+  upgrader: ^12.5.0
   version: ^3.0.2
-  package_info_plus: ^8.3.0
+  package_info_plus: ^9.0.0
   url_launcher: ^6.3.2
   collection: ^1.19.1
   sliver_tools: ^0.2.12
-  flutter_secure_storage: ^9.2.4
+  flutter_secure_storage: ^10.0.0
   provider: ^6.1.5
   grouped_list: ^6.0.0
   material_loading_indicator:
@@ -32,7 +32,7 @@ dependencies:
     git: git@github.com:ksokolovskyi/material_shapes.git
   shared_preferences: any
   elegant_spring_animation: ^2.0.2
-  google_fonts: ^6.3.0
+  google_fonts: ^8.0.2
   uuid: ^4.5.1
   nfc_manager: ^4.1.1
   nfc_manager_felica: ^1.0.1

@@ -49,6 +49,12 @@ class RapidPassApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return DynamicColorBuilder(
       builder: (lightColorScheme, darkColorScheme) {
+        final light =
+            lightColorScheme ?? ColorScheme.fromSeed(seedColor: Colors.blue);
+        final dark = darkColorScheme ??
+            ColorScheme.fromSeed(
+                seedColor: Colors.lightBlue, brightness: Brightness.dark);
+
         return MaterialApp(
           title: "Amar Rapid Pass",
           onGenerateTitle: (context) => AppLocalizations.of(context)!.title,
@@ -66,14 +72,14 @@ class RapidPassApp extends StatelessWidget {
           ],
           theme: ThemeData(
             useMaterial3: true,
-            colorScheme: lightColorScheme ?? const ColorScheme.light(),
+            colorScheme: light,
             textTheme: textTheme,
             fontFamily: fontFamily,
             navigationBarTheme: navigationBarTheme,
           ),
           darkTheme: ThemeData(
             useMaterial3: true,
-            colorScheme: darkColorScheme ?? const ColorScheme.dark(),
+            colorScheme: dark,
             textTheme: textTheme,
             fontFamily: fontFamily,
             navigationBarTheme: navigationBarTheme,
