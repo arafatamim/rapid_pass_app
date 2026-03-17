@@ -248,22 +248,32 @@ class FareResult extends StatelessWidget {
     return Wrap(
       crossAxisAlignment: WrapCrossAlignment.center,
       children: [
+        // Start
         Text(
           TransportRouteLocalizations.of(context).translate(
             origin.routeIndex,
             origin.stationIndex,
           ),
-          style: Theme.of(context).textTheme.headlineSmall,
+          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                color: Theme.of(context).colorScheme.onSecondary,
+              ),
         ),
         const SizedBox(width: 8),
-        const Icon(Icons.swap_horiz),
+        Icon(
+          Icons.swap_horiz,
+          color: Theme.of(context).colorScheme.onSecondary,
+        ),
         const SizedBox(width: 8),
+        // End
         Text(
           TransportRouteLocalizations.of(context).translate(
             destination.routeIndex,
             destination.stationIndex,
           ),
-          style: Theme.of(context).textTheme.headlineSmall,
+          style: Theme.of(context)
+              .textTheme
+              .headlineSmall
+              ?.copyWith(color: Theme.of(context).colorScheme.onSecondary),
         )
       ],
     );
@@ -274,7 +284,7 @@ class FareResult extends StatelessWidget {
       children: [
         Icon(
           origin.getStationIcon(),
-          color: Theme.of(context).hintColor,
+          color: Theme.of(context).colorScheme.onSecondary.withAlpha(200),
         ),
         const SizedBox(width: 8),
         Text(
@@ -282,10 +292,8 @@ class FareResult extends StatelessWidget {
               .translateRouteName(origin.routeIndex)
               .toUpperCase(),
           textAlign: TextAlign.left,
-          style: Theme.of(context)
-              .textTheme
-              .labelSmall
-              ?.copyWith(color: Theme.of(context).hintColor),
+          style: Theme.of(context).textTheme.labelSmall?.copyWith(
+              color: Theme.of(context).colorScheme.onSecondary.withAlpha(200)),
         ),
       ],
     );
@@ -294,6 +302,8 @@ class FareResult extends StatelessWidget {
   Widget _buildFare(BuildContext context, int fare) {
     return CurrencyLabel(
       amount: fare.toDouble(),
+      amountColor: Theme.of(context).colorScheme.onSecondary,
+      symbolColor: Theme.of(context).colorScheme.onSecondary.withAlpha(220),
     );
   }
 
@@ -307,10 +317,15 @@ class FareResult extends StatelessWidget {
       children: [
         Icon(
           icon,
-          color: Theme.of(context).hintColor,
+          color: Theme.of(context).colorScheme.onSecondary,
         ),
         const SizedBox(width: 8),
-        Text(method),
+        Text(
+          method,
+          style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onSecondary,
+              ),
+        ),
         const Spacer(),
         _buildFare(context, fare),
       ],
@@ -333,17 +348,27 @@ class FareResult extends StatelessWidget {
           const SizedBox(height: 8),
           _buildRouteName(context),
           const SizedBox(height: 16),
-          const Divider(),
+          Divider(
+            color: Theme.of(context).colorScheme.onSecondary.withAlpha(100),
+          ),
           const SizedBox(height: 8),
           if (baseFare == null)
             Row(
               children: [
                 Icon(
                   Icons.warning_amber_rounded,
-                  color: Theme.of(context).colorScheme.error,
+                  color: Theme.of(context).colorScheme.onSecondary,
                 ),
                 const SizedBox(width: 8),
-                Text(AppLocalizations.of(context)!.fareNotAvailable),
+                Expanded(
+                  child: Text(
+                    AppLocalizations.of(context)!.fareNotAvailable,
+                    softWrap: true,
+                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.onSecondary,
+                        ),
+                  ),
+                ),
               ],
             )
           else ...[
