@@ -11,7 +11,6 @@ import 'package:rapid_pass_info/models/transit_card.dart';
 
 http.Client makeClient() {
   var ioClient = HttpClient();
-  ioClient.badCertificateCallback = (_, __, ___) => true;
   ioClient.connectionTimeout = const Duration(seconds: 20);
   return IOClient(ioClient);
 }
