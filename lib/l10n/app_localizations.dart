@@ -763,6 +763,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Card not found'**
   String get notFoundException;
+
+  /// No description provided for @welcomeDisclaimerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to Amar Rapid Pass'**
+  String get welcomeDisclaimerTitle;
+
+  /// No description provided for @welcomeDisclaimerBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This is an independent, open-source application designed to help you check your Rapid Pass balance and transactions. Please note that this app is NOT affiliated with, endorsed by, or connected to DTCA (Dhaka Transport Coordination Authority) or any official government entity. Use at your own discretion.'**
+  String get welcomeDisclaimerBody;
+
+  /// No description provided for @iUnderstand.
+  ///
+  /// In en, this message translates to:
+  /// **'I understand'**
+  String get iUnderstand;
 }
 
 class _AppLocalizationsDelegate

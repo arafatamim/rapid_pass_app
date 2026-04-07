@@ -20,6 +20,7 @@ class AccountService extends ChangeNotifier {
   );
 
   static const String _accountsKey = 'saved_accounts';
+  static const String _disclaimerAcceptedKey = 'disclaimer_accepted';
 
   static AccountService? _instance;
   static AccountService get instance => _instance ??= AccountService._();
@@ -29,10 +30,12 @@ class AccountService extends ChangeNotifier {
   }) : _cardLinkRepository = cardLinkRepository ?? CardLinkRepository.instance;
 
   List<Account> _accounts = [];
+  bool _disclaimerAccepted = false;
   final CardLinkRepository _cardLinkRepository;
   bool _repositoryListenerAttached = false;
 
   List<Account> get accounts => _accounts;
+  bool get disclaimerAccepted => _disclaimerAccepted;
   bool get hasMultipleAccounts => _accounts.length > 1;
   ConsolidatedData get consolidatedData => getConsolidatedData();
   MergedCardCollection get mergedCardCollection =>
@@ -41,8 +44,20 @@ class AccountService extends ChangeNotifier {
   Future<void> initialize() async {
     await _cardLinkRepository.initialize();
     _attachRepositoryListener();
+    await _loadDisclaimerStatus();
     await _loadAccounts();
     await syncCurrentAccountsToLinkedCards();
+  }
+
+  Future<void> _loadDisclaimerStatus() async {
+    final value = await _storage.read(key: _disclaimerAcceptedKey);
+    _disclaimerAccepted = value == 'true';
+  }
+
+  Future<void> acceptDisclaimer() async {
+    await _storage.write(key: _disclaimerAcceptedKey, value: 'true');
+    _disclaimerAccepted = true;
+    notifyListeners();
   }
 
   Future<Account> addAccount({

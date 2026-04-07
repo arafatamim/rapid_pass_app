@@ -379,4 +379,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notFoundException => 'Card not found';
+
+  @override
+  String get welcomeDisclaimerTitle => 'Welcome to Amar Rapid Pass';
+
+  @override
+  String get welcomeDisclaimerBody =>
+      'This is an independent, open-source application designed to help you check your Rapid Pass balance and transactions. Please note that this app is NOT affiliated with, endorsed by, or connected to DTCA (Dhaka Transport Coordination Authority) or any official government entity. Use at your own discretion.';
+
+  @override
+  String get iUnderstand => 'I understand';
 }

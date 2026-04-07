@@ -380,4 +380,14 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get notFoundException => 'কার্ড খুঁজে পাওয়া যায়নি';
+
+  @override
+  String get welcomeDisclaimerTitle => 'আমার র‍্যাপিড পাসে স্বাগতম';
+
+  @override
+  String get welcomeDisclaimerBody =>
+      'এটি একটি স্বতন্ত্র এবং ওপেন সোর্স অ্যাপ্লিকেশন যা আপনার র‍্যাপিড পাস ব্যালেন্স এবং লেনদেন দেখতে সাহায্য করে। মনে রাখবেন, এই অ্যাপটি ঢাকা পরিবহন সমন্বয় কর্তৃপক্ষ (DTCA) বা অন্য কোনো সরকারি সংস্থার সাথে কোনোভাবেই সম্পর্কিত বা অনুমোদিত নয়। নিজ দায়িত্বে ব্যবহার করুন।';
+
+  @override
+  String get iUnderstand => 'আমি বুঝতে পেরেছি';
 }

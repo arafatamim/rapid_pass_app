@@ -101,17 +101,69 @@ class RapidPassApp extends StatelessWidget {
             child: ChangeNotifierProvider(
               create: (_) => AccountService.instance,
               builder: (context, child) {
-                final hasAccounts =
-                    context.read<AccountService>().accounts.isNotEmpty;
-                if (!hasAccounts) {
-                  return const LoginPage(isFirstAccount: true);
-                }
-                return const HomePage();
+                return DisclaimerWrapper(
+                  child: Builder(
+                    builder: (context) {
+                      final hasAccounts =
+                          context.watch<AccountService>().accounts.isNotEmpty;
+                      if (!hasAccounts) {
+                        return const LoginPage(isFirstAccount: true);
+                      }
+                      return const HomePage();
+                    },
+                  ),
+                );
               },
             ),
           ),
         );
       },
     );
+  }
+}
+
+class DisclaimerWrapper extends StatefulWidget {
+  final Widget child;
+  const DisclaimerWrapper({super.key, required this.child});
+
+  @override
+  State<DisclaimerWrapper> createState() => _DisclaimerWrapperState();
+}
+
+class _DisclaimerWrapperState extends State<DisclaimerWrapper> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkDisclaimer();
+    });
+  }
+
+  void _checkDisclaimer() {
+    final accountService = context.read<AccountService>();
+    if (!accountService.disclaimerAccepted) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => AlertDialog(
+          title: Text(AppLocalizations.of(context)!.welcomeDisclaimerTitle),
+          content: Text(AppLocalizations.of(context)!.welcomeDisclaimerBody),
+          actions: [
+            TextButton(
+              onPressed: () {
+                accountService.acceptDisclaimer();
+                Navigator.pop(context);
+              },
+              child: Text(AppLocalizations.of(context)!.iUnderstand),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.child;
   }
 }

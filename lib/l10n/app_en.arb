@@ -156,5 +156,8 @@
 
   "networkException": "No internet connection or server is down",
   "serverException": "Server maintenance ongoing",
-  "notFoundException": "Card not found"
+  "notFoundException": "Card not found",
+  "welcomeDisclaimerTitle": "Welcome to Amar Rapid Pass",
+  "welcomeDisclaimerBody": "This is an independent, open-source application designed to help you check your Rapid Pass balance and transactions. Please note that this app is NOT affiliated with, endorsed by, or connected to DTCA (Dhaka Transport Coordination Authority) or any official government entity. Use at your own discretion.",
+  "iUnderstand": "I understand"
 }
