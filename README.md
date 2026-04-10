@@ -7,7 +7,7 @@ Check the balance of your [Rapid Passes](https://rapidpass.com.bd) and MRT Passe
 <img src="https://github.com/user-attachments/assets/70710cf0-0789-4f76-aa75-12a1ff6b9b42" width="250px" alt="Find fares">
 
 ## Download
-<a href="https://github.com/arafatamim/rapid_pass_app/releases/latest/download/amar_rapid_pass.apk">
+<a href="https://github.com/arafatamim/rapid_pass_app/releases/latest">
 <img src="https://github.com/user-attachments/assets/9a28d391-a64f-4a52-9f84-be7714bcfe92" width="200px" alt="Download APK on GitHub"></a>
 
 ## Features
