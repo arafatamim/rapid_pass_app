@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rapid_pass_info/helpers/refresh_notifier.dart';
 import 'package:rapid_pass_info/l10n/app_localizations.dart';
+import 'package:rapid_pass_info/models/dummy_merged_cards.dart';
 import 'package:rapid_pass_info/models/merged_transit_card.dart';
 import 'package:rapid_pass_info/pages/accounts_page.dart';
 import 'package:rapid_pass_info/pages/nfc_debug_page.dart';
@@ -79,12 +80,17 @@ class _HomePageState extends State<HomePage> {
         label: AppLocalizations.of(context)!.findFares,
       ),
     ];
+    final isTablet = MediaQuery.sizeOf(context).width >= 900;
 
     return Consumer<AccountService>(
       builder: (context, state, child) {
-        final mergedCards = state.mergedCardCollection.allCards;
+        final mergedCards =
+            kDebugMode ? dummyMergedCards : state.mergedCardCollection.allCards;
         if (_selectedCardIndex >= mergedCards.length) {
           _selectedCardIndex = mergedCards.isEmpty ? 0 : mergedCards.length - 1;
+        }
+        if (kDebugMode && mergedCards.isNotEmpty) {
+          _selectedCardIndex = 0;
         }
 
         final actions = [
@@ -184,57 +190,88 @@ class _HomePageState extends State<HomePage> {
                 );
               },
             ),
-            bottomNavigationBar: NavigationBar(
-              destinations: destinations,
-              selectedIndex: _currentPageIndex,
-              onDestinationSelected: _onNavigationIndexChange,
-            ),
-            body: PageView(
-              physics: const BouncingScrollPhysics(),
-              controller: _pageController,
-              onPageChanged: _onPageChanged,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: RefreshIndicator(
-                    onRefresh: () async {
-                      try {
-                        await Provider.of<AccountService>(context,
-                                listen: false)
-                            .refreshAllAccounts();
-                      } catch (e) {
-                        debugPrint('Error while loading cards: $e');
-                        if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                AppLocalizations.of(context)!.errorWhileLoading,
-                              ),
-                            ),
-                          );
-                        }
-                      }
-                    },
-                    child: CardsView(
-                      cards: mergedCards,
-                      selectedCardIndex: _selectedCardIndex,
-                      onSelectedCardChanged: (index) {
-                        setState(() {
-                          _selectedCardIndex = index;
-                        });
-                      },
-                      onFabVisibilityChanged: (visible) {
-                        if (_showFabNotifier.value == visible) {
-                          return;
-                        }
-                        _showFabNotifier.value = visible;
-                      },
-                    ),
+            bottomNavigationBar: isTablet
+                ? null
+                : NavigationBar(
+                    destinations: destinations,
+                    selectedIndex: _currentPageIndex,
+                    onDestinationSelected: _onNavigationIndexChange,
                   ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: FindFaresView(),
+            body: Row(
+              children: [
+                if (isTablet)
+                  NavigationRail(
+                    selectedIndex: _currentPageIndex,
+                    onDestinationSelected: _onNavigationIndexChange,
+                    labelType: NavigationRailLabelType.all,
+                    destinations: destinations
+                        .map(
+                          (destination) => NavigationRailDestination(
+                            icon: destination.icon,
+                            selectedIcon:
+                                destination.selectedIcon ?? destination.icon,
+                            label: Text(destination.label),
+                          ),
+                        )
+                        .toList(),
+                  ),
+                Expanded(
+                  child: PageView(
+                    physics: const BouncingScrollPhysics(),
+                    controller: _pageController,
+                    onPageChanged: _onPageChanged,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: RefreshIndicator(
+                          onRefresh: () async {
+                            try {
+                              await Provider.of<AccountService>(context,
+                                      listen: false)
+                                  .refreshAllAccounts();
+                            } catch (e) {
+                              debugPrint('Error while loading cards: $e');
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      AppLocalizations.of(context)!
+                                          .errorWhileLoading,
+                                    ),
+                                  ),
+                                );
+                              }
+                            }
+                          },
+                          child: CardsView(
+                            cards: mergedCards,
+                            selectedCardIndex: _selectedCardIndex,
+                            onSelectedCardChanged: (index) {
+                              setState(() {
+                                _selectedCardIndex = index;
+                              });
+                            },
+                            onFabVisibilityChanged: (visible) {
+                              if (_showFabNotifier.value == visible) {
+                                return;
+                              }
+                              _showFabNotifier.value = visible;
+                            },
+                          ),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.center,
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 500),
+                          child: const Padding(
+                            padding: EdgeInsets.all(16.0),
+                            child: FindFaresView(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

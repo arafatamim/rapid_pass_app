@@ -9,6 +9,7 @@ final List<TransitCard> dummyTransitCards = [
   TransitCard(
     id: 1,
     userId: 101,
+    username: 'alice',
     cardNumber: '1234567890',
     hexCardNo: 'A1B2C3D4',
     name: 'Alice Rahman',
@@ -90,6 +91,7 @@ final List<TransitCard> dummyTransitCards = [
   TransitCard(
     id: 2,
     userId: 102,
+    username: 'babul',
     cardNumber: '9876543210',
     hexCardNo: 'D4C3B2A1',
     name: 'Babul Islam',
@@ -155,6 +157,7 @@ final List<TransitCard> dummyTransitCards = [
   TransitCard(
     id: 3,
     userId: 103,
+    username: 'chanchal',
     cardNumber: '5555555555',
     hexCardNo: 'E5F6G7H8',
     name: 'Chanchal Chowdhury',
@@ -220,6 +223,7 @@ final List<TransitCard> dummyTransitCards = [
   TransitCard(
     id: 4,
     userId: 104,
+    username: 'dipa',
     cardNumber: '4444444444',
     hexCardNo: 'I9J0K1L2',
     name: 'Dipa Karmakar',
@@ -301,6 +305,7 @@ final List<TransitCard> dummyTransitCards = [
   TransitCard(
     id: 5,
     userId: 105,
+    username: 'ehsan',
     cardNumber: '3333333333',
     hexCardNo: 'M3N4O5P6',
     name: 'Ehsanul Haque',
