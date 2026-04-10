@@ -14,12 +14,23 @@ class TransportRouteLocalizations {
       _TransportRouteLocalizationsDelegate();
 
   static final _localizedRouteNames = {
-    'en': {5: 'MRT Line 6', 6: "Hatirjheel Circular Bus"},
-    'bn': {5: 'এমআরটি লাইন ৬', 6: "হাতিরঝিল সার্কুলার বাস"},
+    'en': {2: "BRT Line 3", 5: 'MRT Line 6', 6: "Hatirjheel Circular Bus"},
+    'bn': {2: "বিআরটি লাইন ৩", 5: 'এমআরটি লাইন ৬', 6: "হাতিরঝিল সার্কুলার বাস"},
   };
 
   static final _localizedStations = {
     'en': {
+      2: {
+        // BRT Line 3
+        0: 'Shibbari',
+        1: 'Gazipur Intersection',
+        2: 'Board Bazar',
+        3: 'College Gate',
+        4: 'Airport',
+        5: 'Farmgate',
+        6: 'Shahbag',
+        7: 'Gulistan',
+      },
       5: {
         // Line 6
         0: 'Uttara North',
@@ -53,6 +64,17 @@ class TransportRouteLocalizations {
       }
     },
     'bn': {
+      2: {
+        // বিআরটি লাইন ৩
+        0: 'শিববাড়ী',
+        1: 'গাজীপুর চৌরাস্তা',
+        2: 'বোর্ডবাজার',
+        3: 'কলেজ গেট',
+        4: 'এয়ারপোর্ট',
+        5: 'ফার্মগেট',
+        6: 'শাহবাগ',
+        7: 'গুলিস্তান',
+      },
       5: {
         // লাইন ৬
         0: 'উত্তরা উত্তর',
@@ -79,7 +101,7 @@ class TransportRouteLocalizations {
         1: 'মধুবাগ',
         2: 'মহানগর',
         3: 'এফডিসি',
-        4: 'কুনিপাড়া',
+        4: 'কুনিপাড়া',
         5: 'পুলিশ প্লাজা',
         6: 'বাড্ডা',
         7: 'বউ বাজার',
