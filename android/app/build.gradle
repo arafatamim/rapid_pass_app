@@ -43,7 +43,7 @@ def isReleaseBuildRequested = gradle.startParameter.taskNames.any {
 }
 
 android {
-    namespace "com.arafatamim.rapid_pass_info"
+    namespace "com.arafatamim.amar_rapid_pass"
     compileSdk 36
     ndkVersion flutter.ndkVersion
 
@@ -61,7 +61,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.arafatamim.rapid_pass_info"
+        applicationId "com.arafatamim.amar_rapid_pass"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdkVersion 26

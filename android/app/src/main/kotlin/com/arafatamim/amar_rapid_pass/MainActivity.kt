@@ -1,4 +1,4 @@
-package com.arafatamim.rapid_pass_info
+package com.arafatamim.amar_rapid_pass
 
 import io.flutter.embedding.android.FlutterActivity
 import androidx.core.view.WindowCompat
