@@ -37,5 +37,5 @@ The Amar Rapid Pass developer cannot directly delete operator-managed Rapid Pass
 ## Questions
 For Amar Rapid Pass app questions, contact:
 
-- `tamim.arafat@gmail.com`
+- `apps@arafatam.im`
 - `https://github.com/arafatamim/rapid_pass_app`
