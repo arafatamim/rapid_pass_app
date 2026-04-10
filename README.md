@@ -3,6 +3,7 @@
 Check the balance of your [Rapid Passes](https://rapidpass.com.bd) and MRT Passes easily.
 
 ## Screenshots
+<img width="300" height="613" alt="image" src="https://arafatam.im/assets/amar-rapid-pass-BF-xwvMR.webp" />
 <img src="https://github.com/user-attachments/assets/4b5c0080-98c4-4b79-9202-afad7ffff61d" width="250px" alt="Home page"/>
 <img src="https://github.com/user-attachments/assets/70710cf0-0789-4f76-aa75-12a1ff6b9b42" width="250px" alt="Find fares">
 
