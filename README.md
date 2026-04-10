@@ -20,7 +20,7 @@ Check the balance of your [Rapid Passes](https://rapidpass.com.bd) and MRT Passe
 This app is not affiliated with the DTCA (Dhaka Transport Coordination Authority) or any other government entity. It only serves as an unofficial front-end to [rapidpass.com.bd](https://rapidpass.com.bd).
 
 ## Privacy policy
-This app only stores your card info locally on your device.  We do not collect and store any personal data on our servers. For more information, see our [privacy policy](privacy-policy.md).
+This app stores your Amar Rapid Pass data locally on your device, including saved account credentials, saved card snapshots, and linked NFC snapshots when you choose to use those features. We do not operate a separate Amar Rapid Pass backend server that stores this data for you. For more information, see our [privacy policy](privacy-policy.md).
 
 ## License
 This app is open source and available under the [MIT License](LICENSE).
