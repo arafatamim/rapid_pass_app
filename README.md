@@ -3,8 +3,8 @@
 Check the balance of your [Rapid Passes](https://rapidpass.com.bd) and MRT Passes easily.
 
 ## Screenshots
-<img src="https://github.com/user-attachments/assets/31b3533c-616b-47cc-ba1f-ab47e0bf83ae" width="250px" alt="Home page">
-<img src="https://github.com/user-attachments/assets/1e5ed895-768b-4ebf-8f79-fe84c6dd307a" width="250px" alt="Find fares">
+<img src="https://github.com/user-attachments/assets/4b5c0080-98c4-4b79-9202-afad7ffff61d" width="250px" alt="Home page"/>
+<img src="https://github.com/user-attachments/assets/70710cf0-0789-4f76-aa75-12a1ff6b9b42" width="250px" alt="Find fares">
 
 ## Download
 <a href="https://github.com/arafatamim/rapid_pass_app/releases/latest/download/amar_rapid_pass.apk">
@@ -12,9 +12,11 @@ Check the balance of your [Rapid Passes](https://rapidpass.com.bd) and MRT Passe
 
 ## Features
 - Save multiple Rapid Pass and MRT Pass cards locally on your device.
+- Scan cards with NFC to quickly refresh card snapshots and recent activity.
 - Find fare information for different routes.
 - Requires only internet access to fetch balance information.
 - Supports both Bangla and English language, along with dark mode.
+- Tablet-optimized layout.
 
 ## Disclaimer
 This app is not affiliated with the DTCA (Dhaka Transport Coordination Authority) or any other government entity. It only serves as an unofficial front-end to [rapidpass.com.bd](https://rapidpass.com.bd).
