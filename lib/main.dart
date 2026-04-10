@@ -7,14 +7,12 @@ import 'package:provider/provider.dart';
 import 'package:rapid_pass_info/helpers/transport_route_localizations.dart';
 import 'package:rapid_pass_info/helpers/upgrader.dart';
 import 'package:rapid_pass_info/l10n/app_localizations.dart';
-import 'package:rapid_pass_info/meta.dart';
 import 'package:rapid_pass_info/pages/home_page.dart';
 import 'package:rapid_pass_info/pages/login_page.dart';
 import 'package:rapid_pass_info/services/account_service.dart';
 import 'package:rapid_pass_info/services/nfc.dart';
 import 'package:relative_time/relative_time.dart';
 import 'package:upgrader/upgrader.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -89,16 +87,6 @@ class RapidPassApp extends StatelessWidget {
             upgrader: !kDebugMode ? upgrader : null,
             showIgnore: false,
             showReleaseNotes: false,
-            onUpdate: () {
-              final repoUrlStr = meta["repoUrl"];
-              if (repoUrlStr == null) {
-                return false;
-              }
-              final repoUrl = Uri.parse("$repoUrlStr/releases/latest");
-              launchUrl(repoUrl);
-
-              return true;
-            },
             child: ChangeNotifierProvider(
               create: (_) => AccountService.instance,
               builder: (context, child) {
