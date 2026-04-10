@@ -57,6 +57,7 @@ class RapidPassApp extends StatelessWidget {
 
         return MaterialApp(
           title: "Amar Rapid Pass",
+          debugShowCheckedModeBanner: false,
           onGenerateTitle: (context) => AppLocalizations.of(context)!.title,
           localizationsDelegates: const [
             AppLocalizations.delegate,
