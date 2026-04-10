@@ -44,6 +44,7 @@ dev_dependencies:
   flutter_lints: ^6.0.0
   flutter_launcher_icons: ^0.14.4
   build_runner: ^2.5.4
+  msix: ^3.16.13
 
 flutter:
   uses-material-design: true
@@ -54,3 +55,11 @@ flutter:
     - family: Lexend Deca
       fonts:
         - asset: assets/fonts/LexendDeca/LexendDeca-VariableFont_wght.ttf
+
+msix_config:
+  display_name: Amar Rapid Pass
+  publisher_display_name: Tamim Arafat
+  identity_name: com.arafatamim.amar-rapid-pass
+  msix_version: 2.0.0.0
+  logo_path: .\android\app\src\main\res\mipmap-hdpi\ic_launcher.png
+  capabilities: internetClient
