@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rapid_pass_info/l10n/app_localizations.dart';
 import 'package:rapid_pass_info/services/account_service.dart';
+import 'package:rapid_pass_info/pages/accounts_page.dart';
 import 'package:upgrader/upgrader.dart';
 import 'package:rapid_pass_info/helpers/upgrader.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -30,16 +31,66 @@ class SettingsPage extends StatelessWidget {
                 child: ListView(
                   children: [
                     ListTile(
+                      title: Text(
+                        AppLocalizations.of(context)!.manageAccountsOnDevice,
+                      ),
+                      subtitle: Text(
+                        AppLocalizations.of(context)!
+                            .manageAccountsOnDeviceDescription,
+                      ),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => ChangeNotifierProvider.value(
+                              value: state,
+                              child: const AccountsPage(),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    ListTile(
+                      title:
+                          Text(AppLocalizations.of(context)!.accountDeletion),
+                      subtitle: Text(
+                        AppLocalizations.of(context)!
+                            .accountDeletionDescription,
+                      ),
+                      onTap: () async {
+                        try {
+                          final docUrlStr = meta["accountDeletionUrl"];
+                          if (docUrlStr == null) {
+                            throw Exception(
+                                "accountDeletionUrl is not defined in meta");
+                          }
+                          final docUrl = Uri.parse(docUrlStr);
+                          if (!await launchUrl(docUrl)) {
+                            throw Exception("Failed to launch $docUrl");
+                          }
+                        } catch (e) {
+                          debugPrint(e.toString());
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(AppLocalizations.of(context)!
+                                    .cannotLaunchUrl),
+                              ),
+                            );
+                          }
+                        }
+                      },
+                    ),
+                    ListTile(
                       title:
                           Text(AppLocalizations.of(context)!.viewPrivacyPolicy),
                       onTap: () async {
                         try {
-                          final repoUrlStr = meta["repoUrl"];
-                          if (repoUrlStr == null) {
-                            throw Exception("repoUrl is not defined in meta");
+                          final docUrlStr = meta["privacyPolicyUrl"];
+                          if (docUrlStr == null) {
+                            throw Exception(
+                                "privacyPolicyUrl is not defined in meta");
                           }
-                          final docUrl = Uri.parse(
-                              "$repoUrlStr/blob/master/privacy-policy.md");
+                          final docUrl = Uri.parse(docUrlStr);
                           if (!await launchUrl(docUrl)) {
                             throw Exception("Failed to launch $docUrl");
                           }

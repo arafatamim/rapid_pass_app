@@ -596,6 +596,54 @@ abstract class AppLocalizations {
   /// **'Manage accounts'**
   String get manageAccounts;
 
+  /// No description provided for @manageAccountsOnDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage saved accounts on this device'**
+  String get manageAccountsOnDevice;
+
+  /// No description provided for @manageAccountsOnDeviceDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove saved credentials, cards, and linked NFC data from this phone.'**
+  String get manageAccountsOnDeviceDescription;
+
+  /// No description provided for @accountDeletion.
+  ///
+  /// In en, this message translates to:
+  /// **'Account deletion'**
+  String get accountDeletion;
+
+  /// No description provided for @accountDeletionDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Open instructions for deleting local Amar Rapid Pass data and your Rapid Pass account.'**
+  String get accountDeletionDescription;
+
+  /// No description provided for @removeAccountFromDeviceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove saved account from this device?'**
+  String get removeAccountFromDeviceTitle;
+
+  /// No description provided for @removeAccountFromDeviceMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This removes the saved login, cards, and linked NFC data for {username} from this device only. It does not delete the Rapid Pass account itself.'**
+  String removeAccountFromDeviceMessage(Object username);
+
+  /// No description provided for @removeFromDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from device'**
+  String get removeFromDevice;
+
+  /// No description provided for @savedAccountRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved account removed from this device.'**
+  String get savedAccountRemoved;
+
   /// No description provided for @addFirstCard.
   ///
   /// In en, this message translates to:

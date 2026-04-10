@@ -293,6 +293,35 @@ class AppLocalizationsEn extends AppLocalizations {
   String get manageAccounts => 'Manage accounts';
 
   @override
+  String get manageAccountsOnDevice => 'Manage saved accounts on this device';
+
+  @override
+  String get manageAccountsOnDeviceDescription =>
+      'Remove saved credentials, cards, and linked NFC data from this phone.';
+
+  @override
+  String get accountDeletion => 'Account deletion';
+
+  @override
+  String get accountDeletionDescription =>
+      'Open instructions for deleting local Amar Rapid Pass data and your Rapid Pass account.';
+
+  @override
+  String get removeAccountFromDeviceTitle =>
+      'Remove saved account from this device?';
+
+  @override
+  String removeAccountFromDeviceMessage(Object username) {
+    return 'This removes the saved login, cards, and linked NFC data for $username from this device only. It does not delete the Rapid Pass account itself.';
+  }
+
+  @override
+  String get removeFromDevice => 'Remove from device';
+
+  @override
+  String get savedAccountRemoved => 'Saved account removed from this device.';
+
+  @override
   String get addFirstCard => 'Add your first card using the + button below';
 
   @override

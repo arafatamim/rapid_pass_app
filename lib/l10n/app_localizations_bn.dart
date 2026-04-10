@@ -296,6 +296,36 @@ class AppLocalizationsBn extends AppLocalizations {
   String get manageAccounts => 'একাউন্ট পরিচালনা';
 
   @override
+  String get manageAccountsOnDevice => 'এই ডিভাইসে সংরক্ষিত একাউন্ট পরিচালনা';
+
+  @override
+  String get manageAccountsOnDeviceDescription =>
+      'এই ফোন থেকে সংরক্ষিত লগইন, কার্ড এবং লিংক করা এনএফসি তথ্য সরান।';
+
+  @override
+  String get accountDeletion => 'একাউন্ট মুছে ফেলা';
+
+  @override
+  String get accountDeletionDescription =>
+      'Amar Rapid Pass-এর লোকাল ডেটা ও Rapid Pass একাউন্ট মুছে ফেলার নির্দেশনা খুলুন।';
+
+  @override
+  String get removeAccountFromDeviceTitle =>
+      'এই ডিভাইস থেকে সংরক্ষিত একাউন্ট সরাবেন?';
+
+  @override
+  String removeAccountFromDeviceMessage(Object username) {
+    return 'এতে $username এর সংরক্ষিত লগইন, কার্ড এবং লিংক করা এনএফসি তথ্য শুধু এই ডিভাইস থেকে মুছে যাবে। Rapid Pass-এর মূল একাউন্ট মুছে যাবে না।';
+  }
+
+  @override
+  String get removeFromDevice => 'ডিভাইস থেকে সরান';
+
+  @override
+  String get savedAccountRemoved =>
+      'এই ডিভাইস থেকে সংরক্ষিত একাউন্ট সরানো হয়েছে।';
+
+  @override
   String get addFirstCard =>
       'নিচের + বাটন ব্যাবহার করে আপনার প্রথম কার্ডটি যোগ করুন';
 

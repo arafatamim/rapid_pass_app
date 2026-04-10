@@ -121,6 +121,19 @@
   "accounts": "Accounts",
   "addAnAccount": "Add an account",
   "manageAccounts": "Manage accounts",
+  "manageAccountsOnDevice": "Manage saved accounts on this device",
+  "manageAccountsOnDeviceDescription": "Remove saved credentials, cards, and linked NFC data from this phone.",
+  "accountDeletion": "Account deletion",
+  "accountDeletionDescription": "Open instructions for deleting local Amar Rapid Pass data and your Rapid Pass account.",
+  "removeAccountFromDeviceTitle": "Remove saved account from this device?",
+  "removeAccountFromDeviceMessage": "This removes the saved login, cards, and linked NFC data for {username} from this device only. It does not delete the Rapid Pass account itself.",
+  "@removeAccountFromDeviceMessage": {
+    "placeholders": {
+      "username": {}
+    }
+  },
+  "removeFromDevice": "Remove from device",
+  "savedAccountRemoved": "Saved account removed from this device.",
 
   "addFirstCard": "Add your first card using the + button below",
   "cannotLaunchUrl": "Cannot launch URL",

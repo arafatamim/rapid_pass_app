@@ -13,9 +13,6 @@ import 'package:uuid/uuid.dart';
 
 class AccountService extends ChangeNotifier {
   static final _storage = const FlutterSecureStorage(
-    aOptions: AndroidOptions(
-      encryptedSharedPreferences: true,
-    ),
     iOptions: IOSOptions(groupId: 'com.arafatamim.amar_rapid_pass'),
   );
 
